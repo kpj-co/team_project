@@ -1,20 +1,37 @@
 
-# README Template
-
-Your [design product spec](https://hackmd.io/s/H1wGpVUh7) (described in that link) will look like the following in your README:
+# README 
 
 ## 1. User Stories (Required and Optional)
 
 **Required Must-have Stories**
 
- * [fill in your required user stories here]
- * ...
+ * Username and password
+ * Search School 
+ * Choose courses form a school 
+ * Activity with all courses the user has selected 
+ * Feed of a course with all the posts 
+ * Ability to compose an image post
+ * Ability to compse a text post 
+ * Ability to click for post details 
+ * Ability to upvote and downvote posts
+ * Ability to comment on posts 
+ * Ability to upvote and downvote posts
+ * Ability to make their own post hashtags (?)
+ * Ability to access chat
+ * Ability to send chat messages 
+ * Ability to "send" a post to the chat 
+ * Ability to turn own chat message into a post 
+ * Ability to filter posts by hashtags 
 
 **Optional Nice-to-have Stories**
 
- * [fill in your required user stories here]
- * ...
-
+ * Search for a course in the school 
+ * Ability to choose suggested post hashtags
+ * Ability to send comments to chat 
+ * Ability to see user profile to change info 
+ * Ability to choose more than one school to view courses of 
+ * Ability to report posts 
+ 
 ## 2. Screen Archetypes
 
  * [list first screen here]
