@@ -12,19 +12,19 @@
  * Feed of a course with all the posts 
  * Ability to compose an image post
  * Ability to compse a text post 
+ * Ability to upvote and downvote posts
  * Ability to click for post details 
- * Ability to upvote and downvote posts
  * Ability to comment on posts 
- * Ability to upvote and downvote posts
- * Ability to make their own post hashtags (?)
- * Ability to access chat
+ * Ability to upvote and downvote comments
+ * Ability to choose suggested post hashtags (mandatory hashtags i.e. teacher, course year, section)
+ * Ability to access chat messages 
  * Ability to send chat messages 
  * Ability to "send" a post to the chat 
  * Ability to turn own chat message into a post 
  * Ability to filter posts by hashtags 
 
 **Optional Nice-to-have Stories**
-
+ * Ability to make their own post hashtags 
  * Search for a course in the school 
  * Ability to choose suggested post hashtags
  * Ability to send comments to chat 
