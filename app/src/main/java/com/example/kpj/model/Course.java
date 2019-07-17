@@ -18,6 +18,10 @@ public class Course extends ParseObject {
         return getString(KEY_NAME);
     }
 
+    public void setName(String name) {
+        put(KEY_NAME, name);
+    }
+
     public static class Query extends ParseQuery<Course> {
         public Query() {
             super(Course.class);
