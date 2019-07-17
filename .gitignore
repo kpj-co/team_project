@@ -74,6 +74,10 @@ fastlane/readme.md
 # Version control
 vcs.xml
 
+#secrets
+secrets.xml
+/app/src/main/res/values/secrets.xml
+
 # lint
 lint/intermediates/
 lint/generated/
