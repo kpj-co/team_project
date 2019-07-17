@@ -1,9 +1,11 @@
 package com.example.kpj.model;
 
+import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+@ParseClassName("Message")
 public class Message extends ParseObject {
 
     private static final int MAX_NUMBER = 25;
