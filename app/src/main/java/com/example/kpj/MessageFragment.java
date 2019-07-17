@@ -36,5 +36,6 @@ public class MessageFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_course_list, container, false);
     }
+    // comment
 
 }
