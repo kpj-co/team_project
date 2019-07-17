@@ -2,6 +2,7 @@ package com.example.kpj.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 @ParseClassName("Hashtag")
 public class Hashtag extends ParseObject {
@@ -15,5 +16,18 @@ public class Hashtag extends ParseObject {
        return getString(KEY_DESCRIPTION);
     }
 
+    public void setDescription(String description) {
+        put(KEY_DESCRIPTION, description);
+    }
 
+    public static class Query extends ParseQuery<Hashtag> {
+        public Query() {
+            super(Hashtag.class);
+        }
+
+        public Query getTop() {
+            setLimit(MAX_NUMBER);
+            return this;
+        }
+    }
 }
