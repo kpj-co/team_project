@@ -1,4 +1,4 @@
 package com.example.kpj.model;
 
-public class MessagePost {
+public class Course {
 }
