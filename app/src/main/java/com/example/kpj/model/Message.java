@@ -26,6 +26,18 @@ public class Message extends ParseObject {
         return getParseObject(KEY_COURSE);
     }
 
+    public void setDescription(String description) {
+        put(KEY_DESCRIPTION, description);
+    }
+
+    public void setUser(ParseUser user) {
+        put(KEY_USER, user);
+    }
+
+    public void setCourse(ParseObject course) {
+        put(KEY_COURSE, course);
+    }
+
     public static class Query extends ParseQuery<Message> {
         public Query() {
             super(Message.class);
