@@ -41,4 +41,27 @@ public class Post extends ParseObject {
         return getInt(KEY_DOWNVOTES);
     }
 
+    public void setUser(ParseUser user) {
+        put(KEY_USER, user);
+    }
+
+    public void setMedia(ParseFile media) {
+        put(KEY_MEDIA, media);
+    }
+
+    public void setTitle(String title) {
+        put(KEY_TITLE, title);
+    }
+
+    public void setDescription(String description) {
+        put(KEY_DESCRIPTION, description);
+    }
+
+    public void setUpVotes(int upvotes) {
+        put(KEY_UPVOTES, upvotes);
+    }
+
+    public void setDownVotes(int downVotes) {
+        put(KEY_DOWNVOTES, downVotes);
+    }
 }
