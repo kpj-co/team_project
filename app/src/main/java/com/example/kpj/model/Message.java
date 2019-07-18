@@ -30,6 +30,11 @@ public class Message extends ParseObject {
         put(KEY_DESCRIPTION, description);
     }
 
+    //TODO: Implement the method or something equivalent to it in the adapter
+    public String getUserId() {
+        return "";
+    }
+
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
     }
