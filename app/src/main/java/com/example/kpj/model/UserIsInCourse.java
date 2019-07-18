@@ -5,7 +5,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-@ParseClassName("userIsInCourse")
+@ParseClassName("UserCourseRelation")
 public class UserIsInCourse extends ParseObject {
 
     private static final int MAX_NUMBER = 25;

@@ -4,13 +4,12 @@ import android.app.Application;
 
 import com.example.kpj.R;
 import com.example.kpj.model.Comment;
-import com.example.kpj.model.Hashtag;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.Hashtag;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
-import com.example.kpj.model.postHasHashtag;
+import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.UserIsInCourse;
-
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -26,7 +25,7 @@ public class ParseApp extends Application {
         ParseObject.registerSubclass(Hashtag.class);
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Post.class);
-        ParseObject.registerSubclass(postHasHashtag.class);
+        ParseObject.registerSubclass(PostHashtagRelation.class);
         ParseObject.registerSubclass(UserIsInCourse.class);
 
         final Parse.Configuration configuration = new Parse.Configuration.Builder(this)

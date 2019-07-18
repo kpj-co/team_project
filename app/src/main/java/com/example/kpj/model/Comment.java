@@ -62,7 +62,5 @@ public class Comment extends ParseObject {
             return this;
         }
 
-
-
     }
 }

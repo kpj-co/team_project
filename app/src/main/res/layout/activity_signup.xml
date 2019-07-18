@@ -3,99 +3,101 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SignupActivity">
+    android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/tvSignupCap"
-        android:layout_width="273dp"
-        android:layout_height="46dp"
+    <ImageView
+        android:id="@+id/ivNewProfilePic"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="30dp"
-        android:fontFamily="sans-serif-medium"
-        android:includeFontPadding="false"
-        android:text="Sign up to see photos and videos from your friends."
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/etNewEmail"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/tvTakeProfilePic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivSignUpLogo" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
-    <Button
-        android:id="@+id/btnNewSignup"
-        android:layout_width="334dp"
+    <TextView
+        android:id="@+id/tvTakeProfilePic"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:text="SIGN UP"
-        android:textIsSelectable="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNewPassword" />
-
-    <EditText
-        android:id="@+id/etNewEmail"
-        android:layout_width="334dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="10dp"
-        android:ems="10"
-        android:hint="Email "
-        android:inputType="textPersonName"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Set Profile Photo "
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/etNewUser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSignupCap" />
+        app:layout_constraintTop_toBottomOf="@+id/ivNewProfilePic" />
 
     <EditText
         android:id="@+id/etNewUser"
         android:layout_width="334dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:ems="10"
         android:hint="Full Name"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/etNewPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.588"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNewEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTakeProfilePic" />
 
     <EditText
         android:id="@+id/etNewPassword"
         android:layout_width="334dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/btnNewSignup"
+        app:layout_constraintBottom_toTopOf="@+id/etNewEmail"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNewUser" />
+
+    <EditText
+        android:id="@+id/etNewEmail"
+        android:layout_width="334dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:hint="Email "
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/btnNewSignup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNewPassword" />
+
+    <Button
+        android:id="@+id/btnNewSignup"
+        android:layout_width="334dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:text="SIGN UP"
+        android:textIsSelectable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNewEmail" />
 
 </android.support.constraint.ConstraintLayout>

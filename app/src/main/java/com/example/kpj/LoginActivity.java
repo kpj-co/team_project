@@ -16,15 +16,10 @@ import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-
-    //private ArrayList<String> pervUserInfo;
-
     private EditText usernameInput;
     private EditText passwordInput;
     private Button loginButton;
     private TextView signupButton;
-
-    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,26 +36,29 @@ public class LoginActivity extends AppCompatActivity {
             loginButton = findViewById(R.id.btnLogin);
             signupButton = findViewById(R.id.tvSignup);
 
-            username = usernameInput.getText().toString();
-
-            //set click listener for login
-            loginButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final String username = usernameInput.getText().toString();
-                    final String password = passwordInput.getText().toString();
-                    login(username, password);
-                }
-            });
-
-            //set click listener for sign up button
-            signupButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToSignupActivity();
-                }
-            });
+            setLoginButtonListener();
+            setSignupButtonListener();
         }
+    }
+
+    private void setSignupButtonListener() {
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToSignupActivity();
+            }
+        });
+    }
+
+    private void setLoginButtonListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String username = usernameInput.getText().toString();
+                final String password = passwordInput.getText().toString();
+                login(username, password);
+            }
+        });
     }
 
     private void login(String username, String password) {
@@ -72,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Login Success",Toast.LENGTH_SHORT).show();
                     goToMainActivity();
                 } else {
-                    //TODO : Write to User that password and login do not match
+                    Toast.makeText(getApplicationContext(),"Username or Password is wrong",Toast.LENGTH_SHORT).show();
                     Log.e("LoginActivity", "Login Failed");
                     e.printStackTrace();
                 }
@@ -81,9 +79,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goToSignupActivity() {
-        // Create the ParseUser
-        ParseUser user = new ParseUser();
-        // Create intent to SignUpActivity
         Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
         startActivity(intent);
     }
