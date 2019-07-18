@@ -4,8 +4,8 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-@ParseClassName("postHasHashtag")
-public class postHasHashtag extends ParseObject {
+@ParseClassName("PostHashtagRelation")
+public class PostHashtagRelation extends ParseObject {
 
     private static final int MAX_NUMBER = 25;
 
@@ -28,9 +28,9 @@ public class postHasHashtag extends ParseObject {
         put(KEY_HASHTAG, hashtag);
     }
 
-    public static class Query extends ParseQuery<postHasHashtag> {
+    public static class Query extends ParseQuery<PostHashtagRelation> {
         public Query() {
-            super(postHasHashtag.class);
+            super(PostHashtagRelation.class);
         }
 
         public Query getTop() {
