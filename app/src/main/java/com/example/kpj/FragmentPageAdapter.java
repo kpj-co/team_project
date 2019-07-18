@@ -5,6 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.kpj.fragments.CourseFeedFragment;
+import com.example.kpj.fragments.CourseListFragment;
+import com.example.kpj.fragments.MessageFragment;
+import com.example.kpj.fragments.ProfileFragment;
+
 
 public class FragmentPageAdapter extends FragmentStatePagerAdapter {
 

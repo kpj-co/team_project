@@ -1,23 +1,23 @@
-package com.example.kpj;
+package com.example.kpj.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class CourseListFragment extends Fragment {
+import com.example.kpj.R;
 
+
+public class MessageFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
 
-    public CourseListFragment() {
+    public MessageFragment() {
     }
 
-    public static CourseListFragment newInstance(int page) {
-        CourseListFragment fragment = new CourseListFragment();
+    public static MessageFragment newInstance(int page) {
+        MessageFragment fragment = new MessageFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         fragment.setArguments(args);
@@ -36,10 +36,8 @@ public class CourseListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course_list, container, false);
+        return inflater.inflate(R.layout.fragment_message, container, false);
     }
-
-
-
+    // comment
 
 }
