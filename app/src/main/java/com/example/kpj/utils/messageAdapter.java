@@ -17,13 +17,13 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.List;
 
-public class messageAdapter extends RecyclerView.Adapter<messageAdapter.ViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     private List<Message> mMessages;
     private Context mContext;
     private String mUserId;
 
-    public messageAdapter(Context context, String userId, List<Message> messages) {
+    public MessageAdapter(Context context, String userId, List<Message> messages) {
         mMessages = messages;
         this.mUserId = userId;
         mContext = context;

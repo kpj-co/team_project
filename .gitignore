@@ -74,6 +74,9 @@ fastlane/readme.md
 # Version control
 vcs.xml
 
+#Strange files
+.DS_Store
+
 #secrets
 secrets.xml
 /app/src/main/res/values/secrets.xml
