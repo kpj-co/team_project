@@ -37,9 +37,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:ems="10"
-        android:hint="Post title here "
+        android:hint="Post Title"
         android:inputType="textPersonName"
-        android:text="Name"
         app:layout_constraintBottom_toTopOf="@+id/tvComposeBodyLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.515"
@@ -55,10 +54,10 @@
         android:text="Title"
         app:layout_constraintBottom_toTopOf="@+id/etComposePostTitle"
         app:layout_constraintStart_toStartOf="@+id/etComposePostTitle"
-        app:layout_constraintTop_toBottomOf="@+id/tvComposeProfile" />
+        app:layout_constraintTop_toBottomOf="@+id/ivComposeProfile" />
 
     <ImageView
-        android:id="@+id/tvComposeProfile"
+        android:id="@+id/ivComposeProfile"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
@@ -79,11 +78,11 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tvComposeProfile"
-        app:layout_constraintTop_toTopOf="@+id/tvComposeProfile" />
+        app:layout_constraintStart_toEndOf="@+id/ivComposeProfile"
+        app:layout_constraintTop_toTopOf="@+id/ivComposeProfile" />
 
     <ImageButton
-        android:id="@+id/imgbtnExitCompose"
+        android:id="@+id/ibExitCompose"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginTop="8dp"
@@ -99,6 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="20dp"
         android:text="Body"
         app:layout_constraintBottom_toTopOf="@+id/etComposeBody"
         app:layout_constraintStart_toStartOf="@+id/etComposeBody"
@@ -114,9 +114,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:ems="10"
-        android:hint="Post title here "
+        android:hint="Discription"
         android:inputType="textPersonName"
-        android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
