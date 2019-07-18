@@ -1,11 +1,10 @@
 package com.example.kpj.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +27,10 @@ public class CourseListFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
     private ArrayList<Course> filterCourses;
-    private RecyclerView rvCourses;
+    private RecyclerView recyclerView;
     private CourseListAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
-    private ParseUser userTest;
+    private ParseUser testUser;
 
 
     public CourseListFragment() {
@@ -68,34 +67,39 @@ public class CourseListFragment extends Fragment {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if(e == null){
-                    userTest = (ParseUser) objects.get(0);
+                    testUser = (ParseUser) objects.get(0);
                 }
             }
         });
 
-        findCoursesbyUserId(userTest);
+        findCoursesByUserId(testUser);
         // creating the adapter
-        rvCourses = view.findViewById(R.id.rvCourse);
-        //set the layout manager
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        rvCourses.setLayoutManager(linearLayoutManager);
+        recyclerView = view.findViewById(R.id.rvCourse);
         adapter = new CourseListAdapter(getContext(), filterCourses);
         // set the adapter
-        rvCourses.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
+        //set the layout manager
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
         return view;
     }
 
-    private void findCoursesbyUserId(ParseUser user){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("UserIsInCourse");
+    private void findCoursesByUserId(ParseUser user){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("userIsInCourse");
         query.whereEqualTo("user", user);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if(e == null){
+                    Log.d("CourseListFragment", "Reaches the findCoursesByUserId method: " + objects);
                     for (ParseObject i : objects) {
                         UserIsInCourse userIsInCourseObj = (UserIsInCourse) i;
                         filterCourses.add(((Course) userIsInCourseObj.getCourse()));
+                        adapter.notifyItemInserted(filterCourses.size() - 1);
                     }
+                } else {
+
+                    Log.e("CourseListFragment", "Error in the findCoursesByUserId method: " + e, e);
                 }
             }
         });
