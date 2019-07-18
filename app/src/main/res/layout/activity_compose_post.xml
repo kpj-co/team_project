@@ -147,7 +147,7 @@
     <ImageView
         android:id="@+id/ivComposeImage"
         android:layout_width="match_parent"
-        android:layout_height="wra"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -158,7 +158,6 @@
         app:layout_constraintTop_toBottomOf="@+id/etComposeBody"
         tools:srcCompat="@tools:sample/avatars" />
 
-    //TODO
 
     <!--<ImageView-->
     <!--android:id="@+id/ivTagIcon"-->
