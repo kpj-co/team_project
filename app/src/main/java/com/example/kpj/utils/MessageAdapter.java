@@ -59,7 +59,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         holder.body.setText(message.getDescription());
     }
 
-    // Create a gravatar image based on the hash value obtained from userId
+    // function to get the url of the user profile image given a message
     private static String getProfileUrl(final String userId) {
         String hex = "";
         try {
