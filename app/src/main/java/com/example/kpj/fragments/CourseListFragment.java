@@ -1,5 +1,7 @@
-package com.example.kpj;
+package com.example.kpj.fragments;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.kpj.CourseListAdapter;
+import com.example.kpj.R;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.UserIsInCourse;
 import com.parse.FindCallback;
@@ -97,6 +101,3 @@ public class CourseListFragment extends Fragment {
         });
     }
 }
-
-
-

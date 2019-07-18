@@ -1,4 +1,4 @@
-package com.example.kpj;
+package com.example.kpj.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,15 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ProfileFragment extends Fragment {
+import com.example.kpj.R;
+
+
+public class MessageFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
 
-    public ProfileFragment() {
+    public MessageFragment() {
     }
 
-    public static ProfileFragment newInstance(int page) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static MessageFragment newInstance(int page) {
+        MessageFragment fragment = new MessageFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         fragment.setArguments(args);
@@ -33,8 +36,8 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course_list, container, false);
+        return inflater.inflate(R.layout.fragment_message, container, false);
     }
+    // comment
 
 }
-

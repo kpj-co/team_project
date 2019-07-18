@@ -25,9 +25,7 @@ public class Post extends ParseObject {
         return getParseFile(KEY_MEDIA);
     }
 
-    public String getTitle() {
-        return getString(KEY_TITLE);
-    }
+    public String getTitle() { return getString(KEY_TITLE); }
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
