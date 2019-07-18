@@ -1,4 +1,4 @@
-package com.example.kpj;
+package com.example.kpj.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,15 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ProfileFragment extends Fragment {
+import com.example.kpj.R;
+
+
+public class CourseFeedFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
 
-    public ProfileFragment() {
+    public CourseFeedFragment() {
+        // Required empty public constructor
     }
 
-    public static ProfileFragment newInstance(int page) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static CourseFeedFragment newInstance(int page) {
+        CourseFeedFragment fragment = new CourseFeedFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         fragment.setArguments(args);
@@ -37,4 +41,3 @@ public class ProfileFragment extends Fragment {
     }
 
 }
-

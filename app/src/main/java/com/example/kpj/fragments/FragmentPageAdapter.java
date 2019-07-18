@@ -1,4 +1,4 @@
-package com.example.kpj;
+package com.example.kpj.fragments;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
