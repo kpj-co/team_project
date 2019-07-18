@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <com.parse.ParseImageView
         android:id="@+id/ivProfile"
@@ -21,12 +21,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toEndOf="@+id/ivProfile"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="24dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.parse.ParseImageView
         android:id="@+id/ivPostImage"
@@ -47,32 +47,32 @@
         android:layout_height="25dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvHashtag1"
-        app:srcCompat="@android:color/background_dark"
-        android:layout_marginRight="8dp" />
+        app:srcCompat="@android:color/background_dark" />
 
     <ImageView
         android:id="@+id/ivSend"
         android:layout_width="40dp"
         android:layout_height="25dp"
         android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@+id/tvDownVotesNumber"
         app:layout_constraintTop_toBottomOf="@+id/tvHashtag1"
-        app:srcCompat="@android:color/background_dark"
-        android:layout_marginLeft="24dp" />
+        app:srcCompat="@android:color/background_dark" />
 
     <ImageView
         android:id="@+id/ivComment"
         android:layout_width="40dp"
         android:layout_height="25dp"
         android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@+id/tvUpVotesNumber"
         app:layout_constraintTop_toBottomOf="@+id/tvHashtag1"
-        app:srcCompat="@android:color/background_dark"
-        android:layout_marginLeft="24dp" />
+        app:srcCompat="@android:color/background_dark" />
 
     <ImageView
         android:id="@+id/ivLike"
@@ -88,11 +88,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginTop="5dp"
         android:text="description"
         app:layout_constraintStart_toEndOf="@+id/ivProfile"
-        app:layout_constraintTop_toBottomOf="@+id/tvUser"
-        android:layout_marginLeft="24dp" />
+        app:layout_constraintTop_toBottomOf="@+id/tvUser" />
 
     <TextView
         android:id="@+id/tvDescription"
@@ -112,55 +112,55 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPostImage"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/ivPostImage" />
 
     <TextView
         android:id="@+id/tvHashtag2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/tvHashtag1"
-        app:layout_constraintTop_toBottomOf="@+id/ivPostImage"
-        android:layout_marginLeft="16dp" />
+        app:layout_constraintTop_toBottomOf="@+id/ivPostImage" />
 
     <TextView
         android:id="@+id/tvUpVotesNumber"
         android:layout_width="41dp"
         android:layout_height="26dp"
         android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
         android:layout_marginTop="16dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/ivLike"
-        app:layout_constraintTop_toBottomOf="@+id/tvHashtag1"
-        android:layout_marginLeft="3dp" />
+        app:layout_constraintTop_toBottomOf="@+id/tvHashtag1" />
 
     <TextView
         android:id="@+id/tvDownVotesNumber"
         android:layout_width="41dp"
         android:layout_height="26dp"
         android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
         android:layout_marginTop="16dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/ivComment"
-        app:layout_constraintTop_toBottomOf="@+id/tvHashtag1"
-        android:layout_marginLeft="3dp" />
+        app:layout_constraintTop_toBottomOf="@+id/tvHashtag1" />
 
     <TextView
         android:id="@+id/tvCommentsNumber"
         android:layout_width="41dp"
         android:layout_height="26dp"
         android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
         android:layout_marginTop="16dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/ivSend"
-        app:layout_constraintTop_toBottomOf="@+id/tvHashtag1"
-        android:layout_marginLeft="3dp" />
+        app:layout_constraintTop_toBottomOf="@+id/tvHashtag1" />
 
     <TextView
         android:id="@+id/tvTitle"
