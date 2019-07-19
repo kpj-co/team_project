@@ -189,6 +189,7 @@ public class SignUpFragment extends Fragment {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 File photofile2 = photoFile;
+
                 if (photofile2 != null) {
                     Glide.with(getContext())
                             .load(photoFile.getAbsoluteFile())
@@ -197,7 +198,9 @@ public class SignUpFragment extends Fragment {
                             .into(ivNewProfilePic);
                     Toast.makeText(getContext(), "Profile Picture Set",
                             Toast.LENGTH_LONG).show();
+
                 }
+
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -207,7 +210,7 @@ public class SignUpFragment extends Fragment {
 
     public void goToUniversityFragment() {
         Fragment fragment = new UniversityFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_place, fragment);
         fragmentTransaction.addToBackStack(null);
