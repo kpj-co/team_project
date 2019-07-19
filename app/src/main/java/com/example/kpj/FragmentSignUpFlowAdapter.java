@@ -13,6 +13,9 @@ public class FragmentSignUpFlowAdapter extends FragmentStatePagerAdapter {
 
     final int PAGE_COUNTER = 3;
     String[] tabTitles = new String[]{"Sign up", "University", "Select courses"};
+
+
+
     private Context context;
     public FragmentSignUpFlowAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -30,7 +33,7 @@ public class FragmentSignUpFlowAdapter extends FragmentStatePagerAdapter {
 
             case 2:
                 return SelectCoursesFragment.newInstance(position + 1);
-                
+
             default:
                 return null;
         }
