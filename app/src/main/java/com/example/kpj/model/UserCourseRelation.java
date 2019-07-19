@@ -6,7 +6,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 @ParseClassName("UserCourseRelation")
-public class UserIsInCourse extends ParseObject {
+public class UserCourseRelation extends ParseObject {
 
     private static final int MAX_NUMBER = 25;
 
@@ -29,9 +29,9 @@ public class UserIsInCourse extends ParseObject {
         put(KEY_COURSE, course);
     }
 
-    public static class Query extends ParseQuery<UserIsInCourse> {
+    public static class Query extends ParseQuery<UserCourseRelation> {
         public Query() {
-            super(UserIsInCourse.class);
+            super(UserCourseRelation.class);
         }
 
         public Query getTop() {

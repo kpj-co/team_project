@@ -12,11 +12,9 @@ import android.view.ViewGroup;
 import com.example.kpj.CourseListAdapter;
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
-import com.example.kpj.model.UserIsInCourse;
+import com.example.kpj.model.UserCourseRelation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -30,11 +28,7 @@ public class CourseListFragment extends Fragment {
     private RecyclerView recyclerView;
     private CourseListAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
-    private ParseUser testUser;
 
-
-    public CourseListFragment() {
-    }
 
     public static CourseListFragment newInstance(int page) {
         CourseListFragment fragment = new CourseListFragment();
@@ -50,7 +44,6 @@ public class CourseListFragment extends Fragment {
         if (getArguments() != null) {
             mPage = getArguments().getInt(ARG_PAGE);
         }
-
     }
 
     @Override
@@ -58,21 +51,9 @@ public class CourseListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_course_list, container, false);
-
         //init arraylist
         filterCourses = new ArrayList<>();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
-        query.whereEqualTo("objectId", "ww3tNsw7Eg");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if(e == null){
-                    testUser = (ParseUser) objects.get(0);
-                }
-            }
-        });
-
-        findCoursesByUserId(testUser);
+        findCoursesByUserId(ParseUser.getCurrentUser());
         // creating the adapter
         recyclerView = view.findViewById(R.id.rvCourse);
         adapter = new CourseListAdapter(getContext(), filterCourses);
@@ -85,23 +66,25 @@ public class CourseListFragment extends Fragment {
     }
 
     private void findCoursesByUserId(ParseUser user){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("userIsInCourse");
-        query.whereEqualTo("user", user);
-        query.findInBackground(new FindCallback<ParseObject>() {
+        final UserCourseRelation.Query userCourseRelationQuery = new UserCourseRelation.Query();
+        userCourseRelationQuery.whereEqualTo("user", user);
+        userCourseRelationQuery.findInBackground(new FindCallback<UserCourseRelation>() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if(e == null){
-                    Log.d("CourseListFragment", "Reaches the findCoursesByUserId method: " + objects);
-                    for (ParseObject i : objects) {
-                        UserIsInCourse userIsInCourseObj = (UserIsInCourse) i;
-                        filterCourses.add(((Course) userIsInCourseObj.getCourse()));
-                        adapter.notifyItemInserted(filterCourses.size() - 1);
-                    }
-                } else {
-
-                    Log.e("CourseListFragment", "Error in the findCoursesByUserId method: " + e, e);
+            public void done(List<UserCourseRelation> objects, ParseException e) {
+                    if(e == null){
+                        for(int i = 0; i < objects.size(); i++){
+                            Course course = (Course) objects.get(i).getCourse();
+                            filterCourses.add(course);
+                            adapter.notifyItemInserted(filterCourses.size() - 1);
+                            try {
+                                Log.d("CourseListFragment", "List of courses:" + course.fetchIfNeeded().getString("name"));
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
                 }
             }
         });
     }
 }
+
