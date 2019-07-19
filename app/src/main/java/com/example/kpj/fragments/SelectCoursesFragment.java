@@ -7,18 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kpj.R;
-import com.parse.ParseObject;
 
+public class SelectCoursesFragment extends Fragment {
 
-public class MessageFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
 
-    public MessageFragment() {
+
+    public SelectCoursesFragment() {
     }
 
-    public static MessageFragment newInstance(int page) {
-        MessageFragment fragment = new MessageFragment();
+    public static SelectCoursesFragment newInstance(int page) {
+        SelectCoursesFragment fragment = new SelectCoursesFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         fragment.setArguments(args);
@@ -36,9 +36,10 @@ public class MessageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false);
-    }
-    // comment
 
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_select_courses, container, false);
+        return view;
+
+    }
 }
