@@ -7,24 +7,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kpj.R;
-import com.parse.ParseObject;
+import com.example.kpj.model.University;
 
+import java.util.ArrayList;
 
-public class MessageFragment extends Fragment {
+public class UniversityFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
-
-    public MessageFragment() {
+    private ArrayList<University> universities;
+    public UniversityFragment() {
     }
 
-    public static MessageFragment newInstance(int page) {
-        MessageFragment fragment = new MessageFragment();
+    public static UniversityFragment newInstance(int page) {
+        UniversityFragment fragment = new UniversityFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,13 +32,15 @@ public class MessageFragment extends Fragment {
             mPage = getArguments().getInt(ARG_PAGE);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false);
+
+        final View view = inflater.inflate(R.layout.fragment_university, container, false);
+
+        //init arraylist
+        return view;
     }
-    // comment
+
 
 }
