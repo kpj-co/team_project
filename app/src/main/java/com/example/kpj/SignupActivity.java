@@ -175,5 +175,4 @@ public class SignupActivity extends AppCompatActivity {
         startActivity(in);
         finish();
     }
-
 }
