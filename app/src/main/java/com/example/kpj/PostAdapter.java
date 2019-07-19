@@ -7,12 +7,12 @@ import com.example.kpj.model.Post;
 
 import java.util.List;
 
-public class CourseFeedAdapter extends AppCompatActivity {
+public class PostAdapter extends AppCompatActivity {
 
     private Context context;
     private List<Post> mPosts;
 
-    public CourseFeedAdapter(Context context, List<Post> posts) {
+    public PostAdapter(Context context, List<Post> posts) {
         this.context = context;
         mPosts = posts;
     }

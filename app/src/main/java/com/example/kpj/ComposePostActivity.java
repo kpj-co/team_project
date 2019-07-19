@@ -110,10 +110,14 @@ public class ComposePostActivity extends AppCompatActivity {
         String username = user.getUsername();
         ParseFile profile = user.getParseFile(User.KEY_PROFILE);
         tvComposeUsername.setText(username);
-        Glide.with(ComposePostActivity.this)
-                .load(profile.getUrl())
-                .apply(new RequestOptions().centerCrop())
-                .into(ivComposeProfile);
+
+        if (profile != null) {
+            Glide.with(ComposePostActivity.this)
+                    .load(profile.getUrl())
+                    .apply(new RequestOptions().
+                            centerCrop())
+                    .into(ivComposeProfile);
+        }
     }
 
     private void savePost() {
