@@ -9,12 +9,13 @@ import com.parse.ParseUser;
 public class Post extends ParseObject {
 
     //names of the columns in the database
-    private static final String KEY_USER = "user";
-    private static final String KEY_MEDIA = "media";
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_UPVOTES = "upvotes";
-    private static final String KEY_DOWNVOTES = "downvotes";
+    public static final String KEY_USER = "user";
+    public static final String KEY_MEDIA = "media";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_DESCRIPTION = "description";
+    public static final String KEY_UPVOTES = "upvotes";
+    public static final String KEY_DOWNVOTES = "downvotes";
+    public static final String KEY_CREATED_AT = "createdAt";
 
     //getters
     public ParseUser getUser() {
