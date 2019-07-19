@@ -49,7 +49,7 @@ public class CourseFeedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_course_feed, container, false);
 
         // Find views from xml
-        rvCourseFeed = view.findViewById(R.id.rvCourseFeed);
+        rvCourseFeed = view.findViewById(R.id.rvUniversity);
         ibCompose = view.findViewById(R.id.ibCompose);
         // TODO -- Figure out how to set up a search view
         //svSearch = view.findViewById(R.id.svSearch);
