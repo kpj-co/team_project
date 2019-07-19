@@ -12,7 +12,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kpj.model.Post;
+import com.example.kpj.model.User;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 
@@ -40,13 +45,16 @@ public class ComposePostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose_post);
+        initializeViews();
+    }
 
+    private void initializeViews() {
         etComposePostTitle = findViewById(R.id.etComposePostTitle);
         etComposeBody = findViewById(R.id.etComposeBody);
 
         tvComposeUsername = findViewById(R.id.tvComposeUsername);
         ivComposeProfile = findViewById(R.id.ivComposeProfile);
-        setUserInfo();
+        setUserProfileToScreen();
 
         ibExitCompose = findViewById(R.id.ibExitCompose);
         setIBtnExitListener();
@@ -62,7 +70,13 @@ public class ComposePostActivity extends AppCompatActivity {
     }
 
     public void setIBtnExitListener() {
-        //send back to feed fragment
+        ibExitCompose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setIBtnPdfListener() {
@@ -84,33 +98,45 @@ public class ComposePostActivity extends AppCompatActivity {
                 savePost();
                 //TODO -- notify adapter
                 //TODO -- Send back to feed fragment
-                Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void setUserInfo() {
+    private void setUserProfileToScreen() {
         //get image and usernamme
+        ParseUser user = ParseUser.getCurrentUser();
+        String username = user.getUsername();
+        ParseFile profile = user.getParseFile(User.KEY_PROFILE);
+        tvComposeUsername.setText(username);
+        Glide.with(ComposePostActivity.this)
+                .load(profile.getUrl())
+                .apply(new RequestOptions().centerCrop())
+                .into(ivComposeProfile);
     }
 
     private void savePost() {
         // Create new post instance
         Post newPost = new Post();
+
         // Grab content from the compose activity
         String newTitle = etComposePostTitle.getText().toString();
         String newBody = etComposeBody.getText().toString();
         // TODO - grab photo/pdf file
-
         // Set user of post
         newPost.setUser(ParseUser.getCurrentUser());
         // Set content of post
-        if (newTitle.length() != 0) { newPost.setTitle(newTitle); }
-        if (newBody.length() != 0) { newPost.setDescription(newBody); }
+        if (newTitle.length() != 0) {
+            newPost.setTitle(newTitle);
+        }
+        if (newBody.length() != 0) {
+            newPost.setDescription(newBody);
+        }
         // TODO - send photo/pdf files
-
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
+        newPost.saveInBackground();
+        Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
     }
 
 
