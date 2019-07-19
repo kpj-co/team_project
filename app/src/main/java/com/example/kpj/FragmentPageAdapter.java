@@ -1,5 +1,6 @@
 package com.example.kpj;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,13 +14,16 @@ import com.example.kpj.fragments.ProfileFragment;
 
 public class FragmentPageAdapter extends FragmentStatePagerAdapter {
 
-    final int PAGE_COUNT = 4;
-    private String tabTitles[] = new String[] {"List", "Feed", "Chat", "Profile"};
+    final int PAGE_COUNT = 3;
+    String[] tabTitles = new String[] {"Feed", "Chat", "Profile"};
     private Context context;
 
-    public FragmentPageAdapter(FragmentManager fragmentManager, Context context) {
+
+    public FragmentPageAdapter(FragmentManager fragmentManager, Context context)
+                               {
         super(fragmentManager);
         this.context = context;
+
     }
 
     @Override
@@ -27,18 +31,20 @@ public class FragmentPageAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return CourseListFragment.newInstance(position + 1);
-            case 1:
-                return CourseFeedFragment.newInstance(position + 1);
-            case 2:
-                return MessageFragment.newInstance(position + 1);
-            case 3:
-                return ProfileFragment.newInstance(position + 1);
-            default:
-                return null;
-        }
+
+
+            switch (position) {
+                case 0:
+                    return CourseFeedFragment.newInstance(position + 1);
+                case 1:
+                    return MessageFragment.newInstance(position + 1);
+                case 2:
+                    return ProfileFragment.newInstance(position + 1);
+                default:
+                    return null;
+            }
+
+
     }
 
     @Override
