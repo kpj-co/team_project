@@ -17,13 +17,13 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.List;
 
-public class messageAdapter extends RecyclerView.Adapter<messageAdapter.ViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
     private List<Message> mMessages;
     private Context mContext;
     private String mUserId;
 
-    public messageAdapter(Context context, String userId, List<Message> messages) {
+    public MessageAdapter(Context context, String userId, List<Message> messages) {
         mMessages = messages;
         this.mUserId = userId;
         mContext = context;
@@ -59,7 +59,7 @@ public class messageAdapter extends RecyclerView.Adapter<messageAdapter.ViewHold
         holder.body.setText(message.getDescription());
     }
 
-    // Create a gravatar image based on the hash value obtained from userId
+    // function to get the url of the user profile image given a message
     private static String getProfileUrl(final String userId) {
         String hex = "";
         try {
