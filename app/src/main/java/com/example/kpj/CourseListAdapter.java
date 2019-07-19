@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kpj.model.Course;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
 
     private Context context;
     private List<Course> courses;
-
 
     public CourseListAdapter(Context context, ArrayList<Course> courses) {
         this.courses = courses;
@@ -42,7 +42,11 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         // this method is to bind the components of the layout to the user in parse
         Log.d("Adapter", "On Bind is called");
         // TODO - change the way you get course to getting the course associated with each user
-        viewHolder.tvCourse.setText(courses.get(position).getName());
+        try {
+            viewHolder.tvCourse.setText(courses.get(position).fetchIfNeeded().getString("name"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -52,7 +56,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         private TextView tvCourse;
         private View myRectangleView;
 
@@ -63,6 +66,4 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
             myRectangleView = (View) itemView.findViewById(R.id.myRectangleView);
         }
     }
-
-
 }
