@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.kpj.fragments.SelectCoursesFragment;
 import com.example.kpj.fragments.SignUpFragment;
+import com.example.kpj.fragments.UniversityFragment;
 
 public class FragmentSignUpFlowAdapter extends FragmentStatePagerAdapter {
 
@@ -27,8 +28,7 @@ public class FragmentSignUpFlowAdapter extends FragmentStatePagerAdapter {
 
 
             case 1:
-                //TODO : CHANGE THIS TO UNIVERSITY FRAGMENT
-               return SignUpFragment.newInstance(position + 1);
+               return UniversityFragment.newInstance(position + 1);
 
             case 2:
                 return SelectCoursesFragment.newInstance(position + 1);
