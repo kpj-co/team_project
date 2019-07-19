@@ -25,19 +25,14 @@ public class FragmentSignUpFlowAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return SignUpFragment.newInstance(position + 1);
 
-
-
             case 1:
                return UniversityFragment.newInstance(position + 1);
 
             case 2:
                 return SelectCoursesFragment.newInstance(position + 1);
-
-
+                
             default:
                 return null;
-
-
         }
     }
 
