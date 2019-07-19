@@ -47,7 +47,6 @@ public class CourseFeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_course_feed, container, false);
-
         // Find views from xml
         rvCourseFeed = view.findViewById(R.id.rvCourseFeed);
         ibCompose = view.findViewById(R.id.ibCompose);

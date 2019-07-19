@@ -14,15 +14,12 @@ import android.widget.Toast;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.io.File;
 
 public class ComposePostActivity extends AppCompatActivity {
-
 
     EditText etComposePostTitle;
     EditText etComposeBody;
@@ -73,12 +70,17 @@ public class ComposePostActivity extends AppCompatActivity {
         ibExitCompose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
-                startActivity(intent);
+                goToMainActivity();
             }
         });
     }
 
+    private void goToMainActivity() {
+        Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    // TODO - implement the following
     private void setIBtnPdfListener() {
         //grab pdf into image files
     }
@@ -117,7 +119,6 @@ public class ComposePostActivity extends AppCompatActivity {
     private void savePost() {
         // Create new post instance
         Post newPost = new Post();
-
         // Grab content from the compose activity
         String newTitle = etComposePostTitle.getText().toString();
         String newBody = etComposeBody.getText().toString();
@@ -136,19 +137,8 @@ public class ComposePostActivity extends AppCompatActivity {
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
         newPost.saveInBackground();
+        goToMainActivity();
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
