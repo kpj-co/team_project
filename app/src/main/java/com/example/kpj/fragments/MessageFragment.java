@@ -39,10 +39,6 @@ public class MessageFragment extends Fragment {
     //TODO: Set this variable dinamically
     private Course course;
 
-
-
-
-
     public MessageFragment() {
     }
 
@@ -71,12 +67,9 @@ public class MessageFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_message, container, false);
 
-
-
         initializeObjects(view);
         prepareRecyclerView();
         populateRecyclerView();
-
 
         return view;
     }
@@ -92,7 +85,6 @@ public class MessageFragment extends Fragment {
     void prepareRecyclerView() {
         messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(), messageArrayList);
         rvMessages.setLayoutManager(new LinearLayoutManager(getContext()));
-
     }
 
     void populateRecyclerView() {
@@ -125,11 +117,5 @@ public class MessageFragment extends Fragment {
                 });
             }
         });
-
-
-
-
-
     }
-
 }
