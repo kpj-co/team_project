@@ -126,7 +126,6 @@ public class SignupActivity extends AppCompatActivity {
         // Create a File reference to access to future access
         photoFile = getPhotoFileUri(photoFileName);
         // wrap File object into a content provider
-        // required for API >= 24
         Uri fileProvider = FileProvider.getUriForFile(SignupActivity.this,
                 "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
