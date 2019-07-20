@@ -2,6 +2,8 @@ package com.example.kpj.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.kpj.R;
 import com.example.kpj.UniversityFragmentAdapter;
@@ -28,6 +31,7 @@ public class UniversityFragment extends Fragment {
     private UniversityFragmentAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
     private SearchView searchView;
+    private Button button;
 
     public UniversityFragment() {
     }
@@ -52,6 +56,7 @@ public class UniversityFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_university, container, false);
         //set up the searchview
+
         searchView = (SearchView) view.findViewById(R.id.svSearch);
         searchView.setQueryHint("University");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -70,9 +75,24 @@ public class UniversityFragment extends Fragment {
         findUniversityByName();
         recyclerView = view.findViewById(R.id.rvUniversity);
         adapter = new UniversityFragmentAdapter(getContext(), universities);
+//        searchView = (SearchView) view.findViewById(R.id.svSearch);
+//        searchView.setQueryHint("University");
+        //findUniversityByName();
+        recyclerView = view.findViewById(R.id.rvUniversity);
+        button = (Button) view.findViewById(R.id.bTest);
+        adapter = new UniversityFragmentAdapter(getContext(), universities);
         recyclerView.setAdapter(adapter);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                goToSelectCourses();
+            }
+        });
         return view;
     }
 
@@ -91,4 +111,22 @@ public class UniversityFragment extends Fragment {
             }
         });
     }
+
+
+    private void goToSelectCourses() {
+        Fragment fragment = new SelectCoursesFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_place, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }
+
+
+
+
+
+
+
+

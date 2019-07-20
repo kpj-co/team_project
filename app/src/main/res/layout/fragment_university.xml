@@ -47,4 +47,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/bTest"
+        android:layout_width="54dp"
+        android:layout_height="27dp"
+        android:text="Button"
+        app:layout_constraintStart_toEndOf="@+id/svSearch"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

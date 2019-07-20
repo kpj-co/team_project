@@ -1,6 +1,16 @@
 package com.example.kpj;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +27,9 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 
 public class ComposePostActivity extends AppCompatActivity {
@@ -38,6 +51,8 @@ public class ComposePostActivity extends AppCompatActivity {
 
     Button bLaunch;
 
+    private static final int GALLERY_REQUEST_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +68,15 @@ public class ComposePostActivity extends AppCompatActivity {
         ivComposeProfile = findViewById(R.id.ivComposeProfile);
         setUserProfileToScreen();
 
+        ivComposeImage = findViewById(R.id.ivComposeImage);
+
         ibExitCompose = findViewById(R.id.ibExitCompose);
         setIBtnExitListener();
         ibAddImage = findViewById(R.id.ibAddImage);
         setIBtnAddImageListener();
-        ibCamera  = findViewById(R.id.ibCamera);
+        ibCamera = findViewById(R.id.ibCamera);
         setIBtnCameraListener();
-        ibAddPdf  = findViewById(R.id.ibAddPdf);
+        ibAddPdf = findViewById(R.id.ibAddPdf);
         setIBtnPdfListener();
 
         bLaunch = findViewById(R.id.bLaunch);
@@ -90,8 +107,13 @@ public class ComposePostActivity extends AppCompatActivity {
     }
 
     private void setIBtnAddImageListener() {
-        //grab images from gallary?
-    }
+        //grab images from gallery
+        ibAddImage.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {checkPermissions();
+              }
+          }
+      );}
 
     public void setBtnLaunchListener() {
         bLaunch.setOnClickListener(new View.OnClickListener() {
@@ -141,8 +163,87 @@ public class ComposePostActivity extends AppCompatActivity {
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
         newPost.saveInBackground();
-        goToMainActivity();
+        //goToMainActivity();
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
     }
 
+    private void checkPermissions(){
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    },
+                    1052);
+
+        }
+
+    }
+
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1052: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED ){
+                    // permission was granted.
+                    pickFromGallery();
+                } else {
+                    // Permission denied - Show a message to inform the user that this app only works
+                    // with these permissions granted
+                }
+                return;
+            }
+
+        }
+    }
+
+    private void pickFromGallery() {
+        //Create an Intent with action as ACTION_PICK
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        // Sets the type as image/*. This ensures only components of type image are selected
+        intent.setType("image/*");
+        //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
+        String[] mimeTypes = {"image/jpeg", "image/png"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        // Launching the Intent
+        startActivityForResult(intent, GALLERY_REQUEST_CODE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Result code is RESULT_OK only if the user selects an Image
+        if (resultCode == Activity.RESULT_OK)
+            switch (requestCode) {
+                case GALLERY_REQUEST_CODE:
+                    //data.getData return the content URI for the selected Image
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    // Get the cursor
+                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    // Move to first row
+                    cursor.moveToFirst();
+                    //Get the column index of MediaStore.Images.Media.DATA
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    //Gets the String value in the column
+                    String imgDecodableString = cursor.getString(columnIndex);
+                    cursor.close();
+                    // Set the Image in ImageView after decoding the String
+                    Glide.with(ComposePostActivity.this)
+//                            .load(BitmapFactory.decodeFile(imgDecodableString))
+                            .load(imgDecodableString)
+                            //TODO - change cetner crop
+                            .apply(new RequestOptions().centerCrop())
+                            .into(ivComposeImage);
+                    break;
+            }
+    }
 }
