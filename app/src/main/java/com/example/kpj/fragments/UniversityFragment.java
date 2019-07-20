@@ -22,7 +22,8 @@ import java.util.List;
 public class UniversityFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
-    private ArrayList<University> filteredUniversities;
+    private ArrayList<University> universities;
+    private ArrayList<University> universitiesFull;
     private RecyclerView recyclerView;
     private UniversityFragmentAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
@@ -53,10 +54,22 @@ public class UniversityFragment extends Fragment {
         //set up the searchview
         searchView = (SearchView) view.findViewById(R.id.svSearch);
         searchView.setQueryHint("University");
-        filteredUniversities = new ArrayList<>();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+               adapter.getFilter().filter(s.toLowerCase().toString());
+               return true;
+
+            }
+        });
         findUniversityByName();
         recyclerView = view.findViewById(R.id.rvUniversity);
-        adapter = new UniversityFragmentAdapter(getContext(), filteredUniversities);
+        adapter = new UniversityFragmentAdapter(getContext(), universities);
         recyclerView.setAdapter(adapter);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -71,8 +84,8 @@ public class UniversityFragment extends Fragment {
                 if(e == null){
                     for(int i = 0; i < objects.size(); i++){
                         University university =  objects.get(i);
-                        filteredUniversities.add(university);
-                        adapter.notifyItemInserted(filteredUniversities.size()-1);
+                        universitiesFull.add(university);
+                        adapter.notifyItemInserted(universitiesFull.size()-1);
                     }
                 }
             }

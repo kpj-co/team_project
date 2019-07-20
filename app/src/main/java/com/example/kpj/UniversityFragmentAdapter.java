@@ -19,7 +19,7 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFragmentAdapter.ViewHolder> implements Filterable {
+public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFragmentAdapter.ViewHolder> implements Filterable{
 
     private Context context;
     private List<University> universities;
@@ -28,7 +28,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     public UniversityFragmentAdapter(Context context, ArrayList<University> universities) {
         this.universities = universities;
         this.context = context;
-        universitiesFull = new ArrayList<>(universities);
+        universitiesFull = new ArrayList<University>(universities);
     }
 
     @NonNull
