@@ -21,11 +21,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     private List<Message> mMessages;
     private Context mContext;
-    private String mUserId;
+    private String username;
 
-    public MessageAdapter(Context context, String userId, List<Message> messages) {
+    public MessageAdapter(Context context, String username, List<Message> messages) {
         mMessages = messages;
-        this.mUserId = userId;
+        this.username = username;
         mContext = context;
     }
 
@@ -42,7 +42,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Message message = mMessages.get(position);
-        final boolean isMe = message.getUserId() != null && message.getUserId().equals(mUserId);
+        final boolean isMe = message.getUsername() != null && message.getUsername().equals(username);
 
         if (isMe) {
             holder.imageMe.setVisibility(View.VISIBLE);
@@ -55,22 +55,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
 
         final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
-        Glide.with(mContext).load(getProfileUrl(message.getUserId())).into(profileView);
+        Glide.with(mContext).load(message.getParseFileUserImage().getUrl()).into(profileView);
         holder.body.setText(message.getDescription());
-    }
-
-    // function to get the url of the user profile image given a message
-    private static String getProfileUrl(final String userId) {
-        String hex = "";
-        try {
-            final MessageDigest digest = MessageDigest.getInstance("MD5");
-            final byte[] hash = digest.digest(userId.getBytes());
-            final BigInteger bigInt = new BigInteger(hash);
-            hex = bigInt.abs().toString(16);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "https://www.gravatar.com/avatar/" + hex + "?d=identicon";
     }
 
     @Override
@@ -90,4 +76,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             body = (TextView)itemView.findViewById(R.id.tvBody);
         }
     }
+
+
 }

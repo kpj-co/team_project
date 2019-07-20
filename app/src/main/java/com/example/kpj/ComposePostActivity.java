@@ -53,7 +53,7 @@ public class ComposePostActivity extends AppCompatActivity {
     Button bLaunch;
 
 
-    private String
+
     private static final int GALLERY_REQUEST_CODE = 100;
 
     @Override
@@ -164,7 +164,7 @@ public class ComposePostActivity extends AppCompatActivity {
             newPost.setDescription(newBody);
         }
         // TODO - send photo/pdf files to parse
-        newPost.setMedia();
+        //newPost.setMedia();
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
