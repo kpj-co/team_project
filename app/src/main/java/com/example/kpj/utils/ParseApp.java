@@ -9,6 +9,7 @@ import com.example.kpj.model.Hashtag;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
+import com.example.kpj.model.University;
 import com.example.kpj.model.UserCourseRelation;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -27,6 +28,7 @@ public class ParseApp extends Application {
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(PostHashtagRelation.class);
         ParseObject.registerSubclass(UserCourseRelation.class);
+        ParseObject.registerSubclass(University.class);
 
         final Parse.Configuration configuration = new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.app_id))
