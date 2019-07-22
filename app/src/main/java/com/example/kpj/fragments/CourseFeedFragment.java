@@ -96,7 +96,7 @@ public class CourseFeedFragment extends Fragment {
 
     private void initializeViews(View view) {
         // Find views from xml
-        rvCourseFeed = view.findViewById(R.id.rvUniversity);
+        rvCourseFeed = view.findViewById(R.id.rvCourseFeed);
         ibCompose = view.findViewById(R.id.ibCompose);
         // TODO -- Figure out how to set up a search view
         //svSearch = view.findViewById(R.id.svSearch);
