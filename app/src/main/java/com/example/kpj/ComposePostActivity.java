@@ -52,12 +52,7 @@ public class ComposePostActivity extends AppCompatActivity {
     ImageButton ibAddImage;
 
     Button bLaunch;
-
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 0e624ce90a67313057b118ff24a369dfc59eb789
+    
     private static final int GALLERY_REQUEST_CODE = 100;
     private String imagePath;
 
@@ -157,7 +152,7 @@ public class ComposePostActivity extends AppCompatActivity {
                     .into(ivComposeProfile);
         }
     }
-    
+
     private void pickFromGallery() {
         //Create an Intent with action as ACTION_PICK
         Intent intent = new Intent(Intent.ACTION_PICK);
