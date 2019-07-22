@@ -52,7 +52,7 @@ public class ComposePostActivity extends AppCompatActivity {
     ImageButton ibAddImage;
 
     Button bLaunch;
-    
+
     private static final int GALLERY_REQUEST_CODE = 100;
     private String imagePath;
 
@@ -119,8 +119,9 @@ public class ComposePostActivity extends AppCompatActivity {
         ibAddImage.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                  // this will only work if the app has permission to access
-                  // exterior storage
+                  /* this will only work if the app has permission
+                  to access exterior storage in settings -> permission
+                  */
                   pickFromGallery();
               }
           }
@@ -138,7 +139,7 @@ public class ComposePostActivity extends AppCompatActivity {
     }
 
     private void setUserProfileToScreen() {
-        //get image and usernamme
+        //get image and username
         ParseUser user = ParseUser.getCurrentUser();
         String username = user.getUsername();
         ParseFile profile = user.getParseFile(User.KEY_PROFILE);

@@ -16,6 +16,7 @@ import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
 import com.parse.ParseFile;
 
+import java.io.File;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
@@ -53,8 +54,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
 
         //populate post title, body
-        if (post.getTitle() != null) { holder.tvTitle.setText(post.getTitle()); }
-        if (post.getDescription() != null) { holder.tvDiscription.setText(post.getDescription());}
+        if (post.getTitle() != null) {
+            holder.tvTitle.setVisibility(View.VISIBLE);
+            holder.tvTitle.setText(post.getTitle());
+        } else {
+            holder.tvTitle.setVisibility(View.GONE);
+        }
+
+        if (post.getDescription() != null) {
+            holder.tvDiscription.setVisibility(View.VISIBLE);
+            holder.tvDiscription.setText(post.getDescription());
+        } else {
+            holder.tvDiscription.setVisibility(View.GONE);
+        }
+
+        if (post.getMedia() != null) {
+            holder.ivPostImage.setVisibility(View.VISIBLE);
+            ParseFile photoFile = post.getMedia();
+
+            Glide.with(context)
+                    .load(photoFile.getUrl())
+                    .apply(new RequestOptions().centerCrop())
+                    .into(holder.ivPostImage);
+        } else {
+            holder.ivPostImage.setVisibility(View.GONE);
+        }
 
         //populate post likes, dislikes
         holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
@@ -87,9 +111,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public TextView tvDownVotes;
         public TextView tvCommentCount;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            initializeViews(itemView);
+        }
+
+
+        private void initializeViews(@NonNull View itemView) {
             ivProfile = itemView.findViewById(R.id.ivProfile);
             tvUser = itemView.findViewById(R.id.tvUser);
             tvDate = itemView.findViewById(R.id.tvDate);
@@ -106,8 +134,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvDownVotes = itemView.findViewById(R.id.tvDownVotes);
             tvCommentCount = itemView.findViewById(R.id.tvCommentCount);
         }
-
-
     }
 
 

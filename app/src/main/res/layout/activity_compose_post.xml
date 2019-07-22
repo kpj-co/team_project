@@ -45,6 +45,7 @@
         android:inputType="textPersonName"
         android:singleLine="true"
         android:textSize="14sp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/tvComposeBodyLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.515"
@@ -126,6 +127,7 @@
         android:hint="Discription"
         android:inputType="textPersonName"
         android:textSize="14sp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -170,7 +172,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etComposeBody"
         tools:srcCompat="@tools:sample/avatars" />
 
-
+    <!-- TODO - implement tags -->
     <!--<ImageView-->
     <!--android:id="@+id/ivTagIcon"-->
     <!--android:layout_width="15dp"-->
