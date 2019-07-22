@@ -1,18 +1,16 @@
 package com.example.kpj;
 
-import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,14 +22,11 @@ import android.widget.Toast;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 
 public class ComposePostActivity extends AppCompatActivity {
@@ -53,8 +48,14 @@ public class ComposePostActivity extends AppCompatActivity {
 
     Button bLaunch;
 
-    private static final int GALLERY_REQUEST_CODE = 100;
-    private String imagePath;
+    public String photoFileName = "cameraPhoto.jpg";
+    public File photoFile;
+    public String imagePath;
+    public final static String APP_TAG = "compose post activity";
+
+    private final static int GALLERY_REQUEST_CODE = 100;
+    private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class ComposePostActivity extends AppCompatActivity {
     }
 
     private void initializeVariables() {
+        context = ComposePostActivity.this;
         imagePath = "";
     }
 
@@ -74,7 +76,7 @@ public class ComposePostActivity extends AppCompatActivity {
 
         tvComposeUsername = findViewById(R.id.tvComposeUsername);
         ivComposeProfile = findViewById(R.id.ivComposeProfile);
-        setUserProfileToScreen();
+        bindUserProfileToView();
 
         ivComposeImage = findViewById(R.id.ivComposeImage);
 
@@ -100,18 +102,18 @@ public class ComposePostActivity extends AppCompatActivity {
         });
     }
 
-    private void goToMainActivity() {
-        Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
-        startActivity(intent);
-    }
-
     // TODO - implement the following
     private void setIBtnPdfListener() {
         //grab pdf into image files
     }
 
     private void setIBtnCameraListener() {
-        // do if there is time left
+        ibCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLaunchCamera(v);
+            }
+        });
     }
 
     private void setIBtnAddImageListener() {
@@ -138,7 +140,7 @@ public class ComposePostActivity extends AppCompatActivity {
         });
     }
 
-    private void setUserProfileToScreen() {
+    private void bindUserProfileToView() {
         //get image and username
         ParseUser user = ParseUser.getCurrentUser();
         String username = user.getUsername();
@@ -166,6 +168,37 @@ public class ComposePostActivity extends AppCompatActivity {
         startActivityForResult(intent, GALLERY_REQUEST_CODE);
     }
 
+    public void onLaunchCamera(View view) {
+        // create Intent to take a picture and return control to the calling application
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Create a File reference to access to future access
+        photoFile = getPhotoFileUri(photoFileName);
+        // wrap File object into a content provider
+        Uri fileProvider = FileProvider.getUriForFile(context,
+                "com.codepath.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    // Returns the File for a photo stored on disk given the fileName
+    public File getPhotoFileUri(String fileName) {
+        // Get safe storage directory for photos
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        // This way, we don't need to request external read/write runtime permissions.
+        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+            Log.d(APP_TAG, "failed to create directory");
+        }
+        // Return the file target for the photo based on filename
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+        return file;
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Result code is RESULT_OK only if the user selects an Image
         if (resultCode == Activity.RESULT_OK)
@@ -183,16 +216,25 @@ public class ComposePostActivity extends AppCompatActivity {
                     //Gets the String value in the column
                     String imagePath = cursor.getString(columnIndex);
                     cursor.close();
-                    // Set the Image in ImageView after decoding the String
-                    Glide.with(ComposePostActivity.this)
-                            .load(imagePath)
-                            //TODO - change center crop to resize and fit parent container
-                            .apply(new RequestOptions().centerCrop())
-                            .into(ivComposeImage);
+                    // Set the Image in ImageView
+                    bindImagesToPreview(imagePath);
                     // Save the image path locally
                     this.imagePath = imagePath;
                     break;
+                case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
+                    // Set the Image in ImageView
+                    bindImagesToPreview(photoFile.getAbsolutePath());
+                    Toast.makeText(context, "Profile Picture Set", Toast.LENGTH_LONG).show();
+                    break;
             }
+    }
+
+    private void bindImagesToPreview(String imagePath) {
+        Glide.with(context)
+                .load(imagePath)
+                //TODO - change center crop to resize and fit parent container
+                .apply(new RequestOptions().centerCrop())
+                .into(ivComposeImage);
     }
 
     private void savePost() {
@@ -210,6 +252,7 @@ public class ComposePostActivity extends AppCompatActivity {
         if (newBody.length() != 0) {
             newPost.setDescription(newBody);
         }
+
         if (imagePath.length() != 0) {
             File imageFile = new File(imagePath);
             if (imageFile != null) {
@@ -217,6 +260,12 @@ public class ComposePostActivity extends AppCompatActivity {
                 newPost.setMedia(imageParseFile);
             }
         }
+
+        if (photoFile != null) {
+            ParseFile imageParseFile = new ParseFile(photoFile);
+            newPost.setMedia(imageParseFile);
+        }
+
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
@@ -224,5 +273,10 @@ public class ComposePostActivity extends AppCompatActivity {
         newPost.saveInBackground();
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
         goToMainActivity();
+    }
+
+    private void goToMainActivity() {
+        Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }

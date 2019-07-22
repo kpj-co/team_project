@@ -42,18 +42,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Post post = mPosts.get(position);
+        bindPostUserAssets(holder, post);
+        bindPostContent(holder, post);
+        //populate post likes, dislikes
+        holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
+        holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
+    }
 
-        //populate the user associated views
-        holder.tvUser.setText(post.getUser().getUsername());
-        ParseFile profile = post.getUser().getParseFile(User.KEY_PROFILE);
-        if (profile != null) {
-            Glide.with(context)
-                    .load(profile.getUrl())
-                    .apply(new RequestOptions().centerCrop())
-                    .into(holder.ivProfile);
-        }
-
-        //populate post title, body
+    /* Bind the data base title, body, image info with associated post views
+     * @params: ViewHolder, Post
+     * @return: void
+     */
+    private void bindPostContent(@NonNull ViewHolder holder, Post post) {
         if (post.getTitle() != null) {
             holder.tvTitle.setVisibility(View.VISIBLE);
             holder.tvTitle.setText(post.getTitle());
@@ -79,10 +79,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }
+    }
 
-        //populate post likes, dislikes
-        holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
-        holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
+    /* Bind the data base user info with user associated views of a post
+     * @params: ViewHolder, Post
+     * @return: void
+     */
+    private void bindPostUserAssets(@NonNull ViewHolder holder, Post post) {
+        holder.tvUser.setText(post.getUser().getUsername());
+        ParseFile profile = post.getUser().getParseFile(User.KEY_PROFILE);
+        if (profile != null) {
+            Glide.with(context)
+                    .load(profile.getUrl())
+                    .apply(new RequestOptions().centerCrop())
+                    .into(holder.ivProfile);
+        }
     }
 
     @Override
