@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -32,7 +33,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        Context context = viewGroup.getContext();
+     Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View postView = inflater.inflate(R.layout.post_item, viewGroup, false);
         ViewHolder holder = new ViewHolder(postView);
@@ -47,6 +48,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         //populate post likes, dislikes
         holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
         holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
+        post.isLiked = false;
+        post.isDisliked = false;
+        setUpUpVoteListener(holder, post);
+        setUpDownVoteListener(holder, post);
     }
 
     /* Bind the data base title, body, image info with associated post views
@@ -54,6 +59,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      * @return: void
      */
     private void bindPostContent(@NonNull ViewHolder holder, Post post) {
+
         if (post.getTitle() != null) {
             holder.tvTitle.setVisibility(View.VISIBLE);
             holder.tvTitle.setText(post.getTitle());
@@ -79,6 +85,70 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }
+
+    }
+
+    /* Up Vote a post and update parse db
+     * @params: ViewHolder, Post
+     * @return: void
+     */
+    private void setUpUpVoteListener(final ViewHolder holder, final Post post) {
+        holder.ibLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newParseCount = 0;
+                // Increase UpVote count
+                if (!post.isLiked) {
+                    // TODO -- CHANGE LIKE IMAGE TO DARK COLOR
+                    int newCount = post.getUpVotes() + 1;
+                    holder.tvUpVotes.setText(String.valueOf(newCount));
+                    post.isLiked = true;
+                    newParseCount = newCount;
+                    Toast.makeText(context, "upvoted post", Toast.LENGTH_SHORT).show();
+                } else { // decrease upvote count
+                    // TODO -- CHANGE LIKE IMAGE TO LIGHT COLOR
+                    int newCount = post.getUpVotes() - 1;
+                    holder.tvUpVotes.setText(String.valueOf(newCount));
+                    post.isLiked = false;
+                    newParseCount = newCount;
+                    Toast.makeText(context, "undo upvote", Toast.LENGTH_SHORT).show();
+                }
+                post.setUpVotes(newParseCount);
+                post.saveInBackground();
+            }
+        });
+    }
+
+    /* Down Vote a post and update parse db
+     * @params: ViewHolder, Post
+     * @return: void
+     */
+    private void setUpDownVoteListener(final ViewHolder holder, final Post post) {
+        holder.ibDislike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newParseCount = 0;
+                // Increase down vote count
+                if (!post.isDisliked) {
+                    // TODO -- CHANGE DISLIKE IMAGE TO DARK COLOR
+                    int newCount = post.getDownVotes() + 1;
+                    holder.tvDownVotes.setText(String.valueOf(newCount));
+                    post.isDisliked = true;
+                    newParseCount = newCount;
+                    Toast.makeText(context, "downvoted post", Toast.LENGTH_SHORT).show();
+                } else { // decrease down vote count
+                    // TODO -- CHANGE LIKE IMAGE TO LIGHT COLOR
+                    int newCount = post.getDownVotes() - 1;
+                    holder.tvDownVotes.setText(String.valueOf(newCount));
+                    post.isDisliked = false;
+                    newParseCount = newCount;
+                    Toast.makeText(context, "undo down vote", Toast.LENGTH_SHORT).show();
+                }
+                post.setDownVotes(newParseCount);
+                post.saveInBackground();
+            }
+        });
+
     }
 
     /* Bind the data base user info with user associated views of a post
