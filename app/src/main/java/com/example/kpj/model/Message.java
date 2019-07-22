@@ -1,9 +1,14 @@
 package com.example.kpj.model;
 
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 @ParseClassName("Message")
 public class Message extends ParseObject {
@@ -13,6 +18,8 @@ public class Message extends ParseObject {
     private static final String KEY_COURSE = "course";
     private static final String KEY_USER = "user";
     private static final String KEY_DESCRIPTION = "description";
+    private String username;
+    private ParseFile parseFileUserImage;
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
@@ -31,9 +38,32 @@ public class Message extends ParseObject {
     }
 
     //TODO: Implement the method or something equivalent to it in the adapter
-    public String getUserId() {
-        return "";
+    public void setUserPhoto() {
+
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.whereEqualTo("username", this.getUser().getUsername());
+            query.findInBackground(new FindCallback<ParseUser>() {
+
+                @Override
+                public void done(List<ParseUser> users, ParseException e) {
+                   parseFileUserImage = users.get(0).getParseFile("photoImage");
+
+                }
+            });
     }
+
+    public void setUserUsername() {
+        username = this.getUser().getUsername();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public ParseFile getParseFileUserImage() {
+        return parseFileUserImage;
+    }
+
 
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
