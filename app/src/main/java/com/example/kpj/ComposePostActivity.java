@@ -28,6 +28,7 @@ import com.parse.ParseUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -50,6 +51,8 @@ public class ComposePostActivity extends AppCompatActivity {
     ImageButton ibAddImage;
 
     Button bLaunch;
+
+
 
     private static final int GALLERY_REQUEST_CODE = 100;
 
@@ -110,7 +113,9 @@ public class ComposePostActivity extends AppCompatActivity {
         //grab images from gallery
         ibAddImage.setOnClickListener(new View.OnClickListener() {
               @Override
-              public void onClick(View v) {checkPermissions();
+              public void onClick(View v) {
+                  //checkPermissions();
+                  pickFromGallery();
               }
           }
       );}
@@ -158,53 +163,14 @@ public class ComposePostActivity extends AppCompatActivity {
         if (newBody.length() != 0) {
             newPost.setDescription(newBody);
         }
-        // TODO - send photo/pdf files
+        // TODO - send photo/pdf files to parse
+        //newPost.setMedia();
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
         newPost.saveInBackground();
         //goToMainActivity();
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
-    }
-
-    private void checkPermissions(){
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED||
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    },
-                    1052);
-
-        }
-
-    }
-
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1052: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED ){
-                    // permission was granted.
-                    pickFromGallery();
-                } else {
-                    // Permission denied - Show a message to inform the user that this app only works
-                    // with these permissions granted
-                }
-                return;
-            }
-
-        }
     }
 
     private void pickFromGallery() {
@@ -238,7 +204,6 @@ public class ComposePostActivity extends AppCompatActivity {
                     cursor.close();
                     // Set the Image in ImageView after decoding the String
                     Glide.with(ComposePostActivity.this)
-//                            .load(BitmapFactory.decodeFile(imgDecodableString))
                             .load(imgDecodableString)
                             //TODO - change cetner crop
                             .apply(new RequestOptions().centerCrop())
