@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -52,15 +53,19 @@ public class ComposePostActivity extends AppCompatActivity {
 
     Button bLaunch;
 
-
-    private String
     private static final int GALLERY_REQUEST_CODE = 100;
+    private String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose_post);
         initializeViews();
+        initializeVariables();
+    }
+
+    private void initializeVariables() {
+        imagePath = "";
     }
 
     private void initializeViews() {
@@ -114,7 +119,8 @@ public class ComposePostActivity extends AppCompatActivity {
         ibAddImage.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                  //checkPermissions();
+                  // this will only work if the app has permission to access
+                  // exterior storage
                   pickFromGallery();
               }
           }
@@ -147,32 +153,6 @@ public class ComposePostActivity extends AppCompatActivity {
         }
     }
 
-    private void savePost() {
-        // Create new post instance
-        Post newPost = new Post();
-        // Grab content from the compose activity
-        String newTitle = etComposePostTitle.getText().toString();
-        String newBody = etComposeBody.getText().toString();
-        // TODO - grab photo/pdf file
-        // Set user of post
-        newPost.setUser(ParseUser.getCurrentUser());
-        // Set content of post
-        if (newTitle.length() != 0) {
-            newPost.setTitle(newTitle);
-        }
-        if (newBody.length() != 0) {
-            newPost.setDescription(newBody);
-        }
-        // TODO - send photo/pdf files to parse
-        newPost.setMedia();
-        // Setup vote count
-        newPost.setUpVotes(0);
-        newPost.setDownVotes(0);
-        newPost.saveInBackground();
-        //goToMainActivity();
-        Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
-    }
-
     private void pickFromGallery() {
         //Create an Intent with action as ACTION_PICK
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -200,15 +180,48 @@ public class ComposePostActivity extends AppCompatActivity {
                     //Get the column index of MediaStore.Images.Media.DATA
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     //Gets the String value in the column
-                    String imgDecodableString = cursor.getString(columnIndex);
+                    String imagePath = cursor.getString(columnIndex);
                     cursor.close();
                     // Set the Image in ImageView after decoding the String
                     Glide.with(ComposePostActivity.this)
-                            .load(imgDecodableString)
-                            //TODO - change cetner crop
+                            .load(imagePath)
+                            //TODO - change center crop to resize and fit parent container
                             .apply(new RequestOptions().centerCrop())
                             .into(ivComposeImage);
+                    // Save the image path locally
+                    this.imagePath = imagePath;
                     break;
             }
+    }
+
+    private void savePost() {
+        // Create new post instance
+        Post newPost = new Post();
+        // Grab text content from compose
+        String newTitle = etComposePostTitle.getText().toString();
+        String newBody = etComposeBody.getText().toString();
+        // Set user of post
+        newPost.setUser(ParseUser.getCurrentUser());
+        // Set content of post
+        if (newTitle.length() != 0) {
+            newPost.setTitle(newTitle);
+        }
+        if (newBody.length() != 0) {
+            newPost.setDescription(newBody);
+        }
+        if (imagePath.length() != 0) {
+            File imageFile = new File(imagePath);
+            if (imageFile != null) {
+                ParseFile imageParseFile = new ParseFile(imageFile);
+                newPost.setMedia(imageParseFile);
+            }
+        }
+        // Setup vote count
+        newPost.setUpVotes(0);
+        newPost.setDownVotes(0);
+        // Save post in background thread
+        newPost.saveInBackground();
+        Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
+        goToMainActivity();
     }
 }
