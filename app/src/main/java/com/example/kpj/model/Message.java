@@ -1,5 +1,7 @@
 package com.example.kpj.model;
 
+import android.util.Log;
+
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -19,7 +21,7 @@ public class Message extends ParseObject {
     private static final String KEY_USER = "user";
     private static final String KEY_DESCRIPTION = "description";
     private String username;
-    private ParseFile parseFileUserImage;
+    private ParseFile parseFileUserImage = null;
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
@@ -38,18 +40,24 @@ public class Message extends ParseObject {
     }
 
     //TODO: Implement the method or something equivalent to it in the adapter
-    public void setUserPhoto() {
-
-            ParseQuery<ParseUser> query = ParseUser.getQuery();
-            query.whereEqualTo("username", this.getUser().getUsername());
+    public void setUserPhoto() throws ParseException{
+/*            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            ParseUser user = this.getUser();
+            Log.d("Username", user.fetchIfNeeded().getUsername());
+            query.whereEqualTo("User", this.getUser());
             query.findInBackground(new FindCallback<ParseUser>() {
 
                 @Override
                 public void done(List<ParseUser> users, ParseException e) {
-                   parseFileUserImage = users.get(0).getParseFile("photoImage");
+                    try {
+                        parseFileUserImage = users.get(0).fetchIfNeeded().getParseFile("photoImage");
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
 
                 }
-            });
+            });*/
+        parseFileUserImage = this.getUser().fetchIfNeeded().getParseFile("photoImage");
     }
 
     public void setUserUsername() {
