@@ -19,7 +19,7 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFragmentAdapter.ViewHolder> implements Filterable{
+public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFragmentAdapter.ViewHolder>{
 
     private Context context;
     private List<University> universities;
@@ -66,39 +66,4 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
             tvUniversity = itemView.findViewById(R.id.tvUniversity);
         }
     }
-    @Override
-    public Filter getFilter() {
-        return universityFilter;
-    }
-    private Filter universityFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<University> filteredUniversities = new ArrayList<>();
-
-            if(constraint == null || constraint.length() == 0){
-                filteredUniversities.addAll(universitiesFull);
-            }
-            else {
-                String filteredPattern = constraint.toString().toLowerCase().trim();
-
-                for(University university : universitiesFull){
-                    if(university.getName().toLowerCase().contains(filteredPattern)){
-                        filteredUniversities.add(university);
-                    }
-                }
-            }
-            FilterResults results = new FilterResults();
-            results.values = filteredUniversities;
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            universities.clear();
-            universities.addAll((List) results.values);
-            notifyDataSetChanged();
-        }
-    };
-
 }
