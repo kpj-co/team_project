@@ -57,7 +57,7 @@ public class MessageFragment extends Fragment {
             mPage = getArguments().getInt(ARG_PAGE);
         }
 
-        //TODO: Remove this when you can get the course dinamically
+
 
     }
 
@@ -84,6 +84,7 @@ public class MessageFragment extends Fragment {
 
     void prepareRecyclerView() {
         messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(), messageArrayList);
+        rvMessages.setAdapter(messageAdapter);
         rvMessages.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
@@ -106,6 +107,7 @@ public class MessageFragment extends Fragment {
                                 Message message = objects.get(i);
                                 messageArrayList.add(message);
                                 messageAdapter.notifyItemInserted(messageArrayList.size() - 1);
+                                Log.d("Size of list", "" + messageArrayList.size());
                                 try {
                                     Log.d("MessageFragment", "Message:" + message.fetchIfNeeded().getString("description"));
                                 } catch (ParseException e1) {

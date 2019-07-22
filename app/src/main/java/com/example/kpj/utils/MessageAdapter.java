@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.kpj.R;
 import com.example.kpj.model.Message;
+import com.parse.ParseException;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -55,7 +56,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
 
         final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
-        Glide.with(mContext).load(message.getParseFileUserImage().getUrl()).into(profileView);
+
+        if(message.getParseFileUserImage() != null) {
+            Glide.with(mContext).load(message.getParseFileUserImage().getUrl()).into(profileView);
+        }
+
+        else {
+            try {
+                message.setUserPhoto();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         holder.body.setText(message.getDescription());
     }
 
