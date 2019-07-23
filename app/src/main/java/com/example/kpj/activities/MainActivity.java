@@ -12,6 +12,7 @@ import com.example.kpj.model.Course;
 
 public class MainActivity extends AppCompatActivity {
 
+    public Course course;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +28,10 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        // Grab course title
-        Course course =  getIntent().getParcelableExtra("selectedCourse");
-        String message = "You are in " + course.getName();
-        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+        // Grab course
+        course =  getIntent().getParcelableExtra("selectedCourse");
+//        String message = "You are in " + course.getName();
+//
+//        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
     }
 }

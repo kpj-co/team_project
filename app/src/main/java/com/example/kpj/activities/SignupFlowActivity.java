@@ -13,12 +13,10 @@ import com.example.kpj.fragments.SignUpFragment;
 
 public class SignupFlowActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_flow);
-
         if (savedInstanceState == null) {
             Fragment fragment = new SignUpFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -27,25 +25,6 @@ public class SignupFlowActivity extends AppCompatActivity {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
-
-
-//        else {
-//            String intentFragment = getIntent().getExtras().getString("loadThisFragment");
-//            switch (intentFragment) {
-//                case "COURSE LIST":
-//                    // Load corresponding fragment
-//                    Fragment fragment = new UserCourseListFragment();
-//                    FragmentManager fragmentManager = getSupportFragmentManager();
-//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                    fragmentTransaction.replace(R.id.fragment_container, fragment);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
-//                    break;
-//            }
-//
-//        }
-
-
     }
 
 }

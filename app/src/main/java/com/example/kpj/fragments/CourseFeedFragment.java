@@ -1,5 +1,6 @@
 package com.example.kpj.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.kpj.activities.ComposePostActivity;
+import com.example.kpj.activities.MainActivity;
+import com.example.kpj.model.Course;
 import com.example.kpj.utils.PostAdapter;
 import com.example.kpj.R;
 import com.example.kpj.model.Post;
@@ -37,6 +40,7 @@ public class CourseFeedFragment extends Fragment {
     private PostAdapter postAdapter;
 
     public FragmentActivity fragmentActivity;
+    private Course course;
 
     public CourseFeedFragment() {
         // Required empty public constructor
@@ -68,6 +72,10 @@ public class CourseFeedFragment extends Fragment {
         initializeVariables();
         setUpAdapter();
         setComposeButtonListener();
+        // Get course from main activity
+        this.course = ((MainActivity)getContext()).course;
+        String message = "You are in " + course.getName();
+        Toast.makeText(fragmentActivity, message, Toast.LENGTH_LONG).show();
         queryPosts();
         return view;
     }
@@ -75,6 +83,7 @@ public class CourseFeedFragment extends Fragment {
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery("Post");
         query.include(Post.KEY_USER);
+        query.whereEqualTo("course", course);
         query.orderByDescending(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
             @Override
