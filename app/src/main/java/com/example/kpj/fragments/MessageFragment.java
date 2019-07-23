@@ -117,8 +117,16 @@ public class MessageFragment extends Fragment {
             newMessage.setUniversity(university);
         }
 
+        //Set the course of the user
+        if(course != null) {
+            newMessage.setCourse(course);
+        }
+
         //Put the current user as the author of the message
         newMessage.setUser(ParseUser.getCurrentUser());
+
+        //Clean the EditText
+        etMessage.setText("");
 
         //Save the message in background
         newMessage.saveInBackground();
