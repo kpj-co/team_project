@@ -34,7 +34,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         LayoutInflater inflater = LayoutInflater.from(context);
         // now create the view for course item
         View courseView = inflater.inflate(R.layout.course_item, viewGroup, false);
-        // now return the new viewholder
+        // now return the new view holder
         return new ViewHolder(courseView);
     }
 
