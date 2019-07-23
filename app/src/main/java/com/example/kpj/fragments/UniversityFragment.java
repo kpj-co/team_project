@@ -61,30 +61,29 @@ public class UniversityFragment extends Fragment {
 
 
         recyclerView = view.findViewById(R.id.rvUniversity);
-        adapter = new UniversityFragmentAdapter(getContext(), universities);
         universities = new ArrayList<>();
+        findUniversityByName();
+        adapter = new UniversityFragmentAdapter(getContext(), universities);
         button = (Button) view.findViewById(R.id.bTest);
         recyclerView.setAdapter(adapter);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        findUniversityByName();
 
+        //set up the searchview
+        searchView = view.findViewById(R.id.svSearch);
+        searchView.setQueryHint("University");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
 
-//        //set up the searchview
-//        searchView = view.findViewById(R.id.svSearch);
-//        searchView.setQueryHint("University");
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String s) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String s) {
-//                universityFilter.getFilter().filter(s.toLowerCase().toString());
-//                return true;
-//            }
-//        });
+            @Override
+            public boolean onQueryTextChange(String s) {
+
+                return true;
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
 

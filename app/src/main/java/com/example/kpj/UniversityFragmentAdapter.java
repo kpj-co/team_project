@@ -18,14 +18,14 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
 
     private Context context;
     private List<University> universities;
-    private List<University> universityFilter;
-    //private UniversityFilter filter;
+    private List<University> universityFilteredList;
+    private UniversityFilter filter;
 
     public UniversityFragmentAdapter(Context context, ArrayList<University> universities) {
         this.universities = universities;
         this.context = context;
-       // this.universityFilter = universities;
-       // filter = new UniversityFilter(universities, this);
+        this.universityFilteredList = universities;
+        filter = new UniversityFilter(universities, this);
     }
 
     @NonNull
@@ -45,24 +45,36 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         // this method is to bind the components of the layout to the user in parse
         Log.d("Adapter", "On Bind is called");
-       String university = universityFilter.get(position).getString("name");
+       String university = universityFilteredList.get(position).getString("name");
        viewHolder.tvUniversity.setText(university);
     }
 
 
+//    public void setList(List<University> list){
+//        universityFilteredList = list;
+//    }
+//
+//    public void filterList(String text){
+//        filter.
+//    }
     @Override
     public int getItemCount() {
-       // Log.d("Adapter", "Item Count is called "+ universities.size());
-        return 0;
+       Log.d("Adapter", "Item Count is called "+ universities.size());
+        return universities.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView tvUniversity;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Log.d("Adapter", "Viewholder is called");
             tvUniversity = itemView.findViewById(R.id.tvUniversity);
+        }
+
+        @Override
+        public void onClick(View v) {
+
         }
     }
 }

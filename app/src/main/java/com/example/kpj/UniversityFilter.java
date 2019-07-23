@@ -49,7 +49,7 @@ public class UniversityFilter implements Filterable {
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-           // adapter.setList(filteredUniversities);
+            //adapter.setList(filteredUniversities);
             adapter.notifyDataSetChanged();
 
         }
