@@ -28,7 +28,8 @@ public class LoginActivity extends AppCompatActivity {
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
-            goToMainActivity();
+            //goToMainActivity();
+            goToCourseList();
         } else {
 
             usernameInput = findViewById(R.id.etUsername);
@@ -68,7 +69,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     Log.d("LoginActivity", "login Success!");
                     Toast.makeText(getApplicationContext(),"Login Success",Toast.LENGTH_SHORT).show();
-                    goToMainActivity();
+                    //goToMainActivity();
+                    goToCourseList();
                 } else {
                     Toast.makeText(getApplicationContext(),"Username or Password is wrong",Toast.LENGTH_SHORT).show();
                     Log.e("LoginActivity", "Login Failed");
@@ -79,14 +81,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goToSignupActivity() {
-        Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+        Intent intent = new Intent(LoginActivity.this, SignupFlowActivity.class);
         startActivity(intent);
     }
 
-    //send user to home activity
-    public void goToMainActivity() {
-        Intent in = new Intent(LoginActivity.this, MainActivity.class);
+    private void goToCourseList() {
+        Intent in = new Intent(LoginActivity.this, SignupFlowActivity.class);
+        in.putExtra("loadThisFragment", "COURSE LIST");
         startActivity(in);
         finish();
     }
+
+
 }

@@ -3,7 +3,6 @@ package com.example.kpj.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +12,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.kpj.LoginActivity;
-import com.example.kpj.MainActivity;
 import com.example.kpj.R;
-import com.example.kpj.SignupActivity;
-import com.example.kpj.SignupFlowActivity;
 import com.example.kpj.model.User;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -83,7 +77,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void goToMainActivity() {
-        Intent intent = new Intent(getContext(), SignupFlowActivity.class);
+        Intent intent = new Intent(getContext(), LoginActivity.class);
         startActivity(intent);
     }
 }
