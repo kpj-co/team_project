@@ -13,17 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.kpj.ComposePostActivity;
-import com.example.kpj.MainActivity;
-import com.example.kpj.PostAdapter;
+import com.example.kpj.activities.ComposePostActivity;
+import com.example.kpj.utils.PostAdapter;
 import com.example.kpj.R;
 import com.example.kpj.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

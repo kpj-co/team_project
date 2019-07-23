@@ -1,4 +1,4 @@
-package com.example.kpj;
+package com.example.kpj.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.kpj.R;
 import com.example.kpj.model.Course;
 import com.parse.ParseException;
 
@@ -33,7 +34,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
         LayoutInflater inflater = LayoutInflater.from(context);
         // now create the view for course item
         View courseView = inflater.inflate(R.layout.course_item, viewGroup, false);
-        // now return the new viewholder
+        // now return the new view holder
         return new ViewHolder(courseView);
     }
 
@@ -41,7 +42,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
     public void onBindViewHolder(@NonNull CourseListAdapter.ViewHolder viewHolder, int position) {
         // this method is to bind the components of the layout to the user in parse
         Log.d("Adapter", "On Bind is called");
-        // TODO - change the way you get course to getting the course associated with each user
         try {
             viewHolder.tvCourse.setText(courses.get(position).fetchIfNeeded().getString("name"));
         } catch (ParseException e) {

@@ -13,12 +13,13 @@ import java.util.List;
 public class UniversityFilter implements Filterable {
 
     private List<University> universities;
-    private List<University> universitiesFull;
+    private UniversityFragmentAdapter adapter;
+    private List<University> filteredUniversities;
 
-
-    public UniversityFilter(ArrayList<University> universities){
+    public UniversityFilter(ArrayList<University> universities, UniversityFragmentAdapter adapter){
+        this.adapter = adapter;
         this.universities = universities;
-        this.universitiesFull = new ArrayList<University>(universities);
+        this.filteredUniversities = new ArrayList<>();
     }
 
     @Override
@@ -28,14 +29,13 @@ public class UniversityFilter implements Filterable {
     private Filter universityFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<University> filteredUniversities = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
-                filteredUniversities.addAll(universitiesFull);
+                filteredUniversities.addAll(universities);
             } else {
                 String filteredPattern = constraint.toString().toLowerCase().trim();
 
-                for (University university : universitiesFull) {
+                for (University university : universities) {
                     if (university.getName().toLowerCase().contains(filteredPattern)) {
                         filteredUniversities.add(university);
                     }
@@ -49,8 +49,8 @@ public class UniversityFilter implements Filterable {
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            universities.clear();
-            universities.addAll((List) results.values);
+            //adapter.setList(filteredUniversities);
+            adapter.notifyDataSetChanged();
 
         }
 

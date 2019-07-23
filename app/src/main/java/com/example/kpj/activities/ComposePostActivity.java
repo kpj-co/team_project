@@ -1,4 +1,4 @@
-package com.example.kpj;
+package com.example.kpj.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kpj.R;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
 import com.parse.ParseFile;

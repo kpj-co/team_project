@@ -1,9 +1,12 @@
-package com.example.kpj;
+package com.example.kpj.activities;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.kpj.R;
+import com.example.kpj.FragmentMainActivityAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        viewPager.setAdapter(new FragmentPageAdapter(getSupportFragmentManager(),
+        viewPager.setAdapter(new FragmentMainActivityAdapter(getSupportFragmentManager(),
                 MainActivity.this));
 
         // Give the TabLayout the ViewPager
