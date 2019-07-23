@@ -20,6 +20,7 @@ public class Message extends ParseObject {
     private static final String KEY_COURSE = "course";
     private static final String KEY_USER = "user";
     private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_UNIVERSITY = "university";
     private String username;
     private ParseFile parseFileUserImage = null;
 
@@ -37,6 +38,10 @@ public class Message extends ParseObject {
 
     public void setDescription(String description) {
         put(KEY_DESCRIPTION, description);
+    }
+
+    public void setUniversity(University university) {
+        put(KEY_UNIVERSITY, university);
     }
 
     //TODO: Implement the method or something equivalent to it in the adapter
@@ -66,6 +71,10 @@ public class Message extends ParseObject {
 
     public String getUsername() {
         return username;
+    }
+    
+    public University getUniversity() {
+        return (University)getParseObject(KEY_UNIVERSITY);
     }
 
     public ParseFile getParseFileUserImage() {

@@ -119,7 +119,7 @@ public class MessageFragment extends Fragment {
 
         }
 
-        
+
 
         //Save the message in background
 
