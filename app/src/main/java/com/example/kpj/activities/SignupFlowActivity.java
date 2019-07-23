@@ -9,10 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.kpj.R;
-import com.example.kpj.fragments.CourseListFragment;
-import com.example.kpj.fragments.SelectCoursesFragment;
 import com.example.kpj.fragments.SignUpFragment;
-import com.example.kpj.fragments.UniversityFragment;
 
 public class SignupFlowActivity extends AppCompatActivity {
 
@@ -29,23 +26,24 @@ public class SignupFlowActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-        } else {
-            String intentFragment = getIntent().getExtras().getString("loadThisFragment");
-            switch (intentFragment) {
-                case "COURSE LIST":
-                    // Load corresponding fragment
-                    Fragment fragment = new CourseListFragment();
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_container, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    break;
-            }
-
-
-
         }
+
+
+//        else {
+//            String intentFragment = getIntent().getExtras().getString("loadThisFragment");
+//            switch (intentFragment) {
+//                case "COURSE LIST":
+//                    // Load corresponding fragment
+//                    Fragment fragment = new UserCourseListFragment();
+//                    FragmentManager fragmentManager = getSupportFragmentManager();
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.replace(R.id.fragment_container, fragment);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
+//                    break;
+//            }
+//
+//        }
 
 
     }

@@ -76,5 +76,6 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         public void onClick(View v) {
 
         }
+
     }
 }

@@ -36,14 +36,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View postView = inflater.inflate(R.layout.post_item, viewGroup, false);
-        ViewHolder holder = new ViewHolder(postView);
-        return holder;
+        return new ViewHolder(postView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Post post = mPosts.get(position);
-        bindPostUserAssets(holder, post);
         bindPostContent(holder, post);
         //populate post likes, dislikes
         holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
@@ -59,7 +57,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      * @return: void
      */
     private void bindPostContent(@NonNull ViewHolder holder, Post post) {
-
+        bindPostUserAssets(holder, post);
         if (post.getTitle() != null) {
             holder.tvTitle.setVisibility(View.VISIBLE);
             holder.tvTitle.setText(post.getTitle());
@@ -68,10 +66,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
 
         if (post.getDescription() != null) {
-            holder.tvDiscription.setVisibility(View.VISIBLE);
-            holder.tvDiscription.setText(post.getDescription());
+            holder.tvDescription.setVisibility(View.VISIBLE);
+            holder.tvDescription.setText(post.getDescription());
         } else {
-            holder.tvDiscription.setVisibility(View.GONE);
+            holder.tvDescription.setVisibility(View.GONE);
         }
 
         if (post.getMedia() != null) {
@@ -85,7 +83,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }
-
     }
 
     /* Up Vote a post and update parse db
@@ -96,7 +93,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.ibLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newParseCount = 0;
+                int newParseCount;
                 // Increase UpVote count
                 if (!post.isLiked) {
                     // TODO -- CHANGE LIKE IMAGE TO DARK COLOR
@@ -127,7 +124,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.ibDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newParseCount = 0;
+                int newParseCount;
                 // Increase down vote count
                 if (!post.isDisliked) {
                     // TODO -- CHANGE DISLIKE IMAGE TO DARK COLOR
@@ -151,7 +148,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     }
 
-    /* Bind the data base user info with user associated views of a post
+    /** Bind the data base user info with user associated views of a post
      * @params: ViewHolder, Post
      * @return: void
      */
@@ -177,7 +174,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public TextView tvDate;
 
         public TextView tvTitle;
-        public TextView tvDiscription;
+        public TextView tvDescription;
         public ImageView ivPostImage;
 
         public TextView tvHashtag1;
@@ -197,13 +194,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             initializeViews(itemView);
         }
 
-
         private void initializeViews(@NonNull View itemView) {
             ivProfile = itemView.findViewById(R.id.ivProfile);
             tvUser = itemView.findViewById(R.id.tvUser);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDiscription = itemView.findViewById(R.id.tvDescription);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
             ivPostImage = itemView.findViewById(R.id.ivPostImage);
             tvHashtag1 = itemView.findViewById(R.id.tvHashtag1);
             tvHashtag2 = itemView.findViewById(R.id.tvHashtag2);

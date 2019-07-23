@@ -87,11 +87,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToCourseList() {
-        Intent in = new Intent(LoginActivity.this, SignupFlowActivity.class);
-        in.putExtra("loadThisFragment", "COURSE LIST");
-        startActivity(in);
-        finish();
+        Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
+        startActivity(intent);
     }
-
 
 }
