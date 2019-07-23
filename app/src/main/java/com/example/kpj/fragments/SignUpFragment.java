@@ -141,15 +141,13 @@ public class SignUpFragment extends Fragment {
 
     public void saveNewProfileAssetsToParse() {
         ParseUser user = ParseUser.getCurrentUser();
-        ParseFile parseFile = new ParseFile(photoFile);
-        user.saveInBackground();
-        if (parseFile != null) {
+        if (photoFile != null) {
+            ParseFile parseFile = new ParseFile(photoFile);
             //send profile photo to parse
             user.put(User.KEY_PROFILE, parseFile);
             //save in background thread
             user.saveInBackground();
         }
-
         Toast.makeText(getContext(), "Account created", Toast.LENGTH_LONG).show();
         goToUniversityFragment();
     }
