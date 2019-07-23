@@ -1,16 +1,22 @@
 package com.example.kpj.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.kpj.LoginActivity;
+import com.example.kpj.MainActivity;
 import com.example.kpj.R;
+import com.example.kpj.SignupActivity;
+import com.example.kpj.SignupFlowActivity;
 import com.example.kpj.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -22,8 +28,10 @@ public class ProfileFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
+
     private ImageView imageView;
     private TextView tvUsername;
+    private Button btnLogOut;
 
     public ProfileFragment() {
     }
@@ -52,7 +60,9 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         imageView = view.findViewById(R.id.ivProfilePic);
         tvUsername = view.findViewById(R.id.tvProfileUsername);
-        //findUser(ParseUser.getCurrentUser());
+        btnLogOut = view.findViewById(R.id.bLogout);
+        setBtnLogOut();
+
         ParseUser user = ParseUser.getCurrentUser();
         tvUsername.setText(user.getUsername());
         Glide.with(getContext())
@@ -61,21 +71,20 @@ public class ProfileFragment extends Fragment {
         return view;
 
     }
-//
-//    private void findUser(ParseUser user) {
-//        final User.Query query = new User.Query();
-//        query.whereEqualTo("username", user.getUsername());
-//        query.findInBackground(new FindCallback<User>() {
-//            @Override
-//            public void done(List<User> objects, ParseException e) {
-//                if(e == null){
-//                    for(int i = 0; i < objects.size(); i++){
-//                       Glide.with(getContext()).load(objects.get(i).getProfileImage()).into(imageView);
-//                       tvUsername.setText(objects.get(i).getUsername());
-//                    }
-//                }
-//            }
-//        });
-//    }
+
+    public void setBtnLogOut() {
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOut();
+                goToMainActivity();
+            }
+        });
+    }
+
+    private void goToMainActivity() {
+        Intent intent = new Intent(getContext(), SignupFlowActivity.class);
+        startActivity(intent);
+    }
 }
 

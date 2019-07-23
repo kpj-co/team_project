@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.kpj.fragments.SignUpFragment;
-import com.example.kpj.fragments.UniversityFragment;
 
 public class SignupFlowActivity extends AppCompatActivity {
 
@@ -24,7 +23,7 @@ public class SignupFlowActivity extends AppCompatActivity {
             Fragment fragment = new SignUpFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_place, fragment);
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }

@@ -41,7 +41,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Vi
     public void onBindViewHolder(@NonNull CourseListAdapter.ViewHolder viewHolder, int position) {
         // this method is to bind the components of the layout to the user in parse
         Log.d("Adapter", "On Bind is called");
-        // TODO - change the way you get course to getting the course associated with each user
         try {
             viewHolder.tvCourse.setText(courses.get(position).fetchIfNeeded().getString("name"));
         } catch (ParseException e) {

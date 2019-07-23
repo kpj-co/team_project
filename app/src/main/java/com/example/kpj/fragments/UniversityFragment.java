@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -26,16 +26,17 @@ import java.util.List;
 public class UniversityFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
+
     private RecyclerView recyclerView;
-    private ArrayList<University> universities;
-    private UniversityFragmentAdapter adapter;
-    private LinearLayoutManager linearLayoutManager;
     private SearchView searchView;
     private Button button;
-    private UniversityFilter universityFilter;
 
-    public UniversityFragment() {
-    }
+    private ArrayList<University> universities;
+
+    private LinearLayoutManager linearLayoutManager;
+
+    private UniversityFragmentAdapter adapter;
+
 
     public static UniversityFragment newInstance(int page) {
         UniversityFragment fragment = new UniversityFragment();
@@ -55,33 +56,35 @@ public class UniversityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.fragment_university, container, false);
-        //set up the searchview
-        searchView = (SearchView) view.findViewById(R.id.svSearch);
-        searchView.setQueryHint("University");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
+        final View view = inflater.inflate(R.layout.fragment_university,
+                container, false);
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-               universityFilter.getFilter().filter(s.toLowerCase().toString());
-               return true;
-            }
-        });
-        findUniversityByName();
+
         recyclerView = view.findViewById(R.id.rvUniversity);
         adapter = new UniversityFragmentAdapter(getContext(), universities);
-        recyclerView = view.findViewById(R.id.rvUniversity);
+        universities = new ArrayList<>();
         button = (Button) view.findViewById(R.id.bTest);
-        adapter = new UniversityFragmentAdapter(getContext(), universities);
-        universityFilter = new UniversityFilter(universities);
         recyclerView.setAdapter(adapter);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+        findUniversityByName();
 
+
+//        //set up the searchview
+//        searchView = view.findViewById(R.id.svSearch);
+//        searchView.setQueryHint("University");
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String s) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//                universityFilter.getFilter().filter(s.toLowerCase().toString());
+//                return true;
+//            }
+//        });
 
         button.setOnClickListener(new View.OnClickListener() {
 
@@ -93,6 +96,7 @@ public class UniversityFragment extends Fragment {
         return view;
     }
 
+
     private void findUniversityByName() {
         final University.Query query = new University.Query();
         query.findInBackground(new FindCallback<University>() {
@@ -103,18 +107,18 @@ public class UniversityFragment extends Fragment {
                         University university =  objects.get(i);
                         universities.add(university);
                         adapter.notifyItemInserted(universities.size()-1);
+                        Log.d("UniversityFragment", "List of universities" + university.getName());
                     }
                 }
             }
         });
     }
 
-
     private void goToSelectCourses() {
         Fragment fragment = new SelectCoursesFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_place, fragment);
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

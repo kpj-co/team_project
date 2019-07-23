@@ -1,8 +1,10 @@
 package com.example.kpj.model;
 
+import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+@ParseClassName("University")
 public class University  extends ParseObject {
 
     //Limit to get universities

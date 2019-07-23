@@ -21,9 +21,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.kpj.MainActivity;
 import com.example.kpj.R;
-import com.example.kpj.SignupActivity;
 import com.example.kpj.model.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -84,7 +82,6 @@ public class SignUpFragment extends Fragment {
         initializeViews(view);
         setSignUpButtonListener();
         setCameraListener();
-        photoFile = null;
         return view;
 
     }
@@ -188,19 +185,12 @@ public class SignUpFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                File photofile2 = photoFile;
-
-                if (photofile2 != null) {
-                    Glide.with(getContext())
-                            .load(photoFile.getAbsoluteFile())
-                            //crop photo to size of thing
-                            .apply(new RequestOptions().override(200, 200).centerCrop())
-                            .into(ivNewProfilePic);
-                    Toast.makeText(getContext(), "Profile Picture Set",
-                            Toast.LENGTH_LONG).show();
-
-                }
-
+                Glide.with(getContext())
+                        .load(photoFile.getAbsoluteFile())
+                        //crop photo to size of thing
+                        .apply(new RequestOptions().override(200, 200).centerCrop())
+                        .into(ivNewProfilePic);
+                Toast.makeText(getContext(), "Profile Picture Set", Toast.LENGTH_LONG).show();
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -212,7 +202,7 @@ public class SignUpFragment extends Fragment {
         Fragment fragment = new UniversityFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_place, fragment);
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
