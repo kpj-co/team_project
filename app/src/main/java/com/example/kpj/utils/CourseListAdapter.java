@@ -1,4 +1,4 @@
-package com.example.kpj;
+package com.example.kpj.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.kpj.R;
 import com.example.kpj.model.Course;
 import com.parse.ParseException;
 

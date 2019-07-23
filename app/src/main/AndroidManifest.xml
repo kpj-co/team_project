@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,11 +23,11 @@
             </intent-filter>
         </activity>>
         <activity android:name=".SetCoursesActivity" />
-        <activity android:name=".SignupFlowActivity">
+        <activity android:name=".activities.SignupFlowActivity">
         </activity>
         <activity android:name=".SignupActivity" />
-        <activity android:name=".ComposePostActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activities.ComposePostActivity" />
+        <activity android:name=".activities.MainActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

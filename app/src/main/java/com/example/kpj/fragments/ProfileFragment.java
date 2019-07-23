@@ -11,12 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.kpj.LoginActivity;
+import com.example.kpj.activities.LoginActivity;
 import com.example.kpj.R;
 import com.example.kpj.model.User;
 import com.parse.ParseUser;
-
-import java.util.List;
 
 public class ProfileFragment extends Fragment {
 

@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.kpj.CourseListAdapter;
+import com.example.kpj.utils.CourseListAdapter;
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.UserCourseRelation;
