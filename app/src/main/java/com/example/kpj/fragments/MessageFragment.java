@@ -74,8 +74,6 @@ public class MessageFragment extends Fragment {
         prepareRecyclerView();
         populateRecyclerView();
 
-
-
         return view;
     }
 
@@ -116,48 +114,14 @@ public class MessageFragment extends Fragment {
 
         //set the university of the current user
         if(university != null) {
-
+            newMessage.setUniversity(university);
         }
 
-
+        //Put the current user as the author of the message
+        newMessage.setUser(ParseUser.getCurrentUser());
 
         //Save the message in background
-
-
-        /**
-         *         Post newPost = new Post();
-         *         // Grab text content from compose
-         *         String newTitle = etComposePostTitle.getText().toString();
-         *         String newBody = etComposeBody.getText().toString();
-         *         // Set user of post
-         *         newPost.setUser(ParseUser.getCurrentUser());
-         *         // Set content of post
-         *         if (newTitle.length() != 0) {
-         *             newPost.setTitle(newTitle);
-         *         }
-         *         if (newBody.length() != 0) {
-         *             newPost.setDescription(newBody);
-         *         }
-         *
-         *         if (imagePath.length() != 0) {
-         *             File imageFile = new File(imagePath);
-         *             if (imageFile != null) {
-         *                 ParseFile imageParseFile = new ParseFile(imageFile);
-         *                 newPost.setMedia(imageParseFile);
-         *             }
-         *         }
-         *
-         *         if (photoFile != null) {
-         *             ParseFile imageParseFile = new ParseFile(photoFile);
-         *             newPost.setMedia(imageParseFile);
-         *         }
-         *
-         *         // Setup vote count
-         *         newPost.setUpVotes(0);
-         *         newPost.setDownVotes(0);
-         *         // Save post in background thread
-         *         newPost.saveInBackground();
-         */
+        newMessage.saveInBackground();
     }
 
     void populateRecyclerView() {

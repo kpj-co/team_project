@@ -72,7 +72,7 @@ public class Message extends ParseObject {
     public String getUsername() {
         return username;
     }
-    
+
     public University getUniversity() {
         return (University)getParseObject(KEY_UNIVERSITY);
     }
