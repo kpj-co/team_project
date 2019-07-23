@@ -43,7 +43,6 @@ public class MessageFragment extends Fragment {
     //TODO: Set this variable university dinamically
     private University university;
 
-
     public MessageFragment() {
     }
 
@@ -61,9 +60,6 @@ public class MessageFragment extends Fragment {
         if (getArguments() != null) {
             mPage = getArguments().getInt(ARG_PAGE);
         }
-
-
-
     }
 
     @Override
@@ -71,8 +67,10 @@ public class MessageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_message, container, false);
-
         initializeObjects(view);
+        setListeners(view);
+        //TODO: Remove this function when you can grab universities dynamically
+        hardcodedFunction();
         prepareRecyclerView();
         populateRecyclerView();
 
@@ -85,7 +83,6 @@ public class MessageFragment extends Fragment {
         rvMessages = (RecyclerView) view.findViewById(R.id.rvMessages);
         bSend = (Button) view.findViewById(R.id.bSend);
         etMessage = (EditText) view.findViewById(R.id.etMessage);
-
         messageArrayList = new ArrayList<>();
     }
 
@@ -93,6 +90,74 @@ public class MessageFragment extends Fragment {
         messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(), messageArrayList);
         rvMessages.setAdapter(messageAdapter);
         rvMessages.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    void setListeners(View view) {
+        bSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Get the text of the message EditText
+                String message = etMessage.getText().toString();
+
+                //If there is something in the message edittext
+                if(!message.equals("")) {
+                    //Send it to the database
+                    pushMessageToDatabase(message);
+                }
+            }
+        });
+    }
+
+    void pushMessageToDatabase(String message) {
+        Message newMessage = new Message();
+
+        //set the message body of the current user
+        newMessage.setDescription(message);
+
+        //set the university of the current user
+        if(university != null) {
+
+        }
+
+        
+
+        //Save the message in background
+
+
+        /**
+         *         Post newPost = new Post();
+         *         // Grab text content from compose
+         *         String newTitle = etComposePostTitle.getText().toString();
+         *         String newBody = etComposeBody.getText().toString();
+         *         // Set user of post
+         *         newPost.setUser(ParseUser.getCurrentUser());
+         *         // Set content of post
+         *         if (newTitle.length() != 0) {
+         *             newPost.setTitle(newTitle);
+         *         }
+         *         if (newBody.length() != 0) {
+         *             newPost.setDescription(newBody);
+         *         }
+         *
+         *         if (imagePath.length() != 0) {
+         *             File imageFile = new File(imagePath);
+         *             if (imageFile != null) {
+         *                 ParseFile imageParseFile = new ParseFile(imageFile);
+         *                 newPost.setMedia(imageParseFile);
+         *             }
+         *         }
+         *
+         *         if (photoFile != null) {
+         *             ParseFile imageParseFile = new ParseFile(photoFile);
+         *             newPost.setMedia(imageParseFile);
+         *         }
+         *
+         *         // Setup vote count
+         *         newPost.setUpVotes(0);
+         *         newPost.setDownVotes(0);
+         *         // Save post in background thread
+         *         newPost.saveInBackground();
+         */
     }
 
     void populateRecyclerView() {
@@ -125,6 +190,22 @@ public class MessageFragment extends Fragment {
                         }
                     }
                 });
+            }
+        });
+    }
+
+    //TODO: Remove this when you can set it dynamically
+    void hardcodedFunction() {
+
+        final University.Query universityQuery = new University.Query();
+        universityQuery.whereEqualTo("name", "Facebook University");
+        universityQuery.findInBackground(new FindCallback<University>() {
+            @Override
+            public void done(List<University> objects, ParseException e) {
+                if(e == null){
+                    University university = objects.get(0);
+                    Log.d("MessageFragment", university.getName());
+                }
             }
         });
     }

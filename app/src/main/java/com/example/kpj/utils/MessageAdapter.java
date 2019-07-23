@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.model.Message;
 import com.parse.ParseException;
@@ -58,7 +59,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
 
         if(message.getParseFileUserImage() != null) {
-            Glide.with(mContext).load(message.getParseFileUserImage().getUrl()).into(profileView);
+            Glide.with(mContext)
+                    .load(message.getParseFileUserImage().getUrl())
+                    .apply(new RequestOptions().centerCrop())
+                    .into(profileView);
         }
 
         else {
