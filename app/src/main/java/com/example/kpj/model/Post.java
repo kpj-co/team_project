@@ -17,6 +17,9 @@ public class Post extends ParseObject {
     public static final String KEY_DOWNVOTES = "downvotes";
     public static final String KEY_CREATED_AT = "createdAt";
 
+    public boolean isLiked = false;
+    public boolean isDisliked = false;
+
     //getters
     public ParseUser getUser() {
         return getParseUser(KEY_USER);
@@ -63,4 +66,5 @@ public class Post extends ParseObject {
     public void setDownVotes(int downVotes) {
         put(KEY_DOWNVOTES, downVotes);
     }
+
 }

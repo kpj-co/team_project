@@ -14,6 +14,7 @@ import android.widget.EditText;
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.Message;
+import com.example.kpj.model.University;
 import com.example.kpj.model.UserCourseRelation;
 import com.example.kpj.utils.MessageAdapter;
 import com.parse.FindCallback;
@@ -36,8 +37,11 @@ public class MessageFragment extends Fragment {
 
     private MessageAdapter messageAdapter;
 
-    //TODO: Set this variable dinamically
+    //TODO: Set this variable course dinamically
     private Course course;
+
+    //TODO: Set this variable university dinamically
+    private University university;
 
     public MessageFragment() {
     }
@@ -56,9 +60,6 @@ public class MessageFragment extends Fragment {
         if (getArguments() != null) {
             mPage = getArguments().getInt(ARG_PAGE);
         }
-
-        //TODO: Remove this when you can get the course dinamically
-
     }
 
     @Override
@@ -66,8 +67,10 @@ public class MessageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_message, container, false);
-
         initializeObjects(view);
+        setListeners(view);
+        //TODO: Remove this function when you can grab universities dynamically
+        hardcodedFunction();
         prepareRecyclerView();
         populateRecyclerView();
 
@@ -78,17 +81,60 @@ public class MessageFragment extends Fragment {
         rvMessages = (RecyclerView) view.findViewById(R.id.rvMessages);
         bSend = (Button) view.findViewById(R.id.bSend);
         etMessage = (EditText) view.findViewById(R.id.etMessage);
-
         messageArrayList = new ArrayList<>();
     }
 
     void prepareRecyclerView() {
         messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(), messageArrayList);
+        rvMessages.setAdapter(messageAdapter);
         rvMessages.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    void setListeners(View view) {
+        bSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Get the text of the message EditText
+                String message = etMessage.getText().toString();
+
+                //If there is something in the message edittext
+                if(!message.equals("")) {
+                    //Send it to the database
+                    pushMessageToDatabase(message);
+                }
+            }
+        });
+    }
+
+    void pushMessageToDatabase(String message) {
+        Message newMessage = new Message();
+
+        //set the message body of the current user
+        newMessage.setDescription(message);
+
+        //set the university of the current user
+        if(university != null) {
+            newMessage.setUniversity(university);
+        }
+
+        //Set the course of the user
+        if(course != null) {
+            newMessage.setCourse(course);
+        }
+
+        //Put the current user as the author of the message
+        newMessage.setUser(ParseUser.getCurrentUser());
+
+        //Clean the EditText
+        etMessage.setText("");
+
+        //Save the message in background
+        newMessage.saveInBackground();
     }
 
     void populateRecyclerView() {
 
+        //NOTE: THIS query will not be needed in the full version. We should know in with course are we
         final Course.Query courseQuery = new Course.Query();
         courseQuery.whereEqualTo("name", "math");
         courseQuery.findInBackground(new FindCallback<Course>() {
@@ -106,6 +152,7 @@ public class MessageFragment extends Fragment {
                                 Message message = objects.get(i);
                                 messageArrayList.add(message);
                                 messageAdapter.notifyItemInserted(messageArrayList.size() - 1);
+                                Log.d("Size of list", "" + messageArrayList.size());
                                 try {
                                     Log.d("MessageFragment", "Message:" + message.fetchIfNeeded().getString("description"));
                                 } catch (ParseException e1) {
@@ -115,6 +162,22 @@ public class MessageFragment extends Fragment {
                         }
                     }
                 });
+            }
+        });
+    }
+
+    //TODO: Remove this when you can set it dynamically
+    void hardcodedFunction() {
+
+        final University.Query universityQuery = new University.Query();
+        universityQuery.whereEqualTo("name", "Facebook University");
+        universityQuery.findInBackground(new FindCallback<University>() {
+            @Override
+            public void done(List<University> objects, ParseException e) {
+                if(e == null){
+                    University university = objects.get(0);
+                    Log.d("MessageFragment", university.getName());
+                }
             }
         });
     }
