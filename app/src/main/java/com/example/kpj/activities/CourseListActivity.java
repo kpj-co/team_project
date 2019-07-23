@@ -29,7 +29,7 @@ public class CourseListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_course_list);
+        setContentView(R.layout.activity_course_list);
         this.context = CourseListActivity.this;
         filterCourses = new ArrayList<>();
         // TODO - Uncomment later
