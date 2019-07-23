@@ -50,6 +50,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.imageMe.setVisibility(View.VISIBLE);
             holder.imageOther.setVisibility(View.GONE);
             holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            holder.tvUsername.setGravity(Gravity.CENTER );
         } else {
             holder.imageOther.setVisibility(View.VISIBLE);
             holder.imageMe.setVisibility(View.GONE);
@@ -85,12 +86,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         ImageView imageOther;
         ImageView imageMe;
         TextView body;
+        TextView tvUsername;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageOther = (ImageView)itemView.findViewById(R.id.ivProfileOther);
             imageMe = (ImageView)itemView.findViewById(R.id.ivProfileMe);
             body = (TextView)itemView.findViewById(R.id.tvBody);
+            tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
         }
     }
 

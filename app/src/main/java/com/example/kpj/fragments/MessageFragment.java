@@ -15,11 +15,9 @@ import com.example.kpj.R;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.University;
-import com.example.kpj.model.UserCourseRelation;
 import com.example.kpj.utils.MessageAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -29,18 +27,18 @@ import java.util.List;
 public class MessageFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
-    private RecyclerView rvMessages;
-    private Button bSend;
+    private RecyclerView recyclerView;
+    private Button sendButton;
     private EditText etMessage;
 
-    private ArrayList<Message> messageArrayList;
+    private ArrayList<Message> messages = new ArrayList<>();
 
     private MessageAdapter messageAdapter;
 
-    //TODO: Set this variable course dinamically
+    //TODO: Set this variable course dynamically
     private Course course;
 
-    //TODO: Set this variable university dinamically
+    //TODO: Set this variable university dynamically
     private University university;
 
     public MessageFragment() {
@@ -67,7 +65,7 @@ public class MessageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_message, container, false);
-        initializeObjects(view);
+        findViews(view);
         setListeners(view);
         //TODO: Remove this function when you can grab universities dynamically
         hardcodedFunction();
@@ -77,21 +75,20 @@ public class MessageFragment extends Fragment {
         return view;
     }
 
-    void initializeObjects(View view) {
-        rvMessages = (RecyclerView) view.findViewById(R.id.rvMessages);
-        bSend = (Button) view.findViewById(R.id.bSend);
+    void findViews(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.rvMessages);
+        sendButton = (Button) view.findViewById(R.id.bSend);
         etMessage = (EditText) view.findViewById(R.id.etMessage);
-        messageArrayList = new ArrayList<>();
     }
 
     void prepareRecyclerView() {
-        messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(), messageArrayList);
-        rvMessages.setAdapter(messageAdapter);
-        rvMessages.setLayoutManager(new LinearLayoutManager(getContext()));
+        messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(), messages);
+        recyclerView.setAdapter(messageAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     void setListeners(View view) {
-        bSend.setOnClickListener(new View.OnClickListener() {
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Get the text of the message EditText
@@ -150,9 +147,9 @@ public class MessageFragment extends Fragment {
                         if(e == null){
                             for(int i = 0; i < objects.size(); i++){
                                 Message message = objects.get(i);
-                                messageArrayList.add(message);
-                                messageAdapter.notifyItemInserted(messageArrayList.size() - 1);
-                                Log.d("Size of list", "" + messageArrayList.size());
+                                messages.add(message);
+                                messageAdapter.notifyItemInserted(messages.size() - 1);
+                                Log.d("Size of list", "" + messages.size());
                                 try {
                                     Log.d("MessageFragment", "Message:" + message.fetchIfNeeded().getString("description"));
                                 } catch (ParseException e1) {
