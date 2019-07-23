@@ -1,4 +1,4 @@
-package com.example.kpj;
+package com.example.kpj.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
+
+import com.example.kpj.R;
 
 public class SendToChatDialogFragment extends DialogFragment {
 

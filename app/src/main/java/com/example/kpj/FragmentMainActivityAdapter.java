@@ -1,25 +1,23 @@
 package com.example.kpj;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.kpj.fragments.CourseFeedFragment;
-import com.example.kpj.fragments.CourseListFragment;
 import com.example.kpj.fragments.MessageFragment;
 import com.example.kpj.fragments.ProfileFragment;
 
 
-public class FragmentPageAdapter extends FragmentStatePagerAdapter {
+public class FragmentMainActivityAdapter extends FragmentStatePagerAdapter {
 
     final int PAGE_COUNT = 3;
     String[] tabTitles = new String[] {"Feed", "Chat", "Profile"};
     private Context context;
 
 
-    public FragmentPageAdapter(FragmentManager fragmentManager, Context context)
+    public FragmentMainActivityAdapter(FragmentManager fragmentManager, Context context)
                                {
         super(fragmentManager);
         this.context = context;
@@ -32,7 +30,6 @@ public class FragmentPageAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-
             switch (position) {
                 case 0:
                     return CourseFeedFragment.newInstance(position + 1);
@@ -43,8 +40,6 @@ public class FragmentPageAdapter extends FragmentStatePagerAdapter {
                 default:
                     return null;
             }
-
-
     }
 
     @Override
