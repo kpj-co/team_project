@@ -9,9 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.kpj.R;
+import com.example.kpj.fragments.SelectCoursesFragment;
 import com.example.kpj.fragments.SignUpFragment;
+import com.example.kpj.fragments.UniversityFragment;
 
 public class SignupFlowActivity extends AppCompatActivity {
+
+    SignUpFragment signUpFragment;
+    UniversityFragment universityFragment;
+    SelectCoursesFragment selectCoursesFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +32,8 @@ public class SignupFlowActivity extends AppCompatActivity {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
+
+        }
+
     }
 
-}

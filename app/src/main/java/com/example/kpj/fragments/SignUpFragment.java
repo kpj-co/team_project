@@ -1,6 +1,7 @@
 package com.example.kpj.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -52,7 +53,6 @@ public class SignUpFragment extends Fragment {
     private String email;
     private String username;
     private String password;
-
 
     public SignUpFragment() {
     }
@@ -120,6 +120,7 @@ public class SignUpFragment extends Fragment {
         });
     }
 
+    // Move to parent activity
     public void signUpUser(String email, String username, String password) {
         ParseUser user = new ParseUser();
         // send data to parse for new user
