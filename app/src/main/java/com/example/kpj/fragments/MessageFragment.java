@@ -226,6 +226,7 @@ public class MessageFragment extends Fragment {
                     public void onEvent(ParseQuery<Message> query, Message message) {
 
                         message.setUsername(currentUserUsername);
+                        message.setParseFileUserImage(ParseUser.getCurrentUser().getParseFile("photoImage"));
                         messages.add(messages.size(), message);
 
                         // RecyclerView updates need to be run on the UI thread
