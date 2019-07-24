@@ -2,6 +2,7 @@ package com.example.kpj.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kpj.activities.ComposePostActivity;
@@ -27,13 +29,18 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.parse.Parse.getApplicationContext;
+
 public class CourseFeedFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
+    private final static String PREF_NAME = "sharedData";
     private int mPage;
 
     private SearchView svSearch;
     private ImageButton ibCompose;
+    private TextView tvFeedTitle;
 
     public RecyclerView rvCourseFeed;
     public ArrayList<Post> postArrayList;
@@ -73,11 +80,30 @@ public class CourseFeedFragment extends Fragment {
         setUpAdapter();
         setComposeButtonListener();
         // Get course from main activity
-        this.course = ((MainActivity)getContext()).course;
-        String message = "You are in " + course.getName();
-        Toast.makeText(fragmentActivity, message, Toast.LENGTH_LONG).show();
-        queryPosts();
+        String courseName = getCurrentCourseName();
+        // Set feed title to match course
+        tvFeedTitle.setText(courseName);
+        // Query for course by name
+        final Course.Query courseQuery = new Course.Query();
+        courseQuery.whereEqualTo("name", courseName);
+        courseQuery.findInBackground(new FindCallback<Course>() {
+            @Override
+            public void done(List<Course> selectedCourse, ParseException e) {
+                course = selectedCourse.get(0);
+                // tell user they are in selected course
+                String message = "You are in " + course.getName();
+                Toast.makeText(fragmentActivity, message, Toast.LENGTH_LONG).show();
+                // query for posts associated
+                queryPosts();
+            }
+        });
+
         return view;
+    }
+
+    private String getCurrentCourseName() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        return settings.getString("courseName", "");
     }
 
     private void queryPosts() {
@@ -104,6 +130,7 @@ public class CourseFeedFragment extends Fragment {
         // Find views from xml
         rvCourseFeed = view.findViewById(R.id.rvCourseFeed);
         ibCompose = view.findViewById(R.id.ibCompose);
+        tvFeedTitle = view.findViewById(R.id.tvFeedTitle);
         // TODO -- Figure out how to set up a search view
         //svSearch = view.findViewById(R.id.svSearch);
     }
