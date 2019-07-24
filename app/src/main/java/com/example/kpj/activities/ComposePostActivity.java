@@ -270,7 +270,7 @@ public class ComposePostActivity extends AppCompatActivity {
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
             Log.d(APP_TAG, "failed to create directory");
         }
-        // TODO -- ASK IVAN WHY THE MATH.RANDOM Work 
+        // TODO -- ASK IVAN WHY THE MATH.RANDOM Work
         // Return the file target for the photo based on filename
         File file = new File(mediaStorageDir.getPath() + File.separator + fileName + Math.random());
         return file;
