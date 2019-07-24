@@ -1,6 +1,7 @@
 package com.example.kpj.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +9,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -132,6 +135,7 @@ public class ComposePostActivity extends AppCompatActivity {
 
     private void setIBtnCameraListener() {
         ibCamera.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 requestCameraPermission();
@@ -142,6 +146,8 @@ public class ComposePostActivity extends AppCompatActivity {
     private void setIBtnAddImageListener() {
         //grab images from gallery
         ibAddImage.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 requestGalleryPermission();
@@ -160,6 +166,7 @@ public class ComposePostActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private String getCurrentCourseName() {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
