@@ -74,7 +74,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         if(message.getParseFileUserImage() != null) {
             Glide.with(mContext)
                     .load(message.getParseFileUserImage().getUrl())
-                    .apply(new RequestOptions().centerCrop())
+                    .apply(new RequestOptions().circleCrop())
                     .into(profileView);
         }
 
