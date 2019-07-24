@@ -1,5 +1,6 @@
 package com.example.kpj.fragments;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,8 +21,10 @@ import com.example.kpj.model.University;
 import com.example.kpj.utils.MessageAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.livequery.ParseLiveQueryClient;
+import com.parse.livequery.SubscriptionHandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,5 +197,28 @@ public class MessageFragment extends Fragment {
 
     private void setParseLiveQueryClient() {
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+
+        ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
+
+
+        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
+                SubscriptionHandling.HandleEventCallback<Message>() {
+                    @Override
+                    //Add the element in the beginning of the recycler view and go to that position
+                    public void onEvent(ParseQuery<Message> query, Message message) {
+                        messages.add(messages.size(), message);
+
+                        // RecyclerView updates need to be run on the UI thread
+                        ((Activity)getContext()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                messageAdapter.notifyDataSetChanged();
+                                recyclerView.scrollToPosition(messages.size() - 1);
+                            }
+                        });
+                    }
+                });
     }
 }
