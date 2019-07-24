@@ -45,7 +45,6 @@ public class MessageFragment extends Fragment {
 
     private MessageAdapter messageAdapter;
 
-    //TODO: Set this variable course dynamically
     private Course course;
 
     //TODO: Set this variable university dynamically
@@ -81,8 +80,7 @@ public class MessageFragment extends Fragment {
         hardcodedFunction();
         prepareRecyclerView();
         populateRecyclerView(getCurrentCourseName());
-
-
+        
         return view;
     }
 
@@ -203,7 +201,6 @@ public class MessageFragment extends Fragment {
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
 
         parseQuery.whereEqualTo("course", course);
-
 
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
 
