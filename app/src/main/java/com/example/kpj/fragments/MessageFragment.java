@@ -81,7 +81,7 @@ public class MessageFragment extends Fragment {
         hardcodedFunction();
         prepareRecyclerView();
         populateRecyclerView(getCurrentCourseName());
-        setParseLiveQueryClient();
+
 
         return view;
     }
@@ -156,6 +156,8 @@ public class MessageFragment extends Fragment {
                     @Override
                     public void done(List<Message> objects, ParseException e) {
                         if(e == null){
+                            //We need to set the ParseLiveQueryClient just after finding the course
+                            setParseLiveQueryClient();
                             for(int i = 0; i < objects.size(); i++){
                                 Message message = objects.get(i);
                                 messages.add(message);
@@ -199,6 +201,8 @@ public class MessageFragment extends Fragment {
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
 
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
+
+        parseQuery.whereEqualTo("course", course);
 
 
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
