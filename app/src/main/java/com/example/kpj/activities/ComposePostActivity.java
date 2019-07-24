@@ -1,12 +1,16 @@
 package com.example.kpj.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -55,6 +59,8 @@ public class ComposePostActivity extends AppCompatActivity {
     public final static String APP_TAG = "compose post activity";
 
     private final static int GALLERY_REQUEST_CODE = 100;
+    private final static int PICK_FROM_GALLERY = 3;
+    private final static int CAMERA_PERMISSION_CODE = 1;
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     private Context context;
 
@@ -74,13 +80,10 @@ public class ComposePostActivity extends AppCompatActivity {
     private void initializeViews() {
         etComposePostTitle = findViewById(R.id.etComposePostTitle);
         etComposeBody = findViewById(R.id.etComposeBody);
-
         tvComposeUsername = findViewById(R.id.tvComposeUsername);
         ivComposeProfile = findViewById(R.id.ivComposeProfile);
         bindUserProfileToView();
-
         ivComposeImage = findViewById(R.id.ivComposeImage);
-
         ibExitCompose = findViewById(R.id.ibExitCompose);
         setIBtnExitListener();
         ibAddImage = findViewById(R.id.ibAddImage);
@@ -89,7 +92,6 @@ public class ComposePostActivity extends AppCompatActivity {
         setIBtnCameraListener();
         ibAddPdf = findViewById(R.id.ibAddPdf);
         setIBtnPdfListener();
-
         bLaunch = findViewById(R.id.bLaunch);
         setBtnLaunchListener();
     }
@@ -112,7 +114,7 @@ public class ComposePostActivity extends AppCompatActivity {
         ibCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLaunchCamera(v);
+                requestCameraPermission();
             }
         });
     }
@@ -120,15 +122,13 @@ public class ComposePostActivity extends AppCompatActivity {
     private void setIBtnAddImageListener() {
         //grab images from gallery
         ibAddImage.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  /* this will only work if the app has permission
-                  to access exterior storage in settings -> permission
-                  */
-                  pickFromGallery();
-              }
-          }
-      );}
+            @Override
+            public void onClick(View v) {
+                requestGalleryPermission();
+            }
+        });
+    }
+
 
     public void setBtnLaunchListener() {
         bLaunch.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +157,59 @@ public class ComposePostActivity extends AppCompatActivity {
         }
     }
 
+    private void requestCameraPermission() {
+        try {
+            if (ActivityCompat.checkSelfPermission(context,
+                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(ComposePostActivity.this, new String[]
+                {Manifest.permission.CAMERA, Manifest.permission.CAMERA},
+                        CAMERA_PERMISSION_CODE);
+            } else {
+                onLaunchCamera();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void requestGalleryPermission() {
+        try {
+            if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(ComposePostActivity.this, new String[]
+                    {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PICK_FROM_GALLERY);
+            } else {
+                pickFromGallery();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PICK_FROM_GALLERY:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickFromGallery();
+                } else {
+                    Toast.makeText(context, "no permission from gallery", Toast.LENGTH_SHORT).show();
+                    requestGalleryPermission();
+                }
+                break;
+            case CAMERA_PERMISSION_CODE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    onLaunchCamera();
+                } else {
+                    Toast.makeText(context, "no permission from camera", Toast.LENGTH_SHORT).show();
+                    requestGalleryPermission();
+                }
+        }
+    }
+
     private void pickFromGallery() {
         //Create an Intent with action as ACTION_PICK
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -169,7 +222,7 @@ public class ComposePostActivity extends AppCompatActivity {
         startActivityForResult(intent, GALLERY_REQUEST_CODE);
     }
 
-    public void onLaunchCamera(View view) {
+    public void onLaunchCamera() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Create a File reference to access to future access
@@ -247,13 +300,8 @@ public class ComposePostActivity extends AppCompatActivity {
         // Set user of post
         newPost.setUser(ParseUser.getCurrentUser());
         // Set content of post
-        if (newTitle.length() != 0) {
-            newPost.setTitle(newTitle);
-        }
-        if (newBody.length() != 0) {
-            newPost.setDescription(newBody);
-        }
-
+        if (newTitle.length() != 0) { newPost.setTitle(newTitle); }
+        if (newBody.length() != 0) { newPost.setDescription(newBody); }
         if (imagePath.length() != 0) {
             File imageFile = new File(imagePath);
             if (imageFile != null) {
@@ -261,12 +309,10 @@ public class ComposePostActivity extends AppCompatActivity {
                 newPost.setMedia(imageParseFile);
             }
         }
-
         if (photoFile != null) {
             ParseFile imageParseFile = new ParseFile(photoFile);
             newPost.setMedia(imageParseFile);
         }
-
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);

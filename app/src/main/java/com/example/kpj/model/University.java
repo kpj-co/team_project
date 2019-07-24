@@ -21,6 +21,7 @@ public class University  extends ParseObject {
         put(KEY_NAME, name);
     }
 
+
     public static class Query extends ParseQuery<University> {
         public Query() {
             super(University.class);
