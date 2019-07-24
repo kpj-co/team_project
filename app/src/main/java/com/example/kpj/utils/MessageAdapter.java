@@ -43,9 +43,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Message message = mMessages.get(position);
-        final boolean isMe = message.getUsername() != null && message.getUsername().equals(username);
+        final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
 
-        if (isMe) {
+        if (isCurrentUser) {
             holder.imageMe.setVisibility(View.VISIBLE);
             holder.imageOther.setVisibility(View.GONE);
             holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
@@ -61,8 +61,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.imageMe.setVisibility(View.GONE);
             holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 
-
-
             //Change the text view states
             holder.tvOtherUserName.setVisibility(View.INVISIBLE);
             holder.tvCurrentUserName.setVisibility(View.VISIBLE);
@@ -71,7 +69,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             Log.d("OTHER", username + " is current, the message  " + message.getUsername());
         }
 
-        final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
+        final ImageView profileView = isCurrentUser ? holder.imageMe : holder.imageOther;
 
         if(message.getParseFileUserImage() != null) {
             Glide.with(mContext)
