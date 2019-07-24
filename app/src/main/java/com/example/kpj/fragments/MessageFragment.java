@@ -107,6 +107,9 @@ public class MessageFragment extends Fragment {
                 if(!message.equals("")) {
                     //Send it to the database
                     pushMessageToDatabase(message);
+
+                    //refresh messages
+                    messageAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -167,6 +170,9 @@ public class MessageFragment extends Fragment {
                                     e1.printStackTrace();
                                 }
                             }
+
+                            //scroll to the last message
+                            recyclerView.scrollToPosition(messages.size() - 1);
                         }
                     }
                 });

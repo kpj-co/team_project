@@ -61,6 +61,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.imageMe.setVisibility(View.GONE);
             holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 
+
+
             //Change the text view states
             holder.tvOtherUserName.setVisibility(View.INVISIBLE);
             holder.tvCurrentUserName.setVisibility(View.VISIBLE);
