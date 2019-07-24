@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
-import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.model.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -57,7 +56,6 @@ public class SignUpFragment extends Fragment {
     private String email;
     private String username;
     private String password;
-
 
     public SignUpFragment() {
     }
@@ -125,6 +123,7 @@ public class SignUpFragment extends Fragment {
         });
     }
 
+    // Move to parent activity
     public void signUpUser(String email, String username, String password) {
         ParseUser user = new ParseUser();
         // send data to parse for new user

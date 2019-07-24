@@ -57,9 +57,9 @@ public class ProfileFragment extends Fragment {
 
         ParseUser user = ParseUser.getCurrentUser();
         tvUsername.setText(user.getUsername());
-        Glide.with(getContext())
-                .load(user.getParseFile(User.KEY_PROFILE).getUrl())
-                .into(imageView);
+//        Glide.with(getContext())
+//                .load(user.getParseFile(User.KEY_PROFILE).getUrl())
+//                .into(imageView);
         return view;
 
     }

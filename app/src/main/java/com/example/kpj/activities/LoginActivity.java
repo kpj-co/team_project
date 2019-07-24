@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("LoginActivity", "Is Clicked");
                 goToSignupActivity();
             }
         });
