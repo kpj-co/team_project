@@ -65,8 +65,8 @@ public class Message extends ParseObject {
         parseFileUserImage = this.getUser().fetchIfNeeded().getParseFile("photoImage");
     }
 
-    public void setUserUsername() {
-        username = this.getUser().getUsername();
+    public void setUserUsername() throws ParseException {
+        username = this.getUser().fetchIfNeeded().getUsername();
     }
 
     public String getUsername() {

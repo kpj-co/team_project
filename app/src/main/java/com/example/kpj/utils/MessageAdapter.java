@@ -55,6 +55,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.imageOther.setVisibility(View.VISIBLE);
             holder.imageMe.setVisibility(View.GONE);
             holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+            holder.tvUsername.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
         }
 
         final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
@@ -69,12 +70,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         else {
             try {
                 message.setUserPhoto();
+                message.setUserUsername();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
 
         holder.body.setText(message.getDescription());
+        holder.tvUsername.setText(message.getUsername());
     }
 
     @Override

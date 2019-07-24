@@ -1,5 +1,6 @@
 package com.example.kpj.activities;
 
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,8 @@ import com.example.kpj.model.Course;
 
 public class MainActivity extends AppCompatActivity {
 
-    public Course course;
+    private Course course;
+    private final static String PREF_NAME = "sharedData";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +32,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Grab course
         course =  getIntent().getParcelableExtra("selectedCourse");
-//        String message = "You are in " + course.getName();
-//
-//        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+
+        setupSharedPreferences();
+
+
+    }
+
+    private void setupSharedPreferences() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("courseName", course.getName());
+        editor.apply();
     }
 }

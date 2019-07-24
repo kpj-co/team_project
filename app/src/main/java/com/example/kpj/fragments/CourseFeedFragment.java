@@ -2,6 +2,7 @@ package com.example.kpj.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -27,9 +28,13 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.parse.Parse.getApplicationContext;
+
 public class CourseFeedFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
+    private final static String PREF_NAME = "sharedData";
     private int mPage;
 
     private SearchView svSearch;
@@ -73,11 +78,27 @@ public class CourseFeedFragment extends Fragment {
         setUpAdapter();
         setComposeButtonListener();
         // Get course from main activity
-        this.course = ((MainActivity)getContext()).course;
-        String message = "You are in " + course.getName();
-        Toast.makeText(fragmentActivity, message, Toast.LENGTH_LONG).show();
-        queryPosts();
+        String courseName = getCurrentCourseName();
+        // Query for course by name
+        final Course.Query courseQuery = new Course.Query();
+        courseQuery.whereEqualTo("name", courseName);
+        courseQuery.findInBackground(new FindCallback<Course>() {
+            @Override
+            public void done(List<Course> selectedCourse, ParseException e) {
+                course = selectedCourse.get(0);
+                // tell user they are in selected course
+                String message = "You are in " + course.getName();
+                Toast.makeText(fragmentActivity, message, Toast.LENGTH_LONG).show();
+                queryPosts();
+            }
+        });
+
         return view;
+    }
+
+    private String getCurrentCourseName() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        return settings.getString("courseName", "");
     }
 
     private void queryPosts() {
