@@ -21,6 +21,7 @@ import com.example.kpj.utils.MessageAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.livequery.ParseLiveQueryClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +78,7 @@ public class MessageFragment extends Fragment {
         hardcodedFunction();
         prepareRecyclerView();
         populateRecyclerView(getCurrentCourseName());
+        setParseLiveQueryClient();
 
         return view;
     }
@@ -188,5 +190,9 @@ public class MessageFragment extends Fragment {
     private String getCurrentCourseName() {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         return settings.getString("courseName", "");
+    }
+
+    private void setParseLiveQueryClient() {
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
     }
 }
