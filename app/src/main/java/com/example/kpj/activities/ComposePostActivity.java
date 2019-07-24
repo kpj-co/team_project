@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -24,14 +25,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kpj.R;
+import com.example.kpj.model.Course;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
+import java.util.List;
+
+import static com.parse.Parse.getApplicationContext;
 
 
 public class ComposePostActivity extends AppCompatActivity {
@@ -62,7 +69,10 @@ public class ComposePostActivity extends AppCompatActivity {
     private final static int PICK_FROM_GALLERY = 3;
     private final static int CAMERA_PERMISSION_CODE = 1;
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    private final static String PREF_NAME = "sharedData";
     private Context context;
+    private Course course;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +85,16 @@ public class ComposePostActivity extends AppCompatActivity {
     private void initializeVariables() {
         context = ComposePostActivity.this;
         imagePath = "";
+        String courseName = getCurrentCourseName();
+        final Course.Query courseQuery = new Course.Query();
+        courseQuery.whereEqualTo("name", courseName);
+        // query for current course
+        courseQuery.findInBackground(new FindCallback<Course>() {
+            @Override
+            public void done(List<Course> selectedCourse, ParseException e) {
+                course = selectedCourse.get(0);
+            }
+        });
     }
 
     private void initializeViews() {
@@ -141,6 +161,11 @@ public class ComposePostActivity extends AppCompatActivity {
         });
     }
 
+    private String getCurrentCourseName() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        return settings.getString("courseName", "");
+    }
+
     private void bindUserProfileToView() {
         //get image and username
         ParseUser user = ParseUser.getCurrentUser();
@@ -151,8 +176,7 @@ public class ComposePostActivity extends AppCompatActivity {
         if (profile != null) {
             Glide.with(ComposePostActivity.this)
                     .load(profile.getUrl())
-                    .apply(new RequestOptions().
-                            centerCrop())
+                    .apply(new RequestOptions().centerCrop())
                     .into(ivComposeProfile);
         }
     }
@@ -241,15 +265,14 @@ public class ComposePostActivity extends AppCompatActivity {
     // Returns the File for a photo stored on disk given the fileName
     public File getPhotoFileUri(String fileName) {
         // Get safe storage directory for photos
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
-        // This way, we don't need to request external read/write runtime permissions.
         File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
             Log.d(APP_TAG, "failed to create directory");
         }
+        // TODO -- ASK IVAN WHY THE MATH.RANDOM Work 
         // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName + Math.random());
         return file;
     }
 
@@ -268,24 +291,31 @@ public class ComposePostActivity extends AppCompatActivity {
                     //Get the column index of MediaStore.Images.Media.DATA
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     //Gets the String value in the column
-                    String imagePath = cursor.getString(columnIndex);
+                    imagePath = cursor.getString(columnIndex);
                     cursor.close();
                     // Set the Image in ImageView
                     bindImagesToPreview(imagePath);
                     // Save the image path locally
-                    this.imagePath = imagePath;
                     break;
                 case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
                     // Set the Image in ImageView
-                    bindImagesToPreview(photoFile.getAbsolutePath());
-                    Toast.makeText(context, "Profile Picture Set", Toast.LENGTH_LONG).show();
+                    bindImagesToPreview(photoFile);
+                    Toast.makeText(context, "Camera photo set", Toast.LENGTH_LONG).show();
                     break;
             }
     }
 
-    private void bindImagesToPreview(String imagePath) {
+    private void bindImagesToPreview(File photo) {
         Glide.with(context)
-                .load(imagePath)
+                .load(photo)
+                //TODO - change center crop to resize and fit parent container
+                .apply(new RequestOptions().centerCrop())
+                .into(ivComposeImage);
+    }
+
+    private void bindImagesToPreview(String photoPath) {
+        Glide.with(context)
+                .load(photoPath)
                 //TODO - change center crop to resize and fit parent container
                 .apply(new RequestOptions().centerCrop())
                 .into(ivComposeImage);
@@ -313,6 +343,12 @@ public class ComposePostActivity extends AppCompatActivity {
             ParseFile imageParseFile = new ParseFile(photoFile);
             newPost.setMedia(imageParseFile);
         }
+        // Save associated course
+        if (course != null) {
+            newPost.setCourse(course);
+        } else {
+            Toast.makeText(context, "could not find course associated", Toast.LENGTH_SHORT).show();
+        }
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
@@ -324,6 +360,7 @@ public class ComposePostActivity extends AppCompatActivity {
 
     private void goToMainActivity() {
         Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
+
         startActivity(intent);
     }
 }
