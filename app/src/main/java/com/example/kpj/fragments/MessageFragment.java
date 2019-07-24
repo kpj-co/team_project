@@ -1,5 +1,6 @@
 package com.example.kpj.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
@@ -23,9 +25,13 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.parse.Parse.getApplicationContext;
+
 
 public class MessageFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
+    private final static String PREF_NAME = "sharedData";
     private int mPage;
     private RecyclerView recyclerView;
     private Button sendButton;
@@ -70,7 +76,7 @@ public class MessageFragment extends Fragment {
         //TODO: Remove this function when you can grab universities dynamically
         hardcodedFunction();
         prepareRecyclerView();
-        populateRecyclerView();
+        populateRecyclerView(getCurrentCourseName());
 
         return view;
     }
@@ -129,11 +135,11 @@ public class MessageFragment extends Fragment {
         newMessage.saveInBackground();
     }
 
-    void populateRecyclerView() {
+    void populateRecyclerView(String courseName) {
 
         //NOTE: THIS query will not be needed in the full version. We should know in with course are we
         final Course.Query courseQuery = new Course.Query();
-        courseQuery.whereEqualTo("name", "math");
+        courseQuery.whereEqualTo("name", courseName);
         courseQuery.findInBackground(new FindCallback<Course>() {
             @Override
             public void done(List<Course> objects, ParseException e) {
@@ -177,5 +183,10 @@ public class MessageFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private String getCurrentCourseName() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        return settings.getString("courseName", "");
     }
 }
