@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kpj.activities.ComposePostActivity;
@@ -39,6 +40,7 @@ public class CourseFeedFragment extends Fragment {
 
     private SearchView svSearch;
     private ImageButton ibCompose;
+    private TextView tvFeedTitle;
 
     public RecyclerView rvCourseFeed;
     public ArrayList<Post> postArrayList;
@@ -79,6 +81,8 @@ public class CourseFeedFragment extends Fragment {
         setComposeButtonListener();
         // Get course from main activity
         String courseName = getCurrentCourseName();
+        // Set feed title to match course
+        tvFeedTitle.setText(courseName);
         // Query for course by name
         final Course.Query courseQuery = new Course.Query();
         courseQuery.whereEqualTo("name", courseName);
@@ -89,6 +93,7 @@ public class CourseFeedFragment extends Fragment {
                 // tell user they are in selected course
                 String message = "You are in " + course.getName();
                 Toast.makeText(fragmentActivity, message, Toast.LENGTH_LONG).show();
+                // query for posts associated
                 queryPosts();
             }
         });
@@ -125,6 +130,7 @@ public class CourseFeedFragment extends Fragment {
         // Find views from xml
         rvCourseFeed = view.findViewById(R.id.rvCourseFeed);
         ibCompose = view.findViewById(R.id.ibCompose);
+        tvFeedTitle = view.findViewById(R.id.tvFeedTitle);
         // TODO -- Figure out how to set up a search view
         //svSearch = view.findViewById(R.id.svSearch);
     }
