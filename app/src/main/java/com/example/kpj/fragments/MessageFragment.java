@@ -80,7 +80,7 @@ public class MessageFragment extends Fragment {
         hardcodedFunction();
         prepareRecyclerView();
         populateRecyclerView(getCurrentCourseName());
-        
+
         return view;
     }
 
