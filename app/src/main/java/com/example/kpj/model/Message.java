@@ -69,6 +69,14 @@ public class Message extends ParseObject {
         username = this.getUser().fetchIfNeeded().getUsername();
     }
 
+    public void setUsername(String username){
+        this.username = username;
+    }
+
+    public void setParseFileUserImage(ParseFile parseFileUserImage) {
+        this.parseFileUserImage = parseFileUserImage;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -100,7 +108,7 @@ public class Message extends ParseObject {
             return this;
         }
 
-        public Query withuser() {
+        public Query withUser() {
             include(KEY_USER);
             return this;
         }

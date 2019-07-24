@@ -40,6 +40,7 @@ public class MessageFragment extends Fragment {
     private RecyclerView recyclerView;
     private Button sendButton;
     private EditText etMessage;
+    private String currentUserUsername;
 
     private ArrayList<Message> messages = new ArrayList<>();
 
@@ -74,13 +75,16 @@ public class MessageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_message, container, false);
+
+        currentUserUsername = ParseUser.getCurrentUser().getUsername();
+
         findViews(view);
         setListeners(view);
         //TODO: Remove this function when you can grab universities dynamically
         hardcodedFunction();
         prepareRecyclerView();
         populateRecyclerView(getCurrentCourseName());
-        
+
         return view;
     }
 
@@ -107,6 +111,9 @@ public class MessageFragment extends Fragment {
                 if(!message.equals("")) {
                     //Send it to the database
                     pushMessageToDatabase(message);
+
+                    //refresh messages
+                    messageAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -142,6 +149,7 @@ public class MessageFragment extends Fragment {
 
         //NOTE: THIS query will not be needed in the full version. We should know in with course are we
         final Course.Query courseQuery = new Course.Query();
+
         courseQuery.whereEqualTo("name", courseName);
         courseQuery.findInBackground(new FindCallback<Course>() {
             @Override
@@ -149,15 +157,16 @@ public class MessageFragment extends Fragment {
                 course = objects.get(0);
 
                 final Message.Query messageQuery = new Message.Query();
+                messageQuery.withUser();
                 messageQuery.whereEqualTo("course", course);
                 messageQuery.findInBackground(new FindCallback<Message>() {
                     @Override
                     public void done(List<Message> objects, ParseException e) {
                         if(e == null){
-                            //We need to set the ParseLiveQueryClient just after finding the course
-                            setParseLiveQueryClient();
                             for(int i = 0; i < objects.size(); i++){
                                 Message message = objects.get(i);
+                                message.setUsername(message.getUser().getUsername());
+                                message.setParseFileUserImage(message.getUser().getParseFile("photoImage"));
                                 messages.add(message);
                                 messageAdapter.notifyItemInserted(messages.size() - 1);
                                 Log.d("Size of list", "" + messages.size());
@@ -167,7 +176,13 @@ public class MessageFragment extends Fragment {
                                     e1.printStackTrace();
                                 }
                             }
+
+                            //scroll to the last message
+                            recyclerView.scrollToPosition(messages.size() - 1);
                         }
+
+                        //We need to set the ParseLiveQueryClient after finding the course
+                        setParseLiveQueryClient();
                     }
                 });
             }
@@ -209,6 +224,8 @@ public class MessageFragment extends Fragment {
                     @Override
                     //Add the element in the beginning of the recycler view and go to that position
                     public void onEvent(ParseQuery<Message> query, Message message) {
+
+                        message.setUsername(currentUserUsername);
                         messages.add(messages.size(), message);
 
                         // RecyclerView updates need to be run on the UI thread
