@@ -1,10 +1,13 @@
 package com.example.kpj.fragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
+import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.model.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -45,7 +49,8 @@ public class SignUpFragment extends Fragment {
     public ImageView ivNewProfilePic;
 
     public final String APP_TAG = "Signin";
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    private final static int CAMERA_PERMISSION_CODE = 1;
     public String photoFileName = "photo.jpg";
     public File photoFile;
 
@@ -115,7 +120,7 @@ public class SignUpFragment extends Fragment {
         tvTakeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onLaunchCamera(v);
+                requestCameraPermission();
             }
         });
     }
@@ -152,7 +157,22 @@ public class SignUpFragment extends Fragment {
         goToUniversityFragment();
     }
 
-    public void onLaunchCamera(View view) {
+    private void requestCameraPermission() {
+        try {
+            if (ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]
+                                {Manifest.permission.CAMERA, Manifest.permission.CAMERA},
+                        CAMERA_PERMISSION_CODE);
+            } else {
+                onLaunchCamera();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onLaunchCamera() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Create a File reference to access to future access
