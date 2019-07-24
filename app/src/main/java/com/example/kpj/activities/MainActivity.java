@@ -19,29 +19,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-
         viewPager.setAdapter(new FragmentMainActivityAdapter(getSupportFragmentManager(),
                 MainActivity.this));
-
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-        // Grab course
-        course =  getIntent().getParcelableExtra("selectedCourse");
-
         setupSharedPreferences();
-
-
     }
 
     private void setupSharedPreferences() {
-        SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("courseName", course.getName());
-        editor.apply();
+        // Grab course
+        course = getIntent().getParcelableExtra("selectedCourse");
+        if (course != null) {
+            SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("courseName", course.getName());
+            editor.apply();
+        }
     }
 }

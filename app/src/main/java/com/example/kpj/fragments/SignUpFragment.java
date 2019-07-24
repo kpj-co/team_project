@@ -194,7 +194,7 @@ public class SignUpFragment extends Fragment {
             Log.d(APP_TAG, "failed to create directory");
         }
         // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName + Math.random());
         return file;
     }
 
