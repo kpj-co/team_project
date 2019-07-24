@@ -161,8 +161,7 @@ public class ComposePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 savePost();
-                //TODO -- notify adapter
-                //TODO -- Send back to feed fragment
+                ComposePostActivity.this.finish();
             }
         });
     }
@@ -367,7 +366,6 @@ public class ComposePostActivity extends AppCompatActivity {
 
     private void goToMainActivity() {
         Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
-
         startActivity(intent);
     }
 }

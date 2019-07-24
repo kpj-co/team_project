@@ -29,8 +29,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
-            //goToMainActivity();
             goToCourseList();
+            LoginActivity.this.finish();
         } else {
             usernameInput = findViewById(R.id.etUsername);
             passwordInput = findViewById(R.id.etPassword);
@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goToSignUpActivity();
+                LoginActivity.this.finish();
             }
         });
     }
@@ -68,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     Log.d("LoginActivity", "login Success!");
                     Toast.makeText(getApplicationContext(),"Login Success",Toast.LENGTH_SHORT).show();
-                    //goToMainActivity();
                     goToCourseList();
                 } else {
                     Toast.makeText(getApplicationContext(),"Username or Password is wrong",Toast.LENGTH_SHORT).show();
