@@ -38,7 +38,6 @@
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/layoutPostContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -54,6 +53,8 @@
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:background="@drawable/customborder"
+            android:id="@+id/layoutPostContent"
             android:orientation="vertical">
 
             <TextView
