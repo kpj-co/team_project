@@ -218,9 +218,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             }
 
-            tvPostTitle.setText(post.getTitle());
-            tvPostDescription.setText(post.getDescription());
-            tvUserOpinion.setText(message.getDescription());
+            try {
+                tvPostTitle.setText(((Post)post.fetchIfNeeded()).getTitle());
+                tvPostDescription.setText(((Post)post.fetchIfNeeded()).getDescription());
+                tvUserOpinion.setText(((Message)message.fetchIfNeeded()).getDescription());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
 
             if(post.getMedia() != null) {
                 Glide.with(mContext)
