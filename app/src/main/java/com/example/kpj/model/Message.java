@@ -21,6 +21,7 @@ public class Message extends ParseObject {
     private static final String KEY_USER = "user";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_UNIVERSITY = "university";
+    private static final String KEY_POST = "post";
     private String username;
     private ParseFile parseFileUserImage = null;
 
@@ -36,13 +37,13 @@ public class Message extends ParseObject {
         return getParseObject(KEY_COURSE);
     }
 
-    public void setDescription(String description) {
-        put(KEY_DESCRIPTION, description);
-    }
+    public void setDescription(String description) { put(KEY_DESCRIPTION, description); }
 
-    public void setUniversity(University university) {
-        put(KEY_UNIVERSITY, university);
-    }
+    public void setUniversity(University university) { put(KEY_UNIVERSITY, university); }
+
+    public void setPost(Post post) { put(KEY_POST, post); }
+
+    public ParseObject getPost() { return getParseObject(KEY_POST); }
 
     //TODO: Implement the method or something equivalent to it in the adapter
     public void setUserPhoto() throws ParseException{
