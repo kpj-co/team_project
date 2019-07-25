@@ -21,8 +21,8 @@
 
     <SearchView
         android:id="@+id/svSearch"
-        android:layout_width="343dp"
-        android:layout_height="31dp"
+        android:layout_width="350dp"
+        android:layout_height="20dp"
         app:layout_constraintBottom_toTopOf="@+id/rvCourseFeed"
         app:layout_constraintEnd_toStartOf="@+id/ibCompose"
         app:layout_constraintHorizontal_bias="0.5"
@@ -32,21 +32,26 @@
     <ImageButton
         android:id="@+id/ibCompose"
         android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/svSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/svSearch"
         app:layout_constraintTop_toTopOf="@+id/svSearch"
+        app:layout_constraintVertical_bias="1.0"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvFeedTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="20sp"
+        android:layout_width="393dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center_horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textColor="#E58A04"
+        android:textIsSelectable="false"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/svSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

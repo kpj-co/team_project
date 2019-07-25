@@ -17,7 +17,12 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
+import com.example.kpj.model.UserCourseRelation;
+import com.example.kpj.model.UserPostRelation;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -59,6 +64,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      */
     private void bindPostContent(@NonNull ViewHolder holder, Post post) {
         bindPostUserAssets(holder, post);
+
         if (post.getTitle() != null) {
             holder.tvTitle.setVisibility(View.VISIBLE);
             holder.tvTitle.setText(post.getTitle());
@@ -94,17 +100,49 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.ibLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /* TODO -- ask ivan
+                // check if there is an existing userPostRelation
+                final UserPostRelation.Query userPostRelation = new UserPostRelation.Query();
+                userPostRelation.whereEqualTo("user", ParseUser.getCurrentUser());
+                userPostRelation.whereEqualTo("post", post);
+                userPostRelation.findInBackground(new FindCallback<UserPostRelation>() {
+                    @Override
+                    public void done(List<UserPostRelation> relation, ParseException e) {
+                        if (e == null) {
+                            // if there is none the list is empty or of length 0
+                            if (relation.isEmpty() || relation.size() == 0) {
+                                // create new relation
+                                UserPostRelation newUserPostRelation = new UserPostRelation();
+                                newUserPostRelation.setPost(post);
+                                newUserPostRelation.setUser(ParseUser.getCurrentUser());
+                                newUserPostRelation.setVote(UserPostRelation.UPVOTE);
+                                newUserPostRelation.saveInBackground();
+                                // change UI
+                                int newCount = post.getUpVotes() + 1;
+                                holder.tvUpVotes.setText(String.valueOf(newCount));
+                                post.isLiked = true;
+                                Toast.makeText(context, "upvoted post", Toast.LENGTH_SHORT).show();
+                            } else { // there already exists a relation
+                                // TODO -- check the state of the realtion
+                            }
+                        } else {
+                            Toast.makeText(context, "could not vote", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                */
+
                 int newParseCount;
                 // Increase UpVote count
                 if (!post.isLiked) {
-                    // TODO -- CHANGE LIKE IMAGE TO DARK COLOR
+                    // TODO -- change image into dark
                     int newCount = post.getUpVotes() + 1;
                     holder.tvUpVotes.setText(String.valueOf(newCount));
                     post.isLiked = true;
                     newParseCount = newCount;
                     Toast.makeText(context, "upvoted post", Toast.LENGTH_SHORT).show();
                 } else { // decrease upvote count
-                    // TODO -- CHANGE LIKE IMAGE TO LIGHT COLOR
+                    // TODO -- change icon into light
                     int newCount = post.getUpVotes() - 1;
                     holder.tvUpVotes.setText(String.valueOf(newCount));
                     post.isLiked = false;
@@ -116,12 +154,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
         });
     }
-
-//    private void setUpVoteListener(final ViewHolder holder, final Post post, Button button,
-//                                   ) {
-//
-//
-//    }
 
     /** Down Vote a post and update parse db
      * @params: ViewHolder, Post
