@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kpj.FragmentCommunication;
 import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.activities.MainActivity;
 import com.example.kpj.model.Course;
@@ -24,6 +25,7 @@ import com.example.kpj.R;
 import com.example.kpj.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -77,7 +79,6 @@ public class CourseFeedFragment extends Fragment {
         fragmentActivity = getActivity();
         initializeViews(view);
         initializeVariables();
-        setUpAdapter();
         setComposeButtonListener();
         // Get course from main activity
         String courseName = getCurrentCourseName();
@@ -94,10 +95,10 @@ public class CourseFeedFragment extends Fragment {
                 String message = "You are in " + course.getName();
                 Toast.makeText(fragmentActivity, message, Toast.LENGTH_LONG).show();
                 // query for posts associated
+                setUpAdapter();
                 queryPosts();
             }
         });
-
         return view;
     }
 
@@ -137,7 +138,6 @@ public class CourseFeedFragment extends Fragment {
 
     private void initializeVariables() {
         postArrayList = new ArrayList<>();
-        postAdapter = new PostAdapter(fragmentActivity, postArrayList);
     }
 
     private void setComposeButtonListener() {
@@ -151,6 +151,7 @@ public class CourseFeedFragment extends Fragment {
     }
 
     private void setUpAdapter() {
+        postAdapter = new PostAdapter(fragmentActivity, course, postArrayList);
         //create linear layout manager for recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(fragmentActivity);
         rvCourseFeed.setLayoutManager(linearLayoutManager);
