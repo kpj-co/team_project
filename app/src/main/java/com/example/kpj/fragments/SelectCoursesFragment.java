@@ -5,22 +5,42 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.kpj.R;
+import com.example.kpj.SelectedCoursesFragmentAdapter;
 import com.example.kpj.activities.CourseListActivity;
 import com.example.kpj.activities.LoginActivity;
 import com.example.kpj.activities.MainActivity;
+import com.example.kpj.model.Course;
+import com.example.kpj.model.University;
+import com.example.kpj.model.User;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectCoursesFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
 
+    private ArrayList<Course> filterCourses;
+
+    private RecyclerView recyclerView;
     private Button bToUserCourseList;
+
+    private SelectedCoursesFragmentAdapter adapter;
+
     public SelectCoursesFragment() {
     }
 
@@ -47,7 +67,14 @@ public class SelectCoursesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_select_courses, container, false);
         // Attach button to view
         bToUserCourseList = view.findViewById(R.id.bToUserCourseList);
+
+        ParseUser user = ParseUser.getCurrentUser();
+        ParseObject university = (ParseObject) user.get(User.KEY_UNIVERSITY);
+
+        fetchCourseByUniversity(university);
+        setUpRecyclerView(view);
         setUpToUserCourseListListener();
+
         return view;
     }
 
@@ -60,4 +87,33 @@ public class SelectCoursesFragment extends Fragment {
             }
         });
     }
+
+    private void setUpRecyclerView(View view) {
+        RecyclerView recyclerView = view.findViewById(R.id.rvSelectCourse);
+        filterCourses = new ArrayList<>();
+        adapter = new SelectedCoursesFragmentAdapter(getContext(), filterCourses);
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+
+    private void fetchCourseByUniversity(ParseObject university) {
+        final Course.Query courseQuery = new Course.Query();
+        courseQuery.whereEqualTo("University", university);
+        courseQuery.findInBackground(new FindCallback<Course>() {
+            @Override
+            public void done(List<Course> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        Course course = (Course) objects.get(i);
+                        filterCourses.add(course);
+                        adapter.notifyItemInserted(filterCourses.size() - 1);
+                        Log.d("SelectCourseFragment", "List" + filterCourses);
+                    }
+                }
+            }
+        });
+    }
 }
+

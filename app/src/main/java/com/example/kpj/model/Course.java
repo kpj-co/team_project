@@ -13,14 +13,17 @@ public class Course extends ParseObject {
 
     //columns in the database
     private static final String KEY_NAME = "name";
+    private static final String KEY_UNIVERSITY = "University";
 
-    public String getName() {
-        return getString(KEY_NAME);
-    }
+    public String getName() { return getString(KEY_NAME); }
 
     public void setName(String name) {
         put(KEY_NAME, name);
     }
+
+    public ParseObject getUniversity(){ return getParseObject(KEY_UNIVERSITY);}
+
+    public void setUniversity(ParseObject university){put(KEY_UNIVERSITY, university);}
 
     public static class Query extends ParseQuery<Course> {
         public Query() {
