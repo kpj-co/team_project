@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView2"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activities.ComposePostActivity">
-
 
 
         <ImageButton
@@ -155,14 +155,14 @@
             android:id="@+id/bLaunch"
             android:layout_width="82dp"
             android:layout_height="37dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
             android:layout_marginBottom="10dp"
             android:text="Launch"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ibAddPdf" />
+            app:layout_constraintTop_toBottomOf="@+id/etTags" />
 
         <ImageView
             android:id="@+id/ivComposeImage"
@@ -170,7 +170,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:scaleType="centerInside"
@@ -182,23 +182,30 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <!-- TODO - implement tags -->
-        <!--<ImageView-->
-        <!--android:id="@+id/ivTagIcon"-->
-        <!--android:layout_width="15dp"-->
-        <!--android:layout_height="15dp"-->
-        <!--tools:layout_editor_absoluteX="29dp"-->
-        <!--tools:layout_editor_absoluteY="355dp"-->
-        <!--tools:srcCompat="@tools:sample/avatars" />-->
+        <ImageView
+            android:id="@+id/ivTagIcon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            tools:layout_editor_absoluteX="29dp"
+            tools:layout_editor_absoluteY="355dp"
+            tools:srcCompat="@tools:sample/avatars" />
 
-        <!--<EditText-->
-        <!--android:id="@+id/etTags"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:ems="10"-->
-        <!--android:inputType="textPersonName"-->
-        <!--android:text="Name"-->
-        <!--tools:layout_editor_absoluteX="55dp"-->
-        <!--tools:layout_editor_absoluteY="342dp" />-->
+        <EditText
+            android:id="@+id/etTags"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:ems="10"
+            android:hint="tags"
+            android:inputType="textPersonName"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ibAddImage" />
 
     </android.support.constraint.ConstraintLayout>
 
