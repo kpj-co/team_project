@@ -20,35 +20,33 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameInput;
     private EditText passwordInput;
     private Button loginButton;
-    private TextView signupButton;
+    private TextView signUpButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
-            //goToMainActivity();
             goToCourseList();
+            LoginActivity.this.finish();
         } else {
-
             usernameInput = findViewById(R.id.etUsername);
             passwordInput = findViewById(R.id.etPassword);
             loginButton = findViewById(R.id.btnLogin);
-            signupButton = findViewById(R.id.tvSignup);
-
+            signUpButton = findViewById(R.id.tvSignup);
             setLoginButtonListener();
-            setSignupButtonListener();
+            setSignUpButtonListener();
         }
     }
 
-    private void setSignupButtonListener() {
-        signupButton.setOnClickListener(new View.OnClickListener() {
+    private void setSignUpButtonListener() {
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("LoginActivity", "Is Clicked");
-                goToSignupActivity();
+                goToSignUpActivity();
+                LoginActivity.this.finish();
             }
         });
     }
@@ -57,9 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String username = usernameInput.getText().toString();
-                final String password = passwordInput.getText().toString();
-                login(username, password);
+            final String username = usernameInput.getText().toString();
+            final String password = passwordInput.getText().toString();
+            login(username, password);
             }
         });
     }
@@ -71,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     Log.d("LoginActivity", "login Success!");
                     Toast.makeText(getApplicationContext(),"Login Success",Toast.LENGTH_SHORT).show();
-                    //goToMainActivity();
                     goToCourseList();
                 } else {
                     Toast.makeText(getApplicationContext(),"Username or Password is wrong",Toast.LENGTH_SHORT).show();
@@ -82,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void goToSignupActivity() {
+    public void goToSignUpActivity() {
         Intent intent = new Intent(LoginActivity.this, SignupFlowActivity.class);
         startActivity(intent);
     }

@@ -9,7 +9,6 @@ import com.parse.ParseUser;
 public class UserCourseRelation extends ParseObject {
 
     private static final int MAX_NUMBER = 25;
-
     private static final String KEY_USER = "user";
     private static final String KEY_COURSE = "course";
 
