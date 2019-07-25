@@ -2,8 +2,10 @@ package com.example.kpj.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.activities.MainActivity;
+import com.example.kpj.fragments.CourseFeedFragment;
 import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
@@ -26,6 +29,7 @@ import com.example.kpj.model.UserPostRelation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -33,10 +37,13 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private Context context;
+    private Fragment fragment;
     private List<Post> mPosts;
+    private final static String KEY_SEND_POST_TO_CHAT = "A";
 
-    public PostAdapter(Context context, List<Post> posts) {
+    public PostAdapter(Context context, Fragment fragment,  List<Post> posts) {
         this.context = context;
+        this.fragment = fragment;
         mPosts = posts;
     }
 
@@ -63,12 +70,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         setUpIbSendListener(holder, post);
     }
 
-    private void setUpIbSendListener(ViewHolder holder, Post post) {
+    private void setUpIbSendListener(final ViewHolder holder, final Post post) {
         holder.ibSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment dialogBox = new SendToChatDialogFragment();
                 dialogBox.show(((MainActivity)context).getSupportFragmentManager(), "tag");
+                // send post to dialog fragment via bundle
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(KEY_SEND_POST_TO_CHAT, post);
+                dialogBox.setArguments(bundle);
             }
         });
     }
