@@ -159,7 +159,7 @@ public class MessageFragment extends Fragment {
                 course = objects.get(0);
 
                 final Message.Query messageQuery = new Message.Query();
-                messageQuery.withUser();
+                messageQuery.withUser().withPost();
                 messageQuery.whereEqualTo("course", course);
                 messageQuery.findInBackground(new FindCallback<Message>() {
                     @Override
@@ -173,7 +173,9 @@ public class MessageFragment extends Fragment {
                                 ParseObject postParseObject = message.getPost();
 
                                 if(postParseObject != null) {
-                                    message.setPostReference((Post) postParseObject);
+                                    //Get the postParseObject as a Post object
+                                    Post post = (Post) postParseObject;
+                                    message.setPostReference(post);
                                 }
 
                                 messages.add(message);

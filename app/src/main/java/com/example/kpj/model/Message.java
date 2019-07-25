@@ -126,5 +126,10 @@ public class Message extends ParseObject {
             include(KEY_COURSE);
             return this;
         }
+
+        public Query withPost() {
+            include(KEY_POST);
+            return this;
+        }
     }
 }

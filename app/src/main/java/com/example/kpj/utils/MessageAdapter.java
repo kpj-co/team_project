@@ -60,7 +60,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         //If there is no post
-        if(mMessages.get(position).getPostReference() == null) {
+        if(mMessages.get(position).getPost() == null) {
             return TYPE_NORMAL;
         }
 
@@ -153,7 +153,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ImageView ivOtherUser;
         ImageView ivCurrentUser;
         ImageView ivPostImage;
-        TextView body;
         TextView tvCurrentUserName;
         TextView tvOtherUserName;
         TextView tvPostTitle;
@@ -165,7 +164,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ivOtherUser = (ImageView)itemView.findViewById(R.id.ivProfileOther);
             ivCurrentUser = (ImageView)itemView.findViewById(R.id.ivProfileMe);
             ivPostImage = (ImageView) itemView.findViewById(R.id.ivPostImage);
-            body = (TextView)itemView.findViewById(R.id.tvBody);
             tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvCurrentUserName);
             tvOtherUserName = (TextView) itemView.findViewById(R.id.tvAnotherUserName);
             tvPostTitle = (TextView) itemView.findViewById(R.id.tvPostTitle);
@@ -178,10 +176,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             Post post = (Post) message.getPost();
 
+
+
             if (isCurrentUser) {
                 ivCurrentUser.setVisibility(View.VISIBLE);
                 ivOtherUser.setVisibility(View.GONE);
-                body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
 
                 //Change the text view states
                 tvCurrentUserName.setVisibility(View.INVISIBLE);
@@ -192,7 +191,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             } else {
                 ivOtherUser.setVisibility(View.VISIBLE);
                 ivCurrentUser.setVisibility(View.GONE);
-                body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 
                 //Change the text view states
                 tvOtherUserName.setVisibility(View.INVISIBLE);
@@ -219,9 +217,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     e.printStackTrace();
                 }
             }
-            body.setText(message.getDescription());
 
             tvPostTitle.setText(post.getTitle());
+            tvPostDescription.setText(post.getDescription());
+            tvUserOpinion.setText(message.getDescription());
+
+            if(post.getMedia() != null) {
+                Glide.with(mContext)
+                        .load(post.getMedia().getUrl())
+                        .into(ivPostImage);
+            }
         }
     }
 }
