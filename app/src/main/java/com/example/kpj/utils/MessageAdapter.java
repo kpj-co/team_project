@@ -173,7 +173,52 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         private void setDetails(Message message) {
+            final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
 
+            if (isCurrentUser) {
+                ivCurrentUser.setVisibility(View.VISIBLE);
+                ivOtherUser.setVisibility(View.GONE);
+                body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+
+                //Change the text view states
+                tvCurrentUserName.setVisibility(View.INVISIBLE);
+                tvOtherUserName.setVisibility(View.VISIBLE);
+                tvOtherUserName.setText(message.getUsername());
+
+                Log.d("ME", username + " is current, the message  " + message.getUsername());
+            } else {
+                ivOtherUser.setVisibility(View.VISIBLE);
+                ivCurrentUser.setVisibility(View.GONE);
+                body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+
+                //Change the text view states
+                tvOtherUserName.setVisibility(View.INVISIBLE);
+                tvCurrentUserName.setVisibility(View.VISIBLE);
+                tvCurrentUserName.setText(message.getUsername());
+
+                Log.d("OTHER", username + " is current, the message  " + message.getUsername());
+            }
+
+            final ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
+
+            if(message.getParseFileUserImage() != null) {
+                Glide.with(mContext)
+                        .load(message.getParseFileUserImage().getUrl())
+                        .apply(new RequestOptions().circleCrop())
+                        .into(profileView);
+            }
+
+            else {
+                try {
+                    message.setUserPhoto();
+                    message.setUserUsername();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            body.setText(message.getDescription());
+
+            //tvPostTitle.setText();
         }
     }
 }
