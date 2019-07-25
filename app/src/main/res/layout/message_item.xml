@@ -11,22 +11,28 @@
         android:orientation="horizontal"
         android:gravity="center_vertical|center_horizontal">
 
-    <TextView
-        android:id="@+id/tvCurrentUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:gravity="left"
-        android:layout_weight="1"
-        android:hint="UsernameCurrent"/>
+        <TextView
+            android:id="@+id/tvCurrentUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="left|bottom"
+            android:hint="UsernameCurrent"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvAnotherUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_gravity="end"
-        android:layout_weight="1"
-        android:textAlignment="viewEnd"
-        android:hint="UsernameOther"/>
+        <TextView
+            android:id="@+id/tvAnotherUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="end|bottom"
+            android:hint="UsernameOther"
+            android:textAlignment="viewEnd"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
