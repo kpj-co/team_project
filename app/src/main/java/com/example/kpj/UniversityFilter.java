@@ -1,6 +1,7 @@
 package com.example.kpj;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Filter;
 import android.widget.Filterable;
 
@@ -14,12 +15,11 @@ public class UniversityFilter implements Filterable {
 
     private List<University> universities;
     private UniversityFragmentAdapter adapter;
-    private List<University> filteredUniversities;
+    private List<University> filteredUniversities = new ArrayList<University>();
 
     public UniversityFilter(ArrayList<University> universities, UniversityFragmentAdapter adapter){
         this.adapter = adapter;
         this.universities = universities;
-        this.filteredUniversities = new ArrayList<>();
     }
 
     @Override
@@ -35,24 +35,22 @@ public class UniversityFilter implements Filterable {
             } else {
                 String filteredPattern = constraint.toString().toLowerCase().trim();
 
-                for (University university : universities) {
+                for (final University university : universities) {
                     if (university.getName().toLowerCase().contains(filteredPattern)) {
                         filteredUniversities.add(university);
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }
             FilterResults results = new FilterResults();
             results.values = filteredUniversities;
-
             return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            //adapter.setList(filteredUniversities);
+            adapter.setList(filteredUniversities);
             adapter.notifyDataSetChanged();
-
         }
-
     };
 }

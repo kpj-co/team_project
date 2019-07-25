@@ -16,6 +16,7 @@ import android.widget.Button;
 import com.example.kpj.R;
 import com.example.kpj.UniversityFragmentAdapter;
 import com.example.kpj.model.University;
+import com.example.kpj.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -33,6 +34,7 @@ public class UniversityFragment extends Fragment {
     private ArrayList<University> universities;
 
     private UniversityFragmentAdapter adapter;
+
 
     public static UniversityFragment newInstance(int page) {
         UniversityFragment fragment = new UniversityFragment();
@@ -96,6 +98,7 @@ public class UniversityFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 adapter.filterList(s);
+                searchView.clearFocus();
                 return true;
             }
         });

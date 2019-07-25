@@ -34,7 +34,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     public UniversityFragmentAdapter(Context context, ArrayList<University> universities) {
         this.universities = universities;
         this.context = context;
-        this.universityFilteredList = universities;
+        universityFilteredList = universities;
         filter = new UniversityFilter(universities, this);
 }
 
@@ -55,7 +55,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
         // this method is to bind the components of the layout to the user in parse
         Log.d("Adapter", "On Bind is called");
-       String university = universityFilteredList.get(position).getString("name");
+       String university = universities.get(position).getString("name");
 
         if(selectedPos == position){
             userUniversity = (University) universities.get(selectedPos);
@@ -66,11 +66,10 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     }
 
     public void setList(List<University> list){
-        universityFilteredList = list;
+        universities = list;
     }
-
-    public void filterList(String text){
-        filter.getFilter().filter(text);
+    public void filterList(String s){
+        filter.getFilter().filter(s);
     }
 
     public void setUserUniversity(ParseUser user){
@@ -81,7 +80,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     @Override
     public int getItemCount() {
        Log.d("Adapter", "Item Count is called "+ universities.size());
-        return universities.size();
+        return universityFilteredList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
