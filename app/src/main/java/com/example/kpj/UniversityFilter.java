@@ -15,11 +15,12 @@ public class UniversityFilter implements Filterable {
 
     private List<University> universities;
     private UniversityFragmentAdapter adapter;
-    private List<University> filteredUniversities = new ArrayList<University>();
+    private List<University> filteredUniversities;
 
     public UniversityFilter(ArrayList<University> universities, UniversityFragmentAdapter adapter){
         this.adapter = adapter;
         this.universities = universities;
+        this.filteredUniversities = universities;
     }
 
     @Override
@@ -33,12 +34,12 @@ public class UniversityFilter implements Filterable {
             if (constraint == null || constraint.length() == 0) {
                 filteredUniversities.addAll(universities);
             } else {
+                ArrayList<University> filteredUniversities = new ArrayList<>();
                 String filteredPattern = constraint.toString().toLowerCase().trim();
 
                 for (final University university : universities) {
                     if (university.getName().toLowerCase().contains(filteredPattern)) {
                         filteredUniversities.add(university);
-                        adapter.notifyDataSetChanged();
                     }
                 }
             }

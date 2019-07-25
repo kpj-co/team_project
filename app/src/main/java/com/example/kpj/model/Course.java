@@ -5,15 +5,17 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.io.Serializable;
+
 @ParseClassName("Course")
 public class Course extends ParseObject {
 
     //Limit to get courses
     private static final int MAX_NUMBER = 25;
-
     //columns in the database
     private static final String KEY_NAME = "name";
     private static final String KEY_UNIVERSITY = "University";
+    private boolean isChecked = false;
 
     public String getName() { return getString(KEY_NAME); }
 
@@ -24,6 +26,10 @@ public class Course extends ParseObject {
     public ParseObject getUniversity(){ return getParseObject(KEY_UNIVERSITY);}
 
     public void setUniversity(ParseObject university){put(KEY_UNIVERSITY, university);}
+
+    public Boolean isChecked(){ return isChecked;}
+
+    public void setChecked(boolean checked){isChecked = checked;}
 
     public static class Query extends ParseQuery<Course> {
         public Query() {

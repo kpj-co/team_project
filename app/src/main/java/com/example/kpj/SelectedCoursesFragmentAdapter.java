@@ -1,6 +1,7 @@
 package com.example.kpj;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.kpj.fragments.SelectCoursesFragment;
 import com.example.kpj.model.Course;
 
 import java.util.ArrayList;
@@ -19,10 +19,12 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
 
     private Context context;
     private List<Course> universityCourses;
+    private List<Course> selectedCourses;
 
-    public SelectedCoursesFragmentAdapter(Context context, ArrayList<Course> courses){
+    public SelectedCoursesFragmentAdapter(Context context, ArrayList<Course> courses) {
         this.context = context;
         this.universityCourses = courses;
+        this.selectedCourses = new ArrayList<>();
     }
 
     @NonNull
@@ -41,8 +43,12 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Log.d("SelectedCourse", "On Bind Called");
-        String course = universityCourses.get(position).getName();
-        viewHolder.tvSelectCourses.setText(course);
+        viewHolder.bind(universityCourses.get(position));
+    }
+
+    public void setList(List<Course> list){
+        list.addAll(selectedCourses);
+        Log.d("SelectCourses", "selectedcourse" + list);
     }
 
     @Override
@@ -51,19 +57,28 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
         return universityCourses.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvSelectCourses;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSelectCourses = itemView.findViewById(R.id.tvSelectCourse);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-
+        void bind(final Course course) {
+            tvSelectCourses.setText(course.getName());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("SelectedCourseAdapter", "Item Clicked");
+                    course.setChecked(!course.isChecked());
+                    tvSelectCourses.setBackgroundColor(course.isChecked() ? Color.GREEN :Color.TRANSPARENT);
+                    if(course.isChecked()){
+                        selectedCourses.add(course);
+                    }
+                }
+            });
         }
     }
 }
