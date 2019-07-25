@@ -21,10 +21,13 @@ import com.example.kpj.activities.MainActivity;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.University;
 import com.example.kpj.model.User;
+import com.example.kpj.model.UserCourseRelation;
 import com.parse.FindCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +38,12 @@ public class SelectCoursesFragment extends Fragment {
     private int mPage;
 
     private ArrayList<Course> filterCourses;
+    private ArrayList<Course> selectedCourses;
 
     private RecyclerView recyclerView;
     private Button bToUserCourseList;
 
     private SelectedCoursesFragmentAdapter adapter;
-
-    public SelectCoursesFragment() {
-    }
 
     public static SelectCoursesFragment newInstance(int page) {
         SelectCoursesFragment fragment = new SelectCoursesFragment();
@@ -82,6 +83,8 @@ public class SelectCoursesFragment extends Fragment {
         bToUserCourseList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ParseUser user = ParseUser.getCurrentUser();
+                addSelectedCourses(user);
                 Intent intent = new Intent(getActivity(), CourseListActivity.class);
                 startActivity(intent);
             }
@@ -89,14 +92,13 @@ public class SelectCoursesFragment extends Fragment {
     }
 
     private void setUpRecyclerView(View view) {
-        RecyclerView recyclerView = view.findViewById(R.id.rvSelectCourse);
+        recyclerView = view.findViewById(R.id.rvSelectCourse);
         filterCourses = new ArrayList<>();
         adapter = new SelectedCoursesFragmentAdapter(getContext(), filterCourses);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
     }
-
 
     private void fetchCourseByUniversity(ParseObject university) {
         final Course.Query courseQuery = new Course.Query();
@@ -115,5 +117,15 @@ public class SelectCoursesFragment extends Fragment {
             }
         });
     }
-}
 
+    private void addSelectedCourses(ParseUser user) {
+        selectedCourses = new ArrayList<>();
+        adapter.setList(selectedCourses);
+        UserCourseRelation userCourseRelation = new UserCourseRelation();
+        for (int i = 0; i < selectedCourses.size(); i++) {
+            userCourseRelation.setUser(user);
+            userCourseRelation.setCourse(selectedCourses.get(i));
+            userCourseRelation.saveInBackground();
+        }
+    }
+}

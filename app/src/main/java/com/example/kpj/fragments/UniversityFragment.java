@@ -98,7 +98,6 @@ public class UniversityFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 adapter.filterList(s);
-                searchView.clearFocus();
                 return true;
             }
         });
