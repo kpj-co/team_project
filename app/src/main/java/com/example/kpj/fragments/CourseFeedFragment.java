@@ -79,7 +79,6 @@ public class CourseFeedFragment extends Fragment {
         fragmentActivity = getActivity();
         initializeViews(view);
         initializeVariables();
-        setUpAdapter();
         setComposeButtonListener();
         // Get course from main activity
         String courseName = getCurrentCourseName();
@@ -96,10 +95,10 @@ public class CourseFeedFragment extends Fragment {
                 String message = "You are in " + course.getName();
                 Toast.makeText(fragmentActivity, message, Toast.LENGTH_LONG).show();
                 // query for posts associated
+                setUpAdapter();
                 queryPosts();
             }
         });
-
         return view;
     }
 
@@ -139,7 +138,6 @@ public class CourseFeedFragment extends Fragment {
 
     private void initializeVariables() {
         postArrayList = new ArrayList<>();
-        postAdapter = new PostAdapter(fragmentActivity, this, postArrayList);
     }
 
     private void setComposeButtonListener() {
@@ -153,6 +151,7 @@ public class CourseFeedFragment extends Fragment {
     }
 
     private void setUpAdapter() {
+        postAdapter = new PostAdapter(fragmentActivity, course, postArrayList);
         //create linear layout manager for recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(fragmentActivity);
         rvCourseFeed.setLayoutManager(linearLayoutManager);

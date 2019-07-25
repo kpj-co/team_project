@@ -22,6 +22,7 @@ import com.example.kpj.R;
 import com.example.kpj.activities.MainActivity;
 import com.example.kpj.fragments.CourseFeedFragment;
 import com.example.kpj.fragments.SendToChatDialogFragment;
+import com.example.kpj.model.Course;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
 import com.example.kpj.model.UserCourseRelation;
@@ -37,13 +38,15 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private Context context;
-    private Fragment fragment;
     private List<Post> mPosts;
+    private Course course;
     private final static String KEY_SEND_POST_TO_CHAT = "A";
+    private final static String KEY_SEND_COURSE_TO_CHAT = "B";
 
-    public PostAdapter(Context context, Fragment fragment,  List<Post> posts) {
+
+    public PostAdapter(Context context, Course course, List<Post> posts) {
         this.context = context;
-        this.fragment = fragment;
+        this.course = course;
         mPosts = posts;
     }
 
@@ -79,7 +82,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 // send post to dialog fragment via bundle
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(KEY_SEND_POST_TO_CHAT, post);
+                bundle.putParcelable(KEY_SEND_COURSE_TO_CHAT, course);
                 dialogBox.setArguments(bundle);
+                // send course to dialog fragment via bundle
+//                Bundle bundleCourse = new Bundle();
+//                bundleCourse.putParcelable(KEY_SEND_COURSE_TO_CHAT, course);
+//                dialogBox.setArguments(bundleCourse);
             }
         });
     }
