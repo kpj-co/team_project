@@ -175,9 +175,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
 
             Post post = (Post) message.getPost();
-
-
-
+            
             if (isCurrentUser) {
                 ivCurrentUser.setVisibility(View.VISIBLE);
                 ivOtherUser.setVisibility(View.GONE);
@@ -225,8 +223,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
-
 
             if(post.getMedia() != null) {
                 Glide.with(mContext)
