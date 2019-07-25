@@ -88,9 +88,10 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tvUserOpinion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="User opinion"/>
+                android:hint="User opinion" />
         </LinearLayout>
 
         <ImageView

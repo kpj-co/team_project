@@ -1,6 +1,7 @@
 package com.example.kpj.utils;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,7 +19,11 @@ import com.parse.ParseException;
 
 import java.util.List;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    //Values for the different types of messages(different views)
+    private static final int TYPE_NORMAL = 1;
+    private static final int TYPE_POST = 2;
 
     private List<Message> mMessages;
     private Context mContext;
@@ -30,63 +35,48 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         mContext = context;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.message_item, parent, false);
+        View view;
 
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
-    }
+        if(viewType == TYPE_NORMAL) {
+            view = inflater.inflate(R.layout.message_item, parent, false);
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Message message = mMessages.get(position);
-        final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
-
-        if (isCurrentUser) {
-            holder.imageMe.setVisibility(View.VISIBLE);
-            holder.imageOther.setVisibility(View.GONE);
-            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-
-            //Change the text view states
-            holder.tvCurrentUserName.setVisibility(View.INVISIBLE);
-            holder.tvOtherUserName.setVisibility(View.VISIBLE);
-            holder.tvOtherUserName.setText(message.getUsername());
-
-            Log.d("ME", username + " is current, the message  " + message.getUsername());
-        } else {
-            holder.imageOther.setVisibility(View.VISIBLE);
-            holder.imageMe.setVisibility(View.GONE);
-            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-
-            //Change the text view states
-            holder.tvOtherUserName.setVisibility(View.INVISIBLE);
-            holder.tvCurrentUserName.setVisibility(View.VISIBLE);
-            holder.tvCurrentUserName.setText(message.getUsername());
-
-            Log.d("OTHER", username + " is current, the message  " + message.getUsername());
-        }
-
-        final ImageView profileView = isCurrentUser ? holder.imageMe : holder.imageOther;
-
-        if(message.getParseFileUserImage() != null) {
-            Glide.with(mContext)
-                    .load(message.getParseFileUserImage().getUrl())
-                    .apply(new RequestOptions().circleCrop())
-                    .into(profileView);
+            return new normalMessageViewHolder(view);
         }
 
         else {
-            try {
-                message.setUserPhoto();
-                message.setUserUsername();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            view = inflater.inflate(R.layout.message_post_version_item, parent, false);
+
+            return new postMessageViewHolder(view);
         }
-        holder.body.setText(message.getDescription());
+    }
+
+    //TODO: IMPLEMENT THIS METHOD
+    @Override
+    public int getItemViewType(int position) {
+        //If there is no post
+        if(mMessages.get(position).getPostReference() == null) {
+            return TYPE_NORMAL;
+        }
+
+        else {
+            return TYPE_POST;
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+        if(getItemViewType(position) == TYPE_NORMAL) {
+            ((normalMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
+        }
+
+        else {
+            ((postMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
+        }
     }
 
     @Override
@@ -94,20 +84,96 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         return mMessages.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageOther;
-        ImageView imageMe;
+    public class normalMessageViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivOtherUser;
+        ImageView ivCurrentUser;
         TextView body;
         TextView tvCurrentUserName;
         TextView tvOtherUserName;
 
-        public ViewHolder(View itemView) {
+        public normalMessageViewHolder(View itemView) {
             super(itemView);
-            imageOther = (ImageView)itemView.findViewById(R.id.ivProfileOther);
-            imageMe = (ImageView)itemView.findViewById(R.id.ivProfileMe);
+            ivOtherUser = (ImageView)itemView.findViewById(R.id.ivProfileOther);
+            ivCurrentUser = (ImageView)itemView.findViewById(R.id.ivProfileMe);
             body = (TextView)itemView.findViewById(R.id.tvBody);
             tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvCurrentUserName);
             tvOtherUserName = (TextView) itemView.findViewById(R.id.tvAnotherUserName);
+        }
+
+        private void setDetails(Message message) {
+            final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
+
+            if (isCurrentUser) {
+                ivCurrentUser.setVisibility(View.VISIBLE);
+                ivOtherUser.setVisibility(View.GONE);
+                body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+
+                //Change the text view states
+                tvCurrentUserName.setVisibility(View.INVISIBLE);
+                tvOtherUserName.setVisibility(View.VISIBLE);
+                tvOtherUserName.setText(message.getUsername());
+
+                Log.d("ME", username + " is current, the message  " + message.getUsername());
+            } else {
+                ivOtherUser.setVisibility(View.VISIBLE);
+                ivCurrentUser.setVisibility(View.GONE);
+                body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+
+                //Change the text view states
+                tvOtherUserName.setVisibility(View.INVISIBLE);
+                tvCurrentUserName.setVisibility(View.VISIBLE);
+                tvCurrentUserName.setText(message.getUsername());
+
+                Log.d("OTHER", username + " is current, the message  " + message.getUsername());
+            }
+
+            final ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
+
+            if(message.getParseFileUserImage() != null) {
+                Glide.with(mContext)
+                        .load(message.getParseFileUserImage().getUrl())
+                        .apply(new RequestOptions().circleCrop())
+                        .into(profileView);
+            }
+
+            else {
+                try {
+                    message.setUserPhoto();
+                    message.setUserUsername();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            body.setText(message.getDescription());
+        }
+    }
+
+    public class postMessageViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivOtherUser;
+        ImageView ivCurrentUser;
+        ImageView ivPostImage;
+        TextView body;
+        TextView tvCurrentUserName;
+        TextView tvOtherUserName;
+        TextView tvPostTitle;
+        TextView tvPostDescription;
+        TextView tvUserOpinion;
+
+        public postMessageViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivOtherUser = (ImageView)itemView.findViewById(R.id.ivProfileOther);
+            ivCurrentUser = (ImageView)itemView.findViewById(R.id.ivProfileMe);
+            ivPostImage = (ImageView) itemView.findViewById(R.id.ivPostImage);
+            body = (TextView)itemView.findViewById(R.id.tvBody);
+            tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvCurrentUserName);
+            tvOtherUserName = (TextView) itemView.findViewById(R.id.tvAnotherUserName);
+            tvPostTitle = (TextView) itemView.findViewById(R.id.tvPostTitle);
+            tvPostDescription = (TextView) itemView.findViewById(R.id.tvPostDescription);
+            tvUserOpinion = (TextView) itemView.findViewById(R.id.tvUserOpinion);
+        }
+
+        private void setDetails(Message message) {
+
         }
     }
 }
