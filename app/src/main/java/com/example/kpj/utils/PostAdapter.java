@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -115,6 +116,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
         });
     }
+
+//    private void setUpVoteListener(final ViewHolder holder, final Post post, Button button,
+//                                   ) {
+//
+//
+//    }
 
     /** Down Vote a post and update parse db
      * @params: ViewHolder, Post
