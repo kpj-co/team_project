@@ -17,10 +17,12 @@ import android.widget.Toast;
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.Message;
+import com.example.kpj.model.Post;
 import com.example.kpj.model.University;
 import com.example.kpj.utils.MessageAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.livequery.ParseLiveQueryClient;
@@ -167,6 +169,13 @@ public class MessageFragment extends Fragment {
                                 Message message = objects.get(i);
                                 message.setUsername(message.getUser().getUsername());
                                 message.setParseFileUserImage(message.getUser().getParseFile("photoImage"));
+
+                                ParseObject postParseObject = message.getPost();
+
+                                if(postParseObject != null) {
+                                    message.setPostReference((Post) postParseObject);
+                                }
+
                                 messages.add(message);
                                 messageAdapter.notifyItemInserted(messages.size() - 1);
                                 Log.d("Size of list", "" + messages.size());
@@ -227,6 +236,12 @@ public class MessageFragment extends Fragment {
 
                         message.setUsername(currentUserUsername);
                         message.setParseFileUserImage(ParseUser.getCurrentUser().getParseFile("photoImage"));
+
+                        ParseObject postParseObject = message.getPost();
+
+                        if(postParseObject != null) {
+                            message.setPostReference((Post) postParseObject);
+                        }
                         messages.add(messages.size(), message);
 
                         // RecyclerView updates need to be run on the UI thread

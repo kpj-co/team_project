@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.model.Message;
+import com.example.kpj.model.Post;
 import com.parse.ParseException;
 
 import java.util.List;
@@ -175,6 +176,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private void setDetails(Message message) {
             final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
 
+            Post post = (Post) message.getPost();
+
             if (isCurrentUser) {
                 ivCurrentUser.setVisibility(View.VISIBLE);
                 ivOtherUser.setVisibility(View.GONE);
@@ -218,7 +221,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             body.setText(message.getDescription());
 
-            //tvPostTitle.setText();
+            tvPostTitle.setText(post.getTitle());
         }
     }
 }

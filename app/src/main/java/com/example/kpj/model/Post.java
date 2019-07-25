@@ -21,6 +21,11 @@ public class Post extends ParseObject {
     public boolean isLiked = false;
     public boolean isDisliked = false;
 
+    //Tradeoff space to be faster and deliver a better user experience in the chat
+    private String title;
+    private String description;
+    private ParseFile parseFile;
+
     //getters
     public ParseUser getUser() {
         return getParseUser(KEY_USER);
@@ -68,6 +73,31 @@ public class Post extends ParseObject {
 
     public void setDownVotes(int downVotes) {
         put(KEY_DOWNVOTES, downVotes);
+    }
+
+    //Methods used to store extra data
+    public void setTitleReference(String title) {
+        this.title = title;
+    }
+
+    public void setDescriptionReference(String description) {
+        this.description = description;
+    }
+
+    public void setMediaReference(ParseFile parseFile) {
+        this.parseFile = parseFile;
+    }
+
+    public String getTitleReference() {
+        return title;
+    }
+
+    public String getDescriptionReference() {
+        return description;
+    }
+
+    public ParseFile getMediaReference() {
+        return parseFile;
     }
 
 }
