@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kpj.FragmentCommunication;
 import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.activities.MainActivity;
 import com.example.kpj.model.Course;
@@ -24,6 +25,7 @@ import com.example.kpj.R;
 import com.example.kpj.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -137,7 +139,7 @@ public class CourseFeedFragment extends Fragment {
 
     private void initializeVariables() {
         postArrayList = new ArrayList<>();
-        postAdapter = new PostAdapter(fragmentActivity, postArrayList);
+        postAdapter = new PostAdapter(fragmentActivity, this, postArrayList);
     }
 
     private void setComposeButtonListener() {

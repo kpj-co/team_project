@@ -2,6 +2,7 @@ package com.example.kpj.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 @ParseClassName("UserPostRelation")
@@ -30,4 +31,10 @@ public class UserPostRelation extends ParseObject {
     }
 
     public void setVote(int vote) { put(KEY_POST, vote); }
+
+    public static class Query extends ParseQuery<UserPostRelation> {
+        public Query() {
+            super(UserPostRelation.class);
+        }
+    }
 }

@@ -38,11 +38,12 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'com.github.parse-community.Parse-SDK-Android:parse:1.18.5'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1' // for logging API calls to LogCat
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    // for logging API calls to LogCat
 
-    implementation 'com.github.parse-community:ParseLiveQuery-Android:1.1.0' // for Parse Live Queries
+    implementation 'com.github.parse-community:ParseLiveQuery-Android:1.1.0'
+    // for Parse Live Queries
 
     implementation 'org.parceler:parceler-api:1.1.12'
     annotationProcessor 'org.parceler:parceler:1.1.12'
-
 }

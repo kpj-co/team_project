@@ -11,6 +11,7 @@ import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.University;
 import com.example.kpj.model.UserCourseRelation;
+import com.example.kpj.model.UserPostRelation;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -32,6 +33,7 @@ public class ParseApp extends Application {
         ParseObject.registerSubclass(PostHashtagRelation.class);
         ParseObject.registerSubclass(UserCourseRelation.class);
         ParseObject.registerSubclass(University.class);
+        ParseObject.registerSubclass(UserPostRelation.class);
 
         // Use for monitoring Parse network traffic
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
