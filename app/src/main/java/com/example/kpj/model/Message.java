@@ -14,7 +14,7 @@ import org.parceler.Parcel;
 
 import java.util.List;
 
-@Parcel
+
 @ParseClassName("Message")
 public class Message extends ParseObject {
 

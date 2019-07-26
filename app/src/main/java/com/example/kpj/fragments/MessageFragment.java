@@ -269,7 +269,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
 
         //Move the content of the message to a post
         Intent intentPostMessage = new Intent(getContext(), ComposePostActivity.class);
-        intentPostMessage.putExtra("message", Parcels.wrap(messages.get(position)));
+        //intentPostMessage.putExtra("message", Parcels.wrap(messages.get(position)));
         startActivity(intentPostMessage);
 
     }
