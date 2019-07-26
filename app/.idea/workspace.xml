@@ -6,19 +6,11 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="acd0092b-a809-47c8-97f1-0405f39bdde9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/UniversityFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/UniversityFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/model/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/model/Course.java" afterDir="false" />
-    </list>
+    <list default="true" id="acd0092b-a809-47c8-97f1-0405f39bdde9" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/../.gradle/" />
     <ignored path="$PROJECT_DIR$/build/generated/not_namespaced_r_class_sources/" />
     <ignored path="$PROJECT_DIR$/build/generated/source/r/" />
@@ -77,11 +69,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="129" column="50" selection-start-line="129" selection-start-column="50" selection-end-line="129" selection-end-column="50" />
+            <state relative-caret-position="690">
+              <caret line="46" selection-start-line="46" selection-end-line="46" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2725#3037#0" expanded="true" />
@@ -96,12 +88,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="80" column="22" lean-forward="true" selection-start-line="80" selection-start-column="22" selection-end-line="80" selection-end-column="22" />
+            <state relative-caret-position="760">
+              <caret line="52" selection-start-line="52" selection-end-line="52" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1808#1809#0" expanded="true" />
-                <element signature="e#1846#1847#0" expanded="true" />
                 <element signature="e#3409#4091#0" expanded="true" />
                 <element signature="e#4090#4091#0" expanded="true" />
               </folding>
@@ -112,8 +102,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1">
-              <caret line="51" column="5" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
+            <state relative-caret-position="393">
+              <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="4" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2368#2369#0" expanded="true" />
@@ -123,23 +113,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="609">
-              <caret line="52" column="31" selection-start-line="52" selection-start-column="31" selection-end-line="52" selection-end-column="31" />
+            <state relative-caret-position="765">
+              <caret line="53" column="16" selection-start-line="53" selection-start-column="16" selection-end-line="53" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/model/UserCourseRelation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="8" column="51" selection-start-line="8" selection-start-column="40" selection-end-line="8" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -200,15 +181,15 @@
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/res/layout/select_course_item.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/model/Course.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFilter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/UniversityFragment.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="x" value="50" />
     <option name="y" value="131" />
     <option name="width" value="1656" />
@@ -270,12 +251,6 @@
               <item name="team_project" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="res" type="d4f16f75:AndroidResFolderNode" />
-            </path>
-            <path>
-              <item name="team_project" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
             <path>
               <item name="team_project" type="1abcf292:AndroidViewProjectNode" />
@@ -407,10 +382,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.21916972" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.21916972" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Build Variants" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
@@ -424,10 +399,10 @@
       <window_info anchor="bottom" id="TODO" order="3" sideWeight="0.49950346" weight="0.32865497" />
       <window_info anchor="bottom" id="Android Profiler" order="4" sideWeight="0.49950346" weight="0.32955465" />
       <window_info anchor="bottom" id="Find" order="5" sideWeight="0.49876085" weight="0.32865497" />
-      <window_info anchor="bottom" id="Terminal" order="6" sideWeight="0.49380422" weight="0.16428572" />
+      <window_info anchor="bottom" id="Terminal" order="6" sideWeight="0.49380422" weight="0.527551" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5012392" side_tool="true" weight="0.32865497" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4969021" weight="0.29183674" />
-      <window_info active="true" anchor="bottom" id="Debug" order="9" sideWeight="0.8866171" visible="true" weight="0.40612245" />
+      <window_info anchor="bottom" id="Debug" order="9" sideWeight="0.8866171" weight="0.40612245" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Theme Preview" order="2" />
@@ -482,16 +457,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Added logging to adapter" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>125</line>
-          <properties />
-          <option name="timeStamp" value="59" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="app">
         <watch expression="user" />
@@ -743,35 +708,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="609">
-          <caret line="52" column="31" selection-start-line="52" selection-start-column="31" selection-end-line="52" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1">
-          <caret line="51" column="5" selection-start-line="51" selection-start-column="5" selection-end-line="51" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2368#2369#0" expanded="true" />
-            <element signature="e#2403#2404#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/model/UserCourseRelation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="8" column="51" selection-start-line="8" selection-start-column="40" selection-end-line="8" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/model/Post.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -803,30 +739,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="80" column="22" lean-forward="true" selection-start-line="80" selection-start-column="22" selection-end-line="80" selection-end-column="22" />
+        <state relative-caret-position="393">
+          <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="4" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1808#1809#0" expanded="true" />
-            <element signature="e#1846#1847#0" expanded="true" />
-            <element signature="e#3409#4091#0" expanded="true" />
-            <element signature="e#4090#4091#0" expanded="true" />
+            <element signature="e#2368#2369#0" expanded="true" />
+            <element signature="e#2403#2404#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="129" column="50" selection-start-line="129" selection-start-column="50" selection-end-line="129" selection-end-column="50" />
+        <state relative-caret-position="690">
+          <caret line="46" selection-start-line="46" selection-end-line="46" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2725#3037#0" expanded="true" />
             <element signature="e#3036#3037#0" expanded="true" />
             <element signature="e#3707#4261#0" expanded="true" />
             <element signature="e#4260#4261#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="760">
+          <caret line="52" selection-start-line="52" selection-end-line="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3409#4091#0" expanded="true" />
+            <element signature="e#4090#4091#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/model/UserCourseRelation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="8" column="51" selection-start-line="8" selection-start-column="40" selection-end-line="8" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="53" column="16" selection-start-line="53" selection-start-column="16" selection-end-line="53" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
