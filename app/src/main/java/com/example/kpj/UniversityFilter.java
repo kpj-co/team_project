@@ -27,10 +27,10 @@ public class UniversityFilter implements Filterable {
     public Filter getFilter() {
         return universityFilter;
     }
+
     private Filter universityFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-
             if (constraint == null || constraint.length() == 0) {
                 filteredUniversities.addAll(universities);
             } else {
