@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import com.example.kpj.model.University;
 import com.example.kpj.model.User;
-import com.parse.Parse;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -34,8 +32,8 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     public UniversityFragmentAdapter(Context context, ArrayList<University> universities) {
         this.universities = universities;
         this.context = context;
-        universityFilteredList = universities;
-        filter = new UniversityFilter((ArrayList<University>) universityFilteredList, this);
+        universityFilteredList =universities;
+        filter = new UniversityFilter(universities, this);
     }
 
     @NonNull
@@ -68,6 +66,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     public void setList(List<University> list){
         universityFilteredList = list;
     }
+
     public void filterList(String s){
         filter.getFilter().filter(s);
     }
