@@ -33,17 +33,14 @@ public class CourseListActivity extends AppCompatActivity {
         this.context = CourseListActivity.this;
         filterCourses = new ArrayList<>();
         // TODO - Uncomment later
-        //findCoursesByUserId(ParseUser.getCurrentUser());
-
+        findCoursesByUserId(ParseUser.getCurrentUser());
         // Hardcoded for production
-        try {
-            findCoursesByUserId(ParseUser.getQuery().get("UiqnWgiN8B"));
-        } catch (ParseException e) {
-            Toast.makeText(context, "Could not fetch user", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-
-
+//        try {
+//            findCoursesByUserId(ParseUser.getQuery().get("UiqnWgiN8B"));
+//        } catch (ParseException e) {
+//            Toast.makeText(context, "Could not fetch user", Toast.LENGTH_LONG).show();
+//            e.printStackTrace();
+//        }
         // set up recycler view
         recyclerView = findViewById(R.id.rvCourse);
         // set the adapter

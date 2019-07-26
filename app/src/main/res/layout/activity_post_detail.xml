@@ -53,7 +53,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
         android:text="post title"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/tvDetailDescription"
