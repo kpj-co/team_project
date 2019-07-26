@@ -1,6 +1,7 @@
 package com.example.kpj.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,10 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
+import com.example.kpj.RecyclerViewClickListener;
+import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.parse.ParseException;
@@ -30,10 +34,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Context mContext;
     private String username;
 
-    public MessageAdapter(Context context, String username, List<Message> messages) {
+    private static RecyclerViewClickListener itemListener;
+
+    public MessageAdapter(Context context, String username, List<Message> messages, RecyclerViewClickListener itemListener) {
         mMessages = messages;
         this.username = username;
         mContext = context;
+        this.itemListener = itemListener;
     }
 
     @NonNull
@@ -85,7 +92,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mMessages.size();
     }
 
-    public class normalMessageViewHolder extends RecyclerView.ViewHolder {
+    public class normalMessageViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
         ImageView ivOtherUser;
         ImageView ivCurrentUser;
         TextView body;
@@ -99,6 +106,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             body = (TextView)itemView.findViewById(R.id.tvBody);
             tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvCurrentUserName);
             tvOtherUserName = (TextView) itemView.findViewById(R.id.tvAnotherUserName);
+
+            itemView.setOnLongClickListener(this);
         }
 
         private void setDetails(Message message) {
@@ -146,6 +155,18 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             }
             body.setText(message.getDescription());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            Toast.makeText(mContext, "Long click", Toast.LENGTH_LONG).show();
+            Log.d("MessageAdapter", "Executed long click");
+
+
+            itemListener.recyclerViewListClicked(v, this.getLayoutPosition());
+
+            //indicate that the click has handled
+            return true;
         }
     }
 

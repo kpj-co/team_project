@@ -10,8 +10,11 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
+@Parcel
 @ParseClassName("Message")
 public class Message extends ParseObject {
 
@@ -27,6 +30,10 @@ public class Message extends ParseObject {
 
     //Some messages have a reference to the post, because they actually show a post in the chat
     private Post postReference = null;
+
+    public Message() {
+
+    }
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
