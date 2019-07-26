@@ -175,7 +175,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
 
             Post post = (Post) message.getPost();
-            
+
             if (isCurrentUser) {
                 ivCurrentUser.setVisibility(View.VISIBLE);
                 ivOtherUser.setVisibility(View.GONE);
