@@ -104,10 +104,7 @@ public class Message extends ParseObject {
     }
 
     public void setPostReference(Post post) {
-        put(KEY_POST, post);
-
         postReference = postReference;
-
     }
 
     public static class Query extends ParseQuery<Message> {
@@ -127,6 +124,11 @@ public class Message extends ParseObject {
 
         public Query withCourse() {
             include(KEY_COURSE);
+            return this;
+        }
+
+        public Query withPost() {
+            include(KEY_POST);
             return this;
         }
     }

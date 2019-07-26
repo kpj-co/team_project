@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.model.Message;
+import com.example.kpj.model.Post;
 import com.parse.ParseException;
 
 import java.util.List;
@@ -59,7 +60,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         //If there is no post
-        if(mMessages.get(position).getPostReference() == null) {
+        if(mMessages.get(position).getPost() == null) {
             return TYPE_NORMAL;
         }
 
@@ -152,7 +153,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ImageView ivOtherUser;
         ImageView ivCurrentUser;
         ImageView ivPostImage;
-        TextView body;
         TextView tvCurrentUserName;
         TextView tvOtherUserName;
         TextView tvPostTitle;
@@ -164,7 +164,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ivOtherUser = (ImageView)itemView.findViewById(R.id.ivProfileOther);
             ivCurrentUser = (ImageView)itemView.findViewById(R.id.ivProfileMe);
             ivPostImage = (ImageView) itemView.findViewById(R.id.ivPostImage);
-            body = (TextView)itemView.findViewById(R.id.tvBody);
             tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvCurrentUserName);
             tvOtherUserName = (TextView) itemView.findViewById(R.id.tvAnotherUserName);
             tvPostTitle = (TextView) itemView.findViewById(R.id.tvPostTitle);
@@ -173,7 +172,63 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         private void setDetails(Message message) {
+            final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
 
+            Post post = (Post) message.getPost();
+
+            if (isCurrentUser) {
+                ivCurrentUser.setVisibility(View.VISIBLE);
+                ivOtherUser.setVisibility(View.GONE);
+
+                //Change the text view states
+                tvCurrentUserName.setVisibility(View.INVISIBLE);
+                tvOtherUserName.setVisibility(View.VISIBLE);
+                tvOtherUserName.setText(message.getUsername());
+
+                Log.d("ME", username + " is current, the message  " + message.getUsername());
+            } else {
+                ivOtherUser.setVisibility(View.VISIBLE);
+                ivCurrentUser.setVisibility(View.GONE);
+
+                //Change the text view states
+                tvOtherUserName.setVisibility(View.INVISIBLE);
+                tvCurrentUserName.setVisibility(View.VISIBLE);
+                tvCurrentUserName.setText(message.getUsername());
+
+                Log.d("OTHER", username + " is current, the message  " + message.getUsername());
+            }
+
+            final ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
+
+            if(message.getParseFileUserImage() != null) {
+                Glide.with(mContext)
+                        .load(message.getParseFileUserImage().getUrl())
+                        .apply(new RequestOptions().circleCrop())
+                        .into(profileView);
+            }
+
+            else {
+                try {
+                    message.setUserPhoto();
+                    message.setUserUsername();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            try {
+                tvPostTitle.setText(((Post)post.fetchIfNeeded()).getTitle());
+                tvPostDescription.setText(((Post)post.fetchIfNeeded()).getDescription());
+                tvUserOpinion.setText(((Message)message.fetchIfNeeded()).getDescription());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if(post.getMedia() != null) {
+                Glide.with(mContext)
+                        .load(post.getMedia().getUrl())
+                        .into(ivPostImage);
+            }
         }
     }
 }

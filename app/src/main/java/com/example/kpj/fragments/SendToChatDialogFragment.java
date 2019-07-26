@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -84,5 +87,6 @@ public class SendToChatDialogFragment extends DialogFragment {
         course = bundle.getParcelable(KEY_SEND_COURSE_TO_CHAT);
         Toast.makeText(getContext(), post.getObjectId(), Toast.LENGTH_SHORT).show();
     }
+
 
 }

@@ -3,15 +3,11 @@ package com.example.kpj.fragments;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +20,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.kpj.CameraLauncher;
 import com.example.kpj.R;
 import com.example.kpj.model.User;
 import com.parse.ParseException;
@@ -165,6 +162,7 @@ public class SignUpFragment extends Fragment {
                         CAMERA_PERMISSION_CODE);
             } else {
                 onLaunchCamera();
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,41 +170,20 @@ public class SignUpFragment extends Fragment {
     }
 
     public void onLaunchCamera() {
-        // create Intent to take a picture and return control to the calling application
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Create a File reference to access to future access
-        photoFile = getPhotoFileUri(photoFileName);
-        Uri fileProvider = FileProvider.getUriForFile(getContext(),
-                "com.codepath.fileprovider", photoFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-        // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            // Start the image capture intent to take photo
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        }
-    }
-
-    // Returns the File for a photo stored on disk given the fileName
-    public File getPhotoFileUri(String fileName) {
-        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-            Log.d(APP_TAG, "failed to create directory");
-        }
-        // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName + Math.random());
-        return file;
+        CameraLauncher cameraLauncher = new CameraLauncher(getActivity(), new CameraLauncher.Callback() {
+            @Override
+            public void startActivityForResult(Intent intent) {
+                SignUpFragment.this.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
+        photoFile = cameraLauncher.onLaunchCamera();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Glide.with(getContext())
-                        .load(photoFile.getAbsoluteFile())
-                        //crop photo to size of thing
-                        .apply(new RequestOptions().override(200, 200).centerCrop())
-                        .into(ivNewProfilePic);
+                displayFile(photoFile.getAbsoluteFile());
                 Toast.makeText(getContext(), "Profile Picture Set", Toast.LENGTH_LONG).show();
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
@@ -214,6 +191,13 @@ public class SignUpFragment extends Fragment {
         }
     }
 
+    private void displayFile(File file) {
+        Glide.with(getContext())
+                .load(file)
+                //crop photo to size of thing
+                .apply(new RequestOptions().override(200, 200).centerCrop())
+                .into(ivNewProfilePic);
+    }
 
     public void goToUniversityFragment() {
         Fragment fragment = new UniversityFragment();
