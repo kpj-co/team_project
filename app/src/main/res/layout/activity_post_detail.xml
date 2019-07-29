@@ -15,6 +15,7 @@
 
     <ImageView
         android:id="@+id/ivDetailPostImage"
+        android:layout_width="match_parent"
         android:layout_height="246dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"

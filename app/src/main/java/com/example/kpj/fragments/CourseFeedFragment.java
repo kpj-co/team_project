@@ -1,6 +1,5 @@
 package com.example.kpj.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,16 +15,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kpj.FragmentCommunication;
 import com.example.kpj.activities.ComposePostActivity;
-import com.example.kpj.activities.MainActivity;
+import com.example.kpj.activities.PostDetailActivity;
 import com.example.kpj.model.Course;
 import com.example.kpj.utils.PostAdapter;
 import com.example.kpj.R;
 import com.example.kpj.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -151,7 +148,15 @@ public class CourseFeedFragment extends Fragment {
     }
 
     private void setUpAdapter() {
-        postAdapter = new PostAdapter(fragmentActivity, course, postArrayList);
+        postAdapter = new PostAdapter(fragmentActivity, course, postArrayList, new PostAdapter.OnPostClicked() {
+            @Override
+            public void onPostClickListener(int position) {
+                Toast.makeText(fragmentActivity, "post clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), PostDetailActivity.class);
+                intent.putExtra("post", postArrayList.get(position));
+                startActivity(intent);
+            }
+        });
         //create linear layout manager for recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(fragmentActivity);
         rvCourseFeed.setLayoutManager(linearLayoutManager);

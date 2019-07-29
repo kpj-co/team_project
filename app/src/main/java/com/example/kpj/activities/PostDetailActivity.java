@@ -2,6 +2,7 @@ package com.example.kpj.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.kpj.R;
 
@@ -11,5 +12,8 @@ public class PostDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+        Toast.makeText(this, "inside postDetail Act", Toast.LENGTH_SHORT).show();
     }
+
+
 }
