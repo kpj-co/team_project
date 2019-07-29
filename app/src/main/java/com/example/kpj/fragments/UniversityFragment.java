@@ -26,15 +26,10 @@ import java.util.List;
 
 public class UniversityFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
-    private int mPage;
-
-    private SearchView searchView;
-    private Button nextButton;
 
     private ArrayList<University> universities;
 
     private UniversityFragmentAdapter adapter;
-
 
     public static UniversityFragment newInstance(int page) {
         UniversityFragment fragment = new UniversityFragment();
@@ -47,7 +42,7 @@ public class UniversityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mPage = getArguments().getInt(ARG_PAGE);
+            int mPage = getArguments().getInt(ARG_PAGE);
         }
     }
     @Override
@@ -57,7 +52,7 @@ public class UniversityFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_university,
                 container, false);
 
-        nextButton = (Button) view.findViewById(R.id.bNext);
+        Button nextButton = (Button) view.findViewById(R.id.bNext);
         nextButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -87,7 +82,7 @@ public class UniversityFragment extends Fragment {
     }
 
     private void setUpSearchView(View view) {
-        searchView = view.findViewById(R.id.svSearch);
+        SearchView searchView = view.findViewById(R.id.svSearch);
         searchView.setQueryHint("University");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

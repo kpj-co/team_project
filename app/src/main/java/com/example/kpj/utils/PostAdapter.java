@@ -1,16 +1,13 @@
 package com.example.kpj.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,18 +17,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.activities.MainActivity;
-import com.example.kpj.fragments.CourseFeedFragment;
 import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
-import com.example.kpj.model.UserCourseRelation;
-import com.example.kpj.model.UserPostRelation;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -40,13 +30,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
     private List<Post> mPosts;
     private Course course;
+    private OnPostClicked onPostClicked;
     private final static String KEY_SEND_POST_TO_CHAT = "A";
     private final static String KEY_SEND_COURSE_TO_CHAT = "B";
 
 
-    public PostAdapter(Context context, Course course, List<Post> posts) {
+    public PostAdapter(Context context, Course course, List<Post> posts, OnPostClicked onPostClicked) {
         this.context = context;
         this.course = course;
+        this.onPostClicked = onPostClicked;
         mPosts = posts;
     }
 
@@ -56,16 +48,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View postView = inflater.inflate(R.layout.post_item, viewGroup, false);
-        return new ViewHolder(postView);
+        return new ViewHolder(postView, onPostClicked);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Post post = mPosts.get(position);
         bindPostContent(holder, post);
-        //populate post likes, dislikes
-        holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
-        holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
         post.isLiked = false;
         post.isDisliked = false;
         setUpUpVoteListener(holder, post);
@@ -124,6 +113,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }
+
+        holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
+        holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
     }
 
     /** Up Vote a post and update parse db
@@ -241,30 +233,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return mPosts.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView ivProfile;
-        public TextView tvUser;
-        public TextView tvDate;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView ivProfile, ivPostImage;
+        TextView tvUser, tvDate, tvTitle, tvDescription, tvHashtag1, tvHashtag2, tvUpVotes,
+                        tvDownVotes, tvCommentCount;
+        ImageButton ibLike, ibDislike, ibComment, ibSend;
+        OnPostClicked launchDetailIntent;
 
-        public TextView tvTitle;
-        public TextView tvDescription;
-        public ImageView ivPostImage;
 
-        public TextView tvHashtag1;
-        public TextView tvHashtag2;
 
-        public ImageButton ibLike;
-        public ImageButton ibDislike;
-        public ImageButton ibComment;
-        public ImageButton ibSend;
-
-        public TextView tvUpVotes;
-        public TextView tvDownVotes;
-        public TextView tvCommentCount;
-
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnPostClicked launchDetailIntent) {
             super(itemView);
             initializeViews(itemView);
+            this.launchDetailIntent = launchDetailIntent;
         }
 
         private void initializeViews(@NonNull View itemView) {
@@ -283,7 +264,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvUpVotes = itemView.findViewById(R.id.tvUpVotes);
             tvDownVotes = itemView.findViewById(R.id.tvDownVotes);
             tvCommentCount = itemView.findViewById(R.id.tvCommentCount);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(final View v) {
+            launchDetailIntent.onPostClickListener(getAdapterPosition());
+        }
+
+    }
+
+    public interface OnPostClicked {
+        void onPostClickListener(int position);
     }
 
 

@@ -17,7 +17,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFragmentAdapter.ViewHolder>{
+public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFragmentAdapter.ViewHolder> {
 
     private Context context;
 
@@ -27,7 +27,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     private UniversityFilter filter;
     private University userUniversity;
 
-    private int selectedPos = RecyclerView.NO_POSITION;
+    private String selectedUniversity;
 
     public UniversityFragmentAdapter(Context context, ArrayList<University> universities) {
         this.universities = universities;
@@ -52,50 +52,61 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
         // this method is to bind the components of the layout to the user in parse
         Log.d("Adapter", "On Bind is called");
-       String university = universityFilteredList.get(position).getString("name");
-        if(selectedPos == position){
-            userUniversity = (University) universityFilteredList.get(selectedPos);
-        }
+        final University university = universityFilteredList.get(position);
 
-       viewHolder.tvUniversity.setText(university);
-       viewHolder.itemView.setBackgroundColor(selectedPos == position ? Color.GREEN : Color.TRANSPARENT);
+        if(university.isSelected()){
+            viewHolder.tvUniversity.setBackgroundColor(Color.GREEN);
+        }
+        else{
+            viewHolder.tvUniversity.setBackgroundColor(Color.TRANSPARENT);
+        }
+        String universityName = university.getString("name");
+        viewHolder.tvUniversity.setText(universityName);
+        viewHolder.tvUniversity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                university.setSelected(!university.isSelected());
+                if(university.isSelected()){
+                    viewHolder.tvUniversity.setBackgroundColor(Color.GREEN);
+                    userUniversity = university;
+                }
+                else{
+                    viewHolder.tvUniversity.setBackgroundColor(Color.TRANSPARENT);
+                }
+            }
+        });
+
     }
 
-    public void setList(List<University> list){
+    public void setList(List<University> list) {
         universityFilteredList = list;
     }
 
-    public void filterList(String s){
+    public void filterList(String s) {
         filter = new UniversityFilter(universities, this);
         filter.getFilter().filter(s);
     }
 
-    public void setUserUniversity(ParseUser user){
+    public void setUserUniversity(ParseUser user) {
         user.put(User.KEY_UNIVERSITY, userUniversity);
         user.saveInBackground();
     }
 
     @Override
     public int getItemCount() {
-       Log.d("Adapter", "Item Count is called "+ universities.size());
+        Log.d("Adapter", "Item Count is called " + universities.size());
         return universityFilteredList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvUniversity;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Log.d("Adapter", "Viewholder is called");
             tvUniversity = itemView.findViewById(R.id.tvUniversity);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            notifyItemChanged(selectedPos);
-            selectedPos = getAdapterPosition();
-            notifyItemChanged(selectedPos);
         }
     }
 }
+

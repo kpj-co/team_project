@@ -3,8 +3,6 @@ package com.example.kpj.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,18 +14,13 @@ import android.widget.Button;
 import com.example.kpj.R;
 import com.example.kpj.SelectedCoursesFragmentAdapter;
 import com.example.kpj.activities.CourseListActivity;
-import com.example.kpj.activities.LoginActivity;
-import com.example.kpj.activities.MainActivity;
 import com.example.kpj.model.Course;
-import com.example.kpj.model.University;
 import com.example.kpj.model.User;
 import com.example.kpj.model.UserCourseRelation;
 import com.parse.FindCallback;
-import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +31,7 @@ public class SelectCoursesFragment extends Fragment {
     private int mPage;
 
     private ArrayList<Course> filterCourses;
-    private ArrayList<Course> selectedCourses;
+    private ArrayList<Course> userSelectedCourses;
 
     private RecyclerView recyclerView;
     private Button bToUserCourseList;
@@ -119,12 +112,12 @@ public class SelectCoursesFragment extends Fragment {
     }
 
     private void addSelectedCourses(ParseUser user) {
-        selectedCourses = new ArrayList<>();
-        adapter.setList(selectedCourses);
-        UserCourseRelation userCourseRelation = new UserCourseRelation();
-        for (int i = 0; i < selectedCourses.size(); i++) {
+        userSelectedCourses = new ArrayList<>();
+        adapter.setList(userSelectedCourses);
+        for (int i = 0; i < userSelectedCourses.size(); i++) {
+            UserCourseRelation userCourseRelation = new UserCourseRelation();
             userCourseRelation.setUser(user);
-            userCourseRelation.setCourse(selectedCourses.get(i));
+            userCourseRelation.setCourse(userSelectedCourses.get(i));
             userCourseRelation.saveInBackground();
         }
     }
