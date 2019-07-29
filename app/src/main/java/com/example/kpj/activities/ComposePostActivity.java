@@ -31,6 +31,7 @@ import com.example.kpj.R;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
+import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -365,6 +366,15 @@ public class ComposePostActivity extends AppCompatActivity {
         } else {
             Toast.makeText(context, "could not find course associated", Toast.LENGTH_SHORT).show();
         }
+
+        //Add the relationship post-hashtag to the database for each hashYWtag
+        for(String hashtag : hashtags) {
+            PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
+            postHashtagRelation.setPost(newPost);
+            postHashtagRelation.setHashtag(hashtag);
+            postHashtagRelation.saveInBackground();
+        }
+
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
