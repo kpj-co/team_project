@@ -1,6 +1,7 @@
 package com.example.kpj.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.kpj.R;
+import com.example.kpj.RecyclerViewClickListener;
+import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
@@ -28,6 +31,8 @@ import com.parse.ParseUser;
 import com.parse.livequery.ParseLiveQueryClient;
 import com.parse.livequery.SubscriptionHandling;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +40,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.parse.Parse.getApplicationContext;
 
 
-public class MessageFragment extends Fragment {
+public class MessageFragment extends Fragment implements RecyclerViewClickListener {
     private static final String ARG_PAGE = "ARG_PAGE";
     private final static String PREF_NAME = "sharedData";
     private int mPage;
@@ -97,7 +102,7 @@ public class MessageFragment extends Fragment {
     }
 
     void prepareRecyclerView() {
-        messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(), messages);
+        messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(), messages, this);
         recyclerView.setAdapter(messageAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -256,5 +261,16 @@ public class MessageFragment extends Fragment {
                         });
                     }
                 });
+    }
+
+    @Override
+    public void recyclerViewListClicked(View v, int position) {
+        Log.d("MessageFragment", "item position: " + position);
+
+        //Move the content of the message to a post
+        Intent intentPostMessage = new Intent(getContext(), ComposePostActivity.class);
+        //intentPostMessage.putExtra("message", Parcels.wrap(messages.get(position)));
+        startActivity(intentPostMessage);
+
     }
 }

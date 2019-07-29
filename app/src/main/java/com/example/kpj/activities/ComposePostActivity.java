@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
 import com.parse.FindCallback;
@@ -37,6 +38,8 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 import java.util.List;
@@ -83,6 +86,8 @@ public class ComposePostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_compose_post);
         initializeViews();
         initializeVariables();
+        //if a user wants to post a message as a post, this method will do the job
+        preparePostFromComment();
     }
 
     private void initializeVariables() {
@@ -367,5 +372,12 @@ public class ComposePostActivity extends AppCompatActivity {
     private void goToMainActivity() {
         Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    //if a user wants to post a message as a post, this method will do the job
+    public void preparePostFromComment() {
+       // Message message = (Message) Parcels.unwrap(getIntent().getParcelableExtra("message"));
+
+        //if there is any message where
     }
 }
