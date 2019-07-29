@@ -73,9 +73,13 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
                 public void onClick(View v) {
                     Log.d("SelectedCourseAdapter", "Item Clicked");
                     course.setChecked(!course.isChecked());
-                    tvSelectCourses.setBackgroundColor(course.isChecked() ? Color.GREEN :Color.TRANSPARENT);
                     if(course.isChecked()){
+                        tvSelectCourses.setBackgroundColor(Color.GREEN);
                         selectedCourses.add(course);
+                    }
+                    else {
+                        tvSelectCourses.setBackgroundColor(Color.TRANSPARENT);
+                        selectedCourses.remove(course);
                     }
                 }
             });
