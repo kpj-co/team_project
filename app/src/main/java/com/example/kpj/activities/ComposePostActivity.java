@@ -376,10 +376,9 @@ public class ComposePostActivity extends AppCompatActivity {
 
     //if a user wants to post a message as a post, this method will do the job
     public void preparePostFromComment() {
-        if (getIntent() != null) {
-            Message message = getIntent().getParcelableExtra("message");
+        Message message = getIntent().getParcelableExtra("message");
+        if (message != null) {
             etComposeBody.setText(message.getDescription());
         }
-        //if there is any message where
     }
 }
