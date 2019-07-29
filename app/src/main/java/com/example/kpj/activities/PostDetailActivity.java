@@ -1,7 +1,9 @@
-package com.example.kpj;
+package com.example.kpj.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.kpj.R;
 
 public class PostDetailActivity extends AppCompatActivity {
 
