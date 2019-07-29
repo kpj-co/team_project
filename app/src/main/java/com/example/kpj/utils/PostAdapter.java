@@ -55,9 +55,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Post post = mPosts.get(position);
         bindPostContent(holder, post);
-        //populate post likes, dislikes
-        holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
-        holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
         post.isLiked = false;
         post.isDisliked = false;
         setUpUpVoteListener(holder, post);
@@ -116,6 +113,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }
+
+        holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
+        holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
     }
 
     /** Up Vote a post and update parse db
