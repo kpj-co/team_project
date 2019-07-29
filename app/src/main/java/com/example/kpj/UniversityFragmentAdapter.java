@@ -32,8 +32,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     public UniversityFragmentAdapter(Context context, ArrayList<University> universities) {
         this.universities = universities;
         this.context = context;
-        universityFilteredList =universities;
-        filter = new UniversityFilter(universities, this);
+        universityFilteredList = new ArrayList<University>(universities);
     }
 
     @NonNull
@@ -54,7 +53,6 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         // this method is to bind the components of the layout to the user in parse
         Log.d("Adapter", "On Bind is called");
        String university = universityFilteredList.get(position).getString("name");
-
         if(selectedPos == position){
             userUniversity = (University) universityFilteredList.get(selectedPos);
         }
@@ -68,6 +66,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     }
 
     public void filterList(String s){
+        filter = new UniversityFilter(universities, this);
         filter.getFilter().filter(s);
     }
 

@@ -68,7 +68,7 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
 
         void bind(final Course course) {
             tvSelectCourses.setText(course.getName());
-            itemView.setOnClickListener(new View.OnClickListener() {
+            tvSelectCourses.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d("SelectedCourseAdapter", "Item Clicked");

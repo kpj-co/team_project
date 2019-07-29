@@ -98,6 +98,7 @@ public class UniversityFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 adapter.filterList(s);
+                adapter.notifyDataSetChanged();
                 return true;
             }
         });
