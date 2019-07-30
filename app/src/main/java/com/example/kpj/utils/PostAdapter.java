@@ -308,7 +308,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView ivProfile, ivPostImage;
         TextView tvUser, tvDate, tvTitle, tvDescription, tvHashtag1, tvUpVotes,
-                        tvDownVotes, tvCommentCount;
+                tvDownVotes, tvCommentCount;
         ImageButton ibLike, ibDislike, ibComment, ibSend;
         OnPostClicked launchDetailIntent;
 
