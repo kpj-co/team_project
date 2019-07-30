@@ -399,32 +399,24 @@ public class ComposePostActivity extends AppCompatActivity {
 
     //Returns an ArrayList of all the hashtags given by the user
     private ArrayList<String> returnHashtags(String hashtags) {
-
         //Boolean to know if there is something in the current sequence of characters to be analyzed
         boolean hasContent;
-
         //Variable to store our "base point", or the # symbol that will start the hashtag
         int basePoint;
-
         //ArrayList that has the hashtags to be returned
         ArrayList<String> hashtagsList;
-
         //Initializing the boolean
         hasContent = false;
-
         //Initializing the basePoint
         basePoint = 0;
-
         //Initializing the list
         hashtagsList = new ArrayList<>();
-
         for(int i = 0; i < hashtags.length(); i++) {
             //If it is a #, and we do not have a possible hashtag, change the base point
             if(hashtags.charAt(i) == '#') {
                 basePoint = i;
                 hasContent = true;
             }
-
             //If there is a space, it could be a hashtag if it has content
             else if(hashtags.charAt(i) == ' ' && hasContent) {
                 hashtagsList.add(hashtags.substring(basePoint + 1, i));
