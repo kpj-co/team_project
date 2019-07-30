@@ -5,6 +5,8 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+
 @ParseClassName("Post")
 public class Post extends ParseObject {
 
@@ -25,6 +27,7 @@ public class Post extends ParseObject {
     private String title;
     private String description;
     private ParseFile parseFile;
+    private ArrayList<String> hashtags = new ArrayList<>();
 
     //getters
     public ParseUser getUser() {
@@ -98,6 +101,14 @@ public class Post extends ParseObject {
 
     public ParseFile getMediaReference() {
         return parseFile;
+    }
+
+    public ArrayList<String> getHashtags() {
+        return hashtags;
+    }
+
+    public void addHashtag(String hashtag) {
+        hashtags.add(hashtag);
     }
 
 }

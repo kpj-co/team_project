@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.activities.PostDetailActivity;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.utils.PostAdapter;
 import com.example.kpj.R;
 import com.example.kpj.model.Post;
@@ -113,9 +114,20 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 if (e == null) {
-                    for (Post post : posts) {
-                        postArrayList.add(post);
-                        postAdapter.notifyItemInserted(postArrayList.size() - 1);
+                    for (final Post post : posts) {
+                        //For each post, fetch its hashtags
+                        final PostHashtagRelation.Query innerQuery = new PostHashtagRelation.Query();
+                        innerQuery.whereEqualTo("post", post);
+                        innerQuery.findInBackground(new FindCallback<PostHashtagRelation>() {
+                            @Override
+                            public void done(List<PostHashtagRelation> objects, ParseException e) {
+                                for(PostHashtagRelation relation : objects) {
+                                    post.addHashtag(((PostHashtagRelation)relation).getHashtag());
+                                }
+                                postArrayList.add(post);
+                                postAdapter.notifyItemInserted(postArrayList.size() - 1);
+                            }
+                        });
                     }
                 } else {
                     Toast.makeText(getContext(), "Fail!", Toast.LENGTH_LONG).show();
@@ -163,8 +175,6 @@ public class CourseFeedFragment extends Fragment {
         //attach adapter to recycler view
         rvCourseFeed.setAdapter(postAdapter);
     }
-
-
 }
 
 
