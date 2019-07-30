@@ -39,9 +39,7 @@ public class ComposePostActivity extends AppCompatActivity {
     ImageView ivComposeProfile, ivComposeImage;
     ImageButton ibAddPdf, ibCamera, ibExitCompose, ibAddImage;
     Button bLaunch;
-    
-    public File photoFile;
-    public String imagePath;
+
     public final static String APP_TAG = "compose post activity";
     private final static int GALLERY_REQUEST_CODE = 100;
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
@@ -49,7 +47,8 @@ public class ComposePostActivity extends AppCompatActivity {
     private Context context;
     private Course course;
     private GalleryHelper galleryHelper;
-
+    private File photoFile;
+    private String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +184,6 @@ public class ComposePostActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Result code is RESULT_OK only if the user selects an Image
         if (resultCode == Activity.RESULT_OK)
             switch (requestCode) {
                 case GALLERY_REQUEST_CODE:
