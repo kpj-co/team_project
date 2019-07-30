@@ -27,7 +27,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kpj.CameraLauncher;
 import com.example.kpj.R;
+import com.example.kpj.fragments.SignUpFragment;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
@@ -148,7 +150,7 @@ public class ComposePostActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                requestCameraPermission();
+                onLaunchCamera();
             }
         });
     }
@@ -197,21 +199,6 @@ public class ComposePostActivity extends AppCompatActivity {
         }
     }
 
-    private void requestCameraPermission() {
-        try {
-            if (ActivityCompat.checkSelfPermission(context,
-                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(ComposePostActivity.this, new String[]
-                {Manifest.permission.CAMERA, Manifest.permission.CAMERA},
-                        CAMERA_PERMISSION_CODE);
-            } else {
-                onLaunchCamera();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void requestGalleryPermission() {
         try {
             if (ActivityCompat.checkSelfPermission(context,
@@ -239,14 +226,6 @@ public class ComposePostActivity extends AppCompatActivity {
                     requestGalleryPermission();
                 }
                 break;
-            case CAMERA_PERMISSION_CODE:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    onLaunchCamera();
-                } else {
-                    Toast.makeText(context, "no permission from camera", Toast.LENGTH_SHORT).show();
-                    requestGalleryPermission();
-                }
         }
     }
 
@@ -263,33 +242,14 @@ public class ComposePostActivity extends AppCompatActivity {
     }
 
     public void onLaunchCamera() {
-        // create Intent to take a picture and return control to the calling application
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Create a File reference to access to future access
-        photoFile = getPhotoFileUri(photoFileName);
-        // wrap File object into a content provider
-        Uri fileProvider = FileProvider.getUriForFile(context,
-                "com.codepath.fileprovider", photoFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-        // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            // Start the image capture intent to take photo
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        }
-    }
-
-    // Returns the File for a photo stored on disk given the fileName
-    public File getPhotoFileUri(String fileName) {
-        // Get safe storage directory for photos
-        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-            Log.d(APP_TAG, "failed to create directory");
-        }
-        // TODO -- ASK IVAN WHY THE MATH.RANDOM Work
-        // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName + Math.random());
-        return file;
+        CameraLauncher cameraLauncher = new CameraLauncher(ComposePostActivity.this, new CameraLauncher.Callback() {
+            @Override
+            public void startActivityForResult(Intent intent) {
+                ComposePostActivity.this.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
+        cameraLauncher.requestCameraPermission();
+        photoFile = cameraLauncher.onLaunchCamera();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
