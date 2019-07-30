@@ -19,7 +19,7 @@ import static com.example.kpj.activities.ComposePostActivity.APP_TAG;
 
 public class CameraLauncher {
 
-    private final  Context context;
+    private final Context context;
     private final Callback callback;
     private boolean hasAccess;
 
