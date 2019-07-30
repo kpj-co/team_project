@@ -89,7 +89,7 @@
         android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHashtag1"
+        app:layout_constraintTop_toBottomOf="@+id/tvHashtag"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -119,7 +119,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
     <TextView
-        android:id="@+id/tvHashtag1"
+        android:id="@+id/tvHashtag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -128,17 +128,6 @@
         android:text="hash"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivPostImage" />
-
-    <TextView
-        android:id="@+id/tvHashtag2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="hash"
-        app:layout_constraintBottom_toBottomOf="@+id/tvHashtag1"
-        app:layout_constraintStart_toEndOf="@+id/tvHashtag1"
-        app:layout_constraintTop_toTopOf="@+id/tvHashtag1" />
 
     <TextView
         android:id="@+id/tvUpVotes"

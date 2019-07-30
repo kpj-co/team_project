@@ -86,6 +86,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      * @return: void
      */
     private void bindPostContent(@NonNull ViewHolder holder, Post post) {
+        //String that contains all the hashtags
+        StringBuilder hashtags = new StringBuilder();
+
         bindPostUserAssets(holder, post);
 
         if (post.getTitle() != null) {
@@ -114,6 +117,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.ivPostImage.setVisibility(View.GONE);
         }
 
+        //Put the hashtags, if there is any
+        for(String hashtag : post.getHashtags()) {
+            hashtags.append("#");
+            hashtags.append(hashtag);
+            hashtags.append(" ");
+        }
+
+        holder.tvHashtag1.setText(hashtags);
         holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
         holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
     }
@@ -235,7 +246,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView ivProfile, ivPostImage;
-        TextView tvUser, tvDate, tvTitle, tvDescription, tvHashtag1, tvHashtag2, tvUpVotes,
+        TextView tvUser, tvDate, tvTitle, tvDescription, tvHashtag1, tvUpVotes,
                         tvDownVotes, tvCommentCount;
         ImageButton ibLike, ibDislike, ibComment, ibSend;
         OnPostClicked launchDetailIntent;
@@ -254,8 +265,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             ivPostImage = itemView.findViewById(R.id.ivPostImage);
-            tvHashtag1 = itemView.findViewById(R.id.tvHashtag1);
-            tvHashtag2 = itemView.findViewById(R.id.tvHashtag2);
+            tvHashtag1 = itemView.findViewById(R.id.tvHashtag);
             ibLike = itemView.findViewById(R.id.ibLike);
             ibDislike = itemView.findViewById(R.id.ibDislike);
             ibComment = itemView.findViewById(R.id.ibComment);
