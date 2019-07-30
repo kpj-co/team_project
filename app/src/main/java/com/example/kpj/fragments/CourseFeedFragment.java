@@ -114,7 +114,13 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 if (e == null) {
-                    for (final Post post : posts) {
+                    for (Post post : posts) {
+                        postArrayList.add(post);
+                        postAdapter.notifyItemInserted(postArrayList.size() - 1);
+                    }
+
+                    //We require two separate loops to maintain the order of the post despite the arrival time of the hashtags
+                    for(final Post post : postArrayList) {
                         //For each post, fetch its hashtags
                         final PostHashtagRelation.Query innerQuery = new PostHashtagRelation.Query();
                         innerQuery.whereEqualTo("post", post);
@@ -123,9 +129,8 @@ public class CourseFeedFragment extends Fragment {
                             public void done(List<PostHashtagRelation> objects, ParseException e) {
                                 for(PostHashtagRelation relation : objects) {
                                     post.addHashtag(((PostHashtagRelation)relation).getHashtag());
+                                    postAdapter.notifyDataSetChanged();
                                 }
-                                postArrayList.add(post);
-                                postAdapter.notifyItemInserted(postArrayList.size() - 1);
                             }
                         });
                     }
