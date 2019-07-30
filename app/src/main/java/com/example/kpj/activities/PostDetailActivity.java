@@ -1,9 +1,11 @@
 package com.example.kpj.activities;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
@@ -18,13 +20,22 @@ import com.example.kpj.R;
 import com.example.kpj.model.Comment;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
+import com.example.kpj.utils.CommentAdapter;
 import com.example.kpj.utils.PostAdapter;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PostDetailActivity extends AppCompatActivity {
 
     private Post post;
+    private List<Comment> mComments;
+    private CommentAdapter commentAdapter;
+
     Context context;
     ImageView ivDetailProfilePic, ivDetailPostImage, ivDetailComment;
     TextView tvDetailUsername, tvDetailRelativeTime, tvDetailTitle, tvDetailDescription,
@@ -34,6 +45,7 @@ public class PostDetailActivity extends AppCompatActivity {
     EditText etWriteComment;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +53,31 @@ public class PostDetailActivity extends AppCompatActivity {
         //get post
         initializeVariables();
         initializeViews();
-        bindPostContent(post);
+        bindPostDetailContent(post);
         setOnClickListeners();
+        setUpComments();
+        queryComments();
+    }
+
+    private void queryComments() {
+        Comment.Query query = new Comment.Query();
+        query.include("user");
+        query.whereEqualTo("post", post);
+        query.orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> comments, ParseException e) {
+                if (e == null) {
+                    for (Comment comment : comments) {
+                        mComments.add(comment);
+                        commentAdapter.notifyItemInserted(mComments.size() - 1);
+                    }
+                } else {
+                    Toast.makeText(context, "Error loading comments", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     private void setOnClickListeners() {
@@ -70,7 +105,16 @@ public class PostDetailActivity extends AppCompatActivity {
     private void initializeVariables() {
         this.post = getIntent().getParcelableExtra("post");
         this.context = this;
+        this.mComments = new ArrayList<>();
     }
+
+    private void setUpComments() {
+        commentAdapter = new CommentAdapter(context, post, mComments);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        rvComments.setLayoutManager(linearLayoutManager);
+        rvComments.setAdapter(commentAdapter);
+    }
+
 
     private void initializeViews() {
         ivDetailProfilePic = findViewById(R.id.ivDetailProfilePic);
@@ -92,7 +136,7 @@ public class PostDetailActivity extends AppCompatActivity {
         ibAddComment = findViewById(R.id.ibAddComment);
     }
 
-    private void bindPostContent(Post post) {
+    private void bindPostDetailContent(Post post) {
 
         tvDetailUsername.setText(post.getUser().getUsername());
         ParseFile profile = post.getUser().getParseFile(User.KEY_PROFILE);
@@ -101,20 +145,22 @@ public class PostDetailActivity extends AppCompatActivity {
                     .load(profile.getUrl())
                     .apply(new RequestOptions().centerCrop())
                     .into(ivDetailProfilePic);
+        } else {
+            ivDetailProfilePic.setColorFilter(Color.DKGRAY);
         }
 
         if (post.getTitle() != null) {
             tvDetailTitle.setVisibility(View.VISIBLE);
             tvDetailTitle.setText(post.getTitle());
         } else {
-            tvDetailTitle.setText(post.getTitle());
+            tvDetailTitle.setVisibility(View.INVISIBLE);
         }
 
         if (post.getDescription() != null) {
             tvDetailDescription.setVisibility(View.VISIBLE);
             tvDetailDescription.setText(post.getDescription());
         } else {
-            tvDetailDescription.setVisibility(View.GONE);
+            tvDetailDescription.setVisibility(View.INVISIBLE);
         }
 
         if (post.getMedia() != null) {

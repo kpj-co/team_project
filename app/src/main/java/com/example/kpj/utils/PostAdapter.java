@@ -45,7 +45,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-     Context context = viewGroup.getContext();
+        Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View postView = inflater.inflate(R.layout.post_item, viewGroup, false);
         return new ViewHolder(postView, onPostClicked);
@@ -239,7 +239,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         tvDownVotes, tvCommentCount;
         ImageButton ibLike, ibDislike, ibComment, ibSend;
         OnPostClicked launchDetailIntent;
-
 
 
         public ViewHolder(@NonNull View itemView, OnPostClicked launchDetailIntent) {
