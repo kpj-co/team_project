@@ -21,7 +21,11 @@ import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
+import com.example.kpj.model.UserPostRelation;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -33,6 +37,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private OnPostClicked onPostClicked;
     private final static String KEY_SEND_POST_TO_CHAT = "A";
     private final static String KEY_SEND_COURSE_TO_CHAT = "B";
+    private final ParseUser currentUser;
 
 
     public PostAdapter(Context context, Course course, List<Post> posts, OnPostClicked onPostClicked) {
@@ -40,6 +45,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         this.course = course;
         this.onPostClicked = onPostClicked;
         mPosts = posts;
+        currentUser = ParseUser.getCurrentUser();
     }
 
     @NonNull
@@ -137,10 +143,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.ibLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /* TODO -- ask ivan
+
                 // check if there is an existing userPostRelation
                 final UserPostRelation.Query userPostRelation = new UserPostRelation.Query();
-                userPostRelation.whereEqualTo("user", ParseUser.getCurrentUser());
+                userPostRelation.whereEqualTo("user", currentUser);
                 userPostRelation.whereEqualTo("post", post);
                 userPostRelation.findInBackground(new FindCallback<UserPostRelation>() {
                     @Override
@@ -151,7 +157,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                 // create new relation
                                 UserPostRelation newUserPostRelation = new UserPostRelation();
                                 newUserPostRelation.setPost(post);
-                                newUserPostRelation.setUser(ParseUser.getCurrentUser());
+                                newUserPostRelation.setUser(currentUser);
                                 newUserPostRelation.setVote(UserPostRelation.UPVOTE);
                                 newUserPostRelation.saveInBackground();
                                 // change UI
@@ -167,7 +173,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         }
                     }
                 });
-                */
 
                 int newParseCount;
                 // Increase UpVote count

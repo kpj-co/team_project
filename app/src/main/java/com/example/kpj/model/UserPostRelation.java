@@ -30,7 +30,7 @@ public class UserPostRelation extends ParseObject {
         put(KEY_POST, post);
     }
 
-    public void setVote(int vote) { put(KEY_POST, vote); }
+    public void setVote(int vote) { put(KEY_VOTE, vote); }
 
     public static class Query extends ParseQuery<UserPostRelation> {
         public Query() {
