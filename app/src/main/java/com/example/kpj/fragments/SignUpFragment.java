@@ -83,7 +83,6 @@ public class SignUpFragment extends Fragment {
         setSignUpButtonListener();
         setCameraListener();
         return view;
-
     }
 
     public void initializeViews(View view) {
@@ -115,7 +114,7 @@ public class SignUpFragment extends Fragment {
         tvTakeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestCameraPermission();
+                onLaunchCamera();
             }
         });
     }
@@ -153,22 +152,6 @@ public class SignUpFragment extends Fragment {
         goToUniversityFragment();
     }
 
-    private void requestCameraPermission() {
-        try {
-            if (ActivityCompat.checkSelfPermission(getContext(),
-                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]
-                                {Manifest.permission.CAMERA, Manifest.permission.CAMERA},
-                        CAMERA_PERMISSION_CODE);
-            } else {
-                onLaunchCamera();
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void onLaunchCamera() {
         CameraLauncher cameraLauncher = new CameraLauncher(getActivity(), new CameraLauncher.Callback() {
             @Override
@@ -176,6 +159,7 @@ public class SignUpFragment extends Fragment {
                 SignUpFragment.this.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
             }
         });
+        cameraLauncher.requestCameraPermission();
         photoFile = cameraLauncher.onLaunchCamera();
     }
 
