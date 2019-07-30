@@ -182,13 +182,6 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <!-- TODO - implement tags -->
-    <ImageView
-        android:id="@+id/ivTagIcon"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="395dp"
-        tools:srcCompat="@tools:sample/avatars" />
 
         <EditText
             android:id="@+id/etTags"

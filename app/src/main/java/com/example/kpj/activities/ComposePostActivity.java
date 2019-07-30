@@ -1,14 +1,9 @@
 package com.example.kpj.activities;
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.kpj.CameraLauncher;
 import com.example.kpj.GalleryHelper;
 import com.example.kpj.R;
@@ -34,34 +28,18 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.parse.Parse.getApplicationContext;
-
-
 public class ComposePostActivity extends AppCompatActivity {
 
-    EditText etComposePostTitle;
-    EditText etComposeBody;
-    EditText etHashtags;
-
-    TextView tvComposeTitleLabel;
-    TextView tvComposeUsername;
-    TextView tvComposeBodyLabel;
-
-    ImageView ivComposeProfile;
-    ImageView ivComposeImage;
-
-    ImageButton ibAddPdf;
-    ImageButton ibCamera;
-    ImageButton ibExitCompose;
-    ImageButton ibAddImage;
-
+    EditText etComposePostTitle, etComposeBody, etHashtags;
+    TextView tvComposeTitleLabel, tvComposeUsername, tvComposeBodyLabel;
+    ImageView ivComposeProfile, ivComposeImage;
+    ImageButton ibAddPdf, ibCamera, ibExitCompose, ibAddImage;
     Button bLaunch;
+    
     public File photoFile;
     public String imagePath;
     public final static String APP_TAG = "compose post activity";
@@ -147,7 +125,7 @@ public class ComposePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //grab images from gallery
-                pickFromGallery();
+                onLaunchGallery();
             }
         });
     }
@@ -182,7 +160,7 @@ public class ComposePostActivity extends AppCompatActivity {
         }
     }
 
-    private void pickFromGallery() {
+    private void onLaunchGallery() {
         GalleryHelper galleryHelper = new GalleryHelper(ComposePostActivity.this, new GalleryHelper.Callback() {
             @Override
             public void startActivityForResult(Intent intent) {
