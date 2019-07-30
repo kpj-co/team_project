@@ -143,7 +143,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.ibLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // check if there is an existing userPostRelation
                 final UserPostRelation.Query userPostRelation = new UserPostRelation.Query();
                 userPostRelation.whereEqualTo("user", currentUser);
@@ -164,35 +163,49 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                 int newCount = post.getUpVotes() + 1;
                                 holder.tvUpVotes.setText(String.valueOf(newCount));
                                 post.isLiked = true;
+                                post.setUpVotes(newCount);
                                 Toast.makeText(context, "upvoted post", Toast.LENGTH_SHORT).show();
                             } else { // there already exists a relation
                                 // TODO -- check the state of the realtion
+                                UserPostRelation newUserPostRelation = relation.get(0);
+                                //If the user previously have liked the post
+                                if(newUserPostRelation.getVote() == UserPostRelation.UPVOTE) {
+                                    //Remove the positive vote
+                                    newUserPostRelation.setVote(UserPostRelation.NOVOTE);
+                                    int newCount = post.getUpVotes() - 1;
+                                    holder.tvUpVotes.setText(String.valueOf(newCount));
+                                    post.setUpVotes(newCount);
+                                    post.isLiked = false;
+                                }
+
+                                //If the user had previously disliked the post
+                                else if(newUserPostRelation.getVote() == UserPostRelation.DOWNVOTE) {
+                                    newUserPostRelation.setVote(UserPostRelation.UPVOTE);
+                                    int newCount = post.getUpVotes() + 1;
+                                    holder.tvUpVotes.setText(String.valueOf(newCount));
+                                    post.setUpVotes(newCount);
+                                    newCount = post.getDownVotes() - 1;
+                                    holder.tvDownVotes.setText(String.valueOf(newCount));
+                                    post.setDownVotes(newCount);
+                                    post.isLiked = true;
+                                }
+
+                                //If the user was neutral
+                                else if(newUserPostRelation.getVote() == UserPostRelation.NOVOTE) {
+                                    newUserPostRelation.setVote(UserPostRelation.UPVOTE);
+                                    int newCount = post.getUpVotes() +  1;
+                                    holder.tvUpVotes.setText(String.valueOf(newCount));
+                                    post.setUpVotes(newCount);
+                                    post.isLiked = true;
+                                }
+                                newUserPostRelation.saveInBackground();
                             }
                         } else {
                             Toast.makeText(context, "could not vote", Toast.LENGTH_SHORT).show();
                         }
+                        post.saveInBackground();
                     }
                 });
-
-                int newParseCount;
-                // Increase UpVote count
-                if (!post.isLiked) {
-                    // TODO -- change image into dark
-                    int newCount = post.getUpVotes() + 1;
-                    holder.tvUpVotes.setText(String.valueOf(newCount));
-                    post.isLiked = true;
-                    newParseCount = newCount;
-                    Toast.makeText(context, "upvoted post", Toast.LENGTH_SHORT).show();
-                } else { // decrease upvote count
-                    // TODO -- change icon into light
-                    int newCount = post.getUpVotes() - 1;
-                    holder.tvUpVotes.setText(String.valueOf(newCount));
-                    post.isLiked = false;
-                    newParseCount = newCount;
-                    Toast.makeText(context, "undo upvote", Toast.LENGTH_SHORT).show();
-                }
-                post.setUpVotes(newParseCount);
-                post.saveInBackground();
             }
         });
     }
@@ -205,28 +218,71 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.ibDislike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newParseCount;
-                // Increase down vote count
-                if (!post.isDisliked) {
-                    // TODO -- CHANGE DISLIKE IMAGE TO DARK COLOR
-                    int newCount = post.getDownVotes() + 1;
-                    holder.tvDownVotes.setText(String.valueOf(newCount));
-                    post.isDisliked = true;
-                    newParseCount = newCount;
-                    Toast.makeText(context, "downvoted post", Toast.LENGTH_SHORT).show();
-                } else { // decrease down vote count
-                    // TODO -- CHANGE LIKE IMAGE TO LIGHT COLOR
-                    int newCount = post.getDownVotes() - 1;
-                    holder.tvDownVotes.setText(String.valueOf(newCount));
-                    post.isDisliked = false;
-                    newParseCount = newCount;
-                    Toast.makeText(context, "undo down vote", Toast.LENGTH_SHORT).show();
-                }
-                post.setDownVotes(newParseCount);
-                post.saveInBackground();
+                // check if there is an existing userPostRelation
+                final UserPostRelation.Query userPostRelation = new UserPostRelation.Query();
+                userPostRelation.whereEqualTo("user", currentUser);
+                userPostRelation.whereEqualTo("post", post);
+                userPostRelation.findInBackground(new FindCallback<UserPostRelation>() {
+                    @Override
+                    public void done(List<UserPostRelation> relation, ParseException e) {
+                        if (e == null) {
+                            // if there is none the list is empty or of length 0
+                            if (relation.isEmpty() || relation.size() == 0) {
+                                // create new relation
+                                UserPostRelation newUserPostRelation = new UserPostRelation();
+                                newUserPostRelation.setPost(post);
+                                newUserPostRelation.setUser(currentUser);
+                                newUserPostRelation.setVote(UserPostRelation.UPVOTE);
+                                newUserPostRelation.saveInBackground();
+                                // change UI
+                                int newCount = post.getDownVotes() + 1;
+                                holder.tvDownVotes.setText(String.valueOf(newCount));
+                                post.isLiked = false;
+                                post.setDownVotes(newCount);
+                                Toast.makeText(context, "upvoted post", Toast.LENGTH_SHORT).show();
+                            } else { // there already exists a relation
+                                // TODO -- check the state of the realtion
+                                UserPostRelation newUserPostRelation = relation.get(0);
+                                //If the user previously have liked the post
+                                if(newUserPostRelation.getVote() == UserPostRelation.UPVOTE) {
+                                    newUserPostRelation.setVote(UserPostRelation.DOWNVOTE);
+                                    int newCount = post.getUpVotes() - 1;
+                                    holder.tvUpVotes.setText(String.valueOf(newCount));
+                                    post.setUpVotes(newCount);
+                                    newCount = post.getDownVotes() + 1;
+                                    holder.tvDownVotes.setText(String.valueOf(newCount));
+                                    post.setDownVotes(newCount);
+                                    post.isLiked = false;
+                                }
+
+                                //If the user had previously disliked the post
+                                else if(newUserPostRelation.getVote() == UserPostRelation.DOWNVOTE) {
+                                    newUserPostRelation.setVote(UserPostRelation.NOVOTE);
+                                    int newCount = post.getDownVotes() - 1;
+                                    holder.tvDownVotes.setText(String.valueOf(newCount));
+                                    post.setDownVotes(newCount);
+                                    post.isLiked = false;
+                                }
+
+                                //If the user was neutral
+                                else if(newUserPostRelation.getVote() == UserPostRelation.NOVOTE) {
+                                    newUserPostRelation.setVote(UserPostRelation.DOWNVOTE);
+                                    int newCount = post.getDownVotes() +  1;
+                                    holder.tvDownVotes.setText(String.valueOf(newCount));
+                                    post.setDownVotes(newCount);
+                                    post.isLiked = true;
+                                }
+                                newUserPostRelation.saveInBackground();
+
+                            }
+                        } else {
+                            Toast.makeText(context, "could not vote", Toast.LENGTH_SHORT).show();
+                        }
+                        post.saveInBackground();
+                    }
+                });
             }
         });
-
     }
 
     /** Bind the data base user info with user associated views of a post
@@ -285,13 +341,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public void onClick(final View v) {
             launchDetailIntent.onPostClickListener(getAdapterPosition());
         }
-
     }
 
     public interface OnPostClicked {
         void onPostClickListener(int position);
     }
-
-
-
 }
