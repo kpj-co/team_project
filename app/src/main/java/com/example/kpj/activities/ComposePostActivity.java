@@ -1,24 +1,14 @@
 package com.example.kpj.activities;
-
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,66 +16,56 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.example.kpj.CameraLauncher;
+import com.example.kpj.GalleryHelper;
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
+import com.example.kpj.model.PostHashtagRelation;
+import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
+import com.example.kpj.utils.ImagePreviewAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-
-import org.parceler.Parcels;
+import com.parse.SaveCallback;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.parse.Parse.getApplicationContext;
-
 
 public class ComposePostActivity extends AppCompatActivity {
 
-    EditText etComposePostTitle;
-    EditText etComposeBody;
-
-    TextView tvComposeTitleLabel;
-    TextView tvComposeUsername;
-    TextView tvComposeBodyLabel;
-
+    EditText etComposePostTitle, etComposeBody, etHashtags;
+    TextView tvComposeTitleLabel, tvComposeUsername, tvComposeBodyLabel;
     ImageView ivComposeProfile;
-    ImageView ivComposeImage;
-
-    ImageButton ibAddPdf;
-    ImageButton ibCamera;
-    ImageButton ibExitCompose;
-    ImageButton ibAddImage;
-
+    ImageButton ibAddPdf, ibCamera, ibExitCompose, ibAddImage;
+    RecyclerView rvImagePreview;
     Button bLaunch;
 
-    public String photoFileName = "cameraPhoto.jpg";
-    public File photoFile;
-    public String imagePath;
     public final static String APP_TAG = "compose post activity";
-
     private final static int GALLERY_REQUEST_CODE = 100;
-    private final static int PICK_FROM_GALLERY = 3;
-    private final static int CAMERA_PERMISSION_CODE = 1;
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     private final static String PREF_NAME = "sharedData";
     private Context context;
     private Course course;
-
+    private GalleryHelper galleryHelper;
+    private File photoFile;
+    private String imagePath;
+    private List<ImagePreview> mImages;
+    private ImagePreviewAdapter imagePreviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose_post);
-        initializeViews();
         initializeVariables();
+        initializeViews();
         //if a user wants to post a message as a post, this method will do the job
         preparePostFromComment();
     }
@@ -108,10 +88,10 @@ public class ComposePostActivity extends AppCompatActivity {
     private void initializeViews() {
         etComposePostTitle = findViewById(R.id.etComposePostTitle);
         etComposeBody = findViewById(R.id.etComposeBody);
+        etHashtags = findViewById(R.id.etTags);
         tvComposeUsername = findViewById(R.id.tvComposeUsername);
         ivComposeProfile = findViewById(R.id.ivComposeProfile);
         bindUserProfileToView();
-        ivComposeImage = findViewById(R.id.ivComposeImage);
         ibExitCompose = findViewById(R.id.ibExitCompose);
         setIBtnExitListener();
         ibAddImage = findViewById(R.id.ibAddImage);
@@ -122,6 +102,18 @@ public class ComposePostActivity extends AppCompatActivity {
         setIBtnPdfListener();
         bLaunch = findViewById(R.id.bLaunch);
         setBtnLaunchListener();
+        rvImagePreview = findViewById(R.id.rvDetailImagePreview);
+        this.mImages = new ArrayList<>();
+        setUpImagePreview();
+        rvImagePreview.setVisibility(View.GONE);
+    }
+
+    private void setUpImagePreview() {
+        imagePreviewAdapter = new ImagePreviewAdapter(context, mImages);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false);
+        rvImagePreview.setLayoutManager(linearLayoutManager);
+        rvImagePreview.setAdapter(imagePreviewAdapter);
     }
 
     public void setIBtnExitListener() {
@@ -143,23 +135,22 @@ public class ComposePostActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                requestCameraPermission();
+                rvImagePreview.setVisibility(View.VISIBLE);
+                onLaunchCamera();
             }
         });
     }
 
     private void setIBtnAddImageListener() {
-        //grab images from gallery
         ibAddImage.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("WrongConstant")
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                requestGalleryPermission();
+                //grab images from gallery
+                rvImagePreview.setVisibility(View.VISIBLE);
+                onLaunchGallery();
             }
         });
     }
-
 
     public void setBtnLaunchListener() {
         bLaunch.setOnClickListener(new View.OnClickListener() {
@@ -170,7 +161,6 @@ public class ComposePostActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private String getCurrentCourseName() {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
@@ -192,179 +182,110 @@ public class ComposePostActivity extends AppCompatActivity {
         }
     }
 
-    private void requestCameraPermission() {
-        try {
-            if (ActivityCompat.checkSelfPermission(context,
-                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(ComposePostActivity.this, new String[]
-                {Manifest.permission.CAMERA, Manifest.permission.CAMERA},
-                        CAMERA_PERMISSION_CODE);
-            } else {
-                onLaunchCamera();
+    private void onLaunchGallery() {
+        GalleryHelper galleryHelper = new GalleryHelper(ComposePostActivity.this, new GalleryHelper.Callback() {
+            @Override
+            public void startActivityForResult(Intent intent) {
+                ComposePostActivity.this.startActivityForResult(intent, GALLERY_REQUEST_CODE);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void requestGalleryPermission() {
-        try {
-            if (ActivityCompat.checkSelfPermission(context,
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ComposePostActivity.this, new String[]
-                    {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    PICK_FROM_GALLERY);
-            } else {
-                pickFromGallery();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PICK_FROM_GALLERY:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    pickFromGallery();
-                } else {
-                    Toast.makeText(context, "no permission from gallery", Toast.LENGTH_SHORT).show();
-                    requestGalleryPermission();
-                }
-                break;
-            case CAMERA_PERMISSION_CODE:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    onLaunchCamera();
-                } else {
-                    Toast.makeText(context, "no permission from camera", Toast.LENGTH_SHORT).show();
-                    requestGalleryPermission();
-                }
-        }
-    }
-
-    private void pickFromGallery() {
-        //Create an Intent with action as ACTION_PICK
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        // Sets the type as image/*. This ensures only components of type image are selected
-        intent.setType("image/*");
-        //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
-        String[] mimeTypes = {"image/jpeg", "image/png"};
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-        // Launching the Intent
-        startActivityForResult(intent, GALLERY_REQUEST_CODE);
+        });
+        this.galleryHelper = galleryHelper;
+        galleryHelper.requestGalleryPermission();
+        galleryHelper.pickFromGallery();
     }
 
     public void onLaunchCamera() {
-        // create Intent to take a picture and return control to the calling application
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Create a File reference to access to future access
-        photoFile = getPhotoFileUri(photoFileName);
-        // wrap File object into a content provider
-        Uri fileProvider = FileProvider.getUriForFile(context,
-                "com.codepath.fileprovider", photoFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-        // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            // Start the image capture intent to take photo
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        }
+        CameraLauncher cameraLauncher = new CameraLauncher(ComposePostActivity.this, new CameraLauncher.Callback() {
+            @Override
+            public void startActivityForResult(Intent intent) {
+                ComposePostActivity.this.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            }
+        });
+        cameraLauncher.requestCameraPermission();
+        photoFile = cameraLauncher.onLaunchCamera();
     }
 
-    // Returns the File for a photo stored on disk given the fileName
-    public File getPhotoFileUri(String fileName) {
-        // Get safe storage directory for photos
-        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-            Log.d(APP_TAG, "failed to create directory");
-        }
-        // TODO -- ASK IVAN WHY THE MATH.RANDOM Work
-        // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName + Math.random());
-        return file;
-    }
-
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Result code is RESULT_OK only if the user selects an Image
         if (resultCode == Activity.RESULT_OK)
             switch (requestCode) {
                 case GALLERY_REQUEST_CODE:
-                    //data.getData return the content URI for the selected Image
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                    // Get the cursor
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    // Move to first row
-                    cursor.moveToFirst();
-                    //Get the column index of MediaStore.Images.Media.DATA
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    //Gets the String value in the column
-                    imagePath = cursor.getString(columnIndex);
-                    cursor.close();
-                    // Set the Image in ImageView
-                    bindImagesToPreview(imagePath);
-                    // Save the image path locally
+                    imagePath = galleryHelper.getImagePath(data);
+                    // create a new image preview and inset it in the recycler view
+                    ImagePreview newImage = new ImagePreview(imagePath);
+                    notifyAdapterItemInserted(newImage);
                     break;
                 case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
                     // Set the Image in ImageView
-                    bindImagesToPreview(photoFile);
+                    ImagePreview image = new ImagePreview(photoFile);
+                    notifyAdapterItemInserted(image);
                     Toast.makeText(context, "Camera photo set", Toast.LENGTH_LONG).show();
                     break;
             }
     }
 
-    private void bindImagesToPreview(File photo) {
-        Glide.with(context)
-                .load(photo)
-                //TODO - change center crop to resize and fit parent container
-                .apply(new RequestOptions().centerCrop())
-                .into(ivComposeImage);
-    }
-
-    private void bindImagesToPreview(String photoPath) {
-        Glide.with(context)
-                .load(photoPath)
-                //TODO - change center crop to resize and fit parent container
-                .apply(new RequestOptions().centerCrop())
-                .into(ivComposeImage);
+    private void notifyAdapterItemInserted(ImagePreview newImage) {
+        mImages.add(newImage);
+        imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
     }
 
     private void savePost() {
         // Create new post instance
-        Post newPost = new Post();
+        final Post newPost = new Post();
         // Grab text content from compose
         String newTitle = etComposePostTitle.getText().toString();
         String newBody = etComposeBody.getText().toString();
+        final ArrayList<String> hashtags = returnHashtags(etHashtags.getText().toString());
         // Set user of post
         newPost.setUser(ParseUser.getCurrentUser());
         // Set content of post
         if (newTitle.length() != 0) { newPost.setTitle(newTitle); }
         if (newBody.length() != 0) { newPost.setDescription(newBody); }
-        if (imagePath.length() != 0) {
-            File imageFile = new File(imagePath);
-            if (imageFile != null) {
-                ParseFile imageParseFile = new ParseFile(imageFile);
-                newPost.setMedia(imageParseFile);
-            }
-        }
-        if (photoFile != null) {
-            ParseFile imageParseFile = new ParseFile(photoFile);
-            newPost.setMedia(imageParseFile);
-        }
+
         // Save associated course
         if (course != null) {
             newPost.setCourse(course);
         } else {
             Toast.makeText(context, "could not find course associated", Toast.LENGTH_SHORT).show();
         }
+
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
+
         // Save post in background thread
-        newPost.saveInBackground();
+        newPost.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                saveHashtags();
+                savePhotos();
+            }
+            // Save media via PostImage relation
+            private void savePhotos() {
+                if (mImages.size() != 0) {
+                    for (ImagePreview image : mImages) {
+                        PostImageRelation postImageRelation = new PostImageRelation();
+                        postImageRelation.setPost(newPost);
+                        postImageRelation.setImage(image.getParseFile());
+                        postImageRelation.saveInBackground();
+                    }
+                    newPost.setHasMedia(true);
+                    newPost.saveInBackground();
+                } else {
+                    newPost.setHasMedia(false);
+                    newPost.saveInBackground();
+                }
+            }
+            // Add the relationship post-hashtag to the database for each hash tag
+            private void saveHashtags() {
+                for(String hashtag : hashtags) {
+                    PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
+                    postHashtagRelation.setPost(newPost);
+                    postHashtagRelation.setHashtag(hashtag);
+                    postHashtagRelation.saveInBackground();
+                }
+            }
+        });
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
         goToMainActivity();
     }
@@ -380,5 +301,40 @@ public class ComposePostActivity extends AppCompatActivity {
         if (message != null) {
             etComposeBody.setText(message.getDescription());
         }
+    }
+
+    //Returns an ArrayList of all the Hash Tags given by the user
+    private ArrayList<String> returnHashtags(String hashtags) {
+        //Boolean to know if there is something in the current sequence of characters to be analyzed
+        boolean hasContent;
+        //Variable to store our "base point", or the # symbol that will start the hashtag
+        int basePoint;
+        //ArrayList that has the hashtags to be returned
+        ArrayList<String> hashtagsList;
+        //Initializing the boolean
+        hasContent = false;
+        //Initializing the basePoint
+        basePoint = 0;
+        //Initializing the list
+        hashtagsList = new ArrayList<>();
+        for(int i = 0; i < hashtags.length(); i++) {
+            //If it is a #, and we do not have a possible hashtag, change the base point
+            if(hashtags.charAt(i) == '#') {
+                basePoint = i;
+                hasContent = true;
+            }
+            //If there is a space, it could be a hashtag if it has content
+            else if(hashtags.charAt(i) == ' ' && hasContent) {
+                hashtagsList.add(hashtags.substring(basePoint + 1, i));
+                hasContent = false;
+            }
+            //The case is slightly different when we are dealing with the last character of the string
+            else if(i == hashtags.length() - 1 && hasContent) {
+                hashtagsList.add(hashtags.substring(basePoint + 1, i + 1));
+                hasContent = false;
+            }
+        }
+        //returning the object
+        return hashtagsList;
     }
 }

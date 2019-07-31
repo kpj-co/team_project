@@ -78,7 +78,6 @@ public class SignUpFragment extends Fragment {
         setSignUpButtonListener();
         setCameraListener();
         return view;
-
     }
 
     public void initializeViews(View view) {
@@ -112,7 +111,7 @@ public class SignUpFragment extends Fragment {
         tvTakeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestCameraPermission();
+                onLaunchCamera();
             }
         });
     }
@@ -139,6 +138,7 @@ public class SignUpFragment extends Fragment {
                 SignUpFragment.this.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
             }
         });
+        cameraLauncher.requestCameraPermission();
         photoFile = cameraLauncher.onLaunchCamera();
         photo = photoFile.toString();
     }

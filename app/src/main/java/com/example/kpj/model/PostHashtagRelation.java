@@ -16,15 +16,15 @@ public class PostHashtagRelation extends ParseObject {
         return getParseObject(KEY_POST);
     }
 
-    public ParseObject getHashtag() {
-        return getParseObject(KEY_HASHTAG);
+    public String getHashtag() {
+        return getString(KEY_HASHTAG);
     }
 
     public void setPost(ParseObject post) {
         put(KEY_POST, post);
     }
 
-    public void setHashtag(ParseObject hashtag) {
+    public void setHashtag(String hashtag) {
         put(KEY_HASHTAG, hashtag);
     }
 
