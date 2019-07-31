@@ -18,13 +18,16 @@ import java.util.List;
 public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<SelectedCoursesFragmentAdapter.ViewHolder> {
 
     private Context context;
+
     private List<Course> universityCourses;
     private List<Course> selectedCourses;
+    private List<Course> courseFilteredList;
 
     public SelectedCoursesFragmentAdapter(Context context, ArrayList<Course> courses) {
         this.context = context;
         this.universityCourses = courses;
         this.selectedCourses = new ArrayList<>();
+        this.courseFilteredList = new ArrayList<>();
     }
 
     @NonNull
@@ -43,19 +46,33 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Log.d("SelectedCourse", "On Bind Called");
-        viewHolder.bind(universityCourses.get(position));
+        viewHolder.bind(courseFilteredList.get(position));
     }
 
-    public void setList(List<Course> list){
+    public void setUserSelectedCourseList(List<Course> list){
         list.addAll(selectedCourses);
         Log.d("SelectCourses", "selectedcourse" + list);
+    }
+
+    public void setSearchList(List<Course> list) {
+        if (list == null) {
+            courseFilteredList = universityCourses;
+        } else {
+            courseFilteredList = list;
+        }
+    }
+
+    public void filterList(String s) {
+        CourseFilter filter = new CourseFilter(universityCourses, this);
+        filter.getFilter().filter(s);
     }
 
     @Override
     public int getItemCount() {
         Log.d("SelectedCourse", "Item Count");
-        return universityCourses.size();
+        return courseFilteredList.size();
     }
+    
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

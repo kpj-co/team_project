@@ -2,13 +2,14 @@ package com.example.kpj.fragments;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,25 +18,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.CameraLauncher;
 import com.example.kpj.R;
-import com.example.kpj.model.User;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
-
 import java.io.File;
-
 import static android.app.Activity.RESULT_OK;
 
 public class SignUpFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
-    private int mPage;
 
     public EditText etNewEmail;
     public EditText etNewUsername;
@@ -43,18 +35,23 @@ public class SignUpFragment extends Fragment {
     public Button btnNewSignup;
     public TextView tvTakeProfilePic;
     public ImageView ivNewProfilePic;
+    private SignUpFragmentListener callback;
 
-    public final String APP_TAG = "Signin";
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     private final static int CAMERA_PERMISSION_CODE = 1;
-    public String photoFileName = "photo.jpg";
     public File photoFile;
 
     private String email;
     private String username;
     private String password;
+    private String photo;
 
-    public SignUpFragment() {
+    public void setSignUpData(SignUpFragmentListener callback){
+        this.callback = callback;
+    }
+
+    public interface SignUpFragmentListener{
+        void onSignUpSet(String username, String password, String email);
     }
 
     public static SignUpFragment newInstance(int page) {
@@ -69,15 +66,13 @@ public class SignUpFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mPage = getArguments().getInt(ARG_PAGE);
+            int mPage = getArguments().getInt(ARG_PAGE);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
         initializeViews(view);
         setSignUpButtonListener();
@@ -106,7 +101,9 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getStringsFromEditTexts();
-                signUpUser(email, username, password);
+                setUpSharedPref(photo);
+                callback.onSignUpSet(username, password, email);
+                goToUniversityFragment();
             }
         });
     }
@@ -120,39 +117,6 @@ public class SignUpFragment extends Fragment {
         });
     }
 
-    // Move to parent activity
-    public void signUpUser(String email, String username, String password) {
-        ParseUser user = new ParseUser();
-        // send data to parse for new user
-        user.setEmail(email);
-        user.setUsername(username);
-        user.setPassword(password);
-        // Invoke signUpInBackground
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    saveNewProfileAssetsToParse();
-                } else {
-                    Log.e("SignUpActivity", "Login Failed");
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public void saveNewProfileAssetsToParse() {
-        ParseUser user = ParseUser.getCurrentUser();
-        if (photoFile != null) {
-            ParseFile parseFile = new ParseFile(photoFile);
-            //send profile photo to parse
-            user.put(User.KEY_PROFILE, parseFile);
-            //save in background thread
-            user.saveInBackground();
-        }
-        Toast.makeText(getContext(), "Account created", Toast.LENGTH_LONG).show();
-        goToUniversityFragment();
-    }
-
     private void requestCameraPermission() {
         try {
             if (ActivityCompat.checkSelfPermission(getContext(),
@@ -162,7 +126,6 @@ public class SignUpFragment extends Fragment {
                         CAMERA_PERMISSION_CODE);
             } else {
                 onLaunchCamera();
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,6 +140,7 @@ public class SignUpFragment extends Fragment {
             }
         });
         photoFile = cameraLauncher.onLaunchCamera();
+        photo = photoFile.toString();
     }
 
     @Override
@@ -197,6 +161,14 @@ public class SignUpFragment extends Fragment {
                 //crop photo to size of thing
                 .apply(new RequestOptions().override(200, 200).centerCrop())
                 .into(ivNewProfilePic);
+
+    }
+
+    private void setUpSharedPref(String photo){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("photo",photo);
+        editor.apply();
     }
 
     public void goToUniversityFragment() {
