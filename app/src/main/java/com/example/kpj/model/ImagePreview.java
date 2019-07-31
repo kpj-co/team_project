@@ -32,7 +32,7 @@ public class ImagePreview {
             Glide.with(context)
                     .load(photoFile)
                     .into(imageView);
-        } else if (imagePath != null || imagePath.length() != 0){
+        } else if (imagePath != null){
             Glide.with(context)
                     .load(imagePath)
                     .into(imageView);

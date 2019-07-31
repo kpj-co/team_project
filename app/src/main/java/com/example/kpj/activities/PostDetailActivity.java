@@ -19,10 +19,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.model.Comment;
+import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
+import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.utils.CommentAdapter;
+import com.example.kpj.utils.ImagePreviewAdapter;
 import com.example.kpj.utils.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -40,7 +43,9 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private Post post;
     private List<Comment> mComments;
+    private List<ImagePreview> mImages;
     private CommentAdapter commentAdapter;
+    private ImagePreviewAdapter imagePreviewAdapter;
 
     Context context;
     ImageView ivDetailProfilePic, ivDetailComment;
@@ -59,8 +64,9 @@ public class PostDetailActivity extends AppCompatActivity {
         initializeViews();
         bindPostDetailContent(post);
         setOnClickListeners();
+        setUpImages();
         setUpComments();
-        // TODO -- SET UP IMAGES
+        queryImages();
         queryComments();
         setParseLiveQueryClient();
     }
@@ -102,6 +108,26 @@ public class PostDetailActivity extends AppCompatActivity {
                 });
     }
 
+    private void queryImages() {
+        PostImageRelation.Query query = new PostImageRelation.Query();
+        query.whereEqualTo("post", post);
+        query.orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<PostImageRelation>() {
+            @Override
+            public void done(List<PostImageRelation> relations, ParseException e) {
+                if (e == null) {
+                    for (PostImageRelation relation : relations) {
+//                        ParseFile parseFile = relation.getImage();
+                        mImages.add(new ImagePreview(relation.getImage()));
+                        imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
+                    }
+                } else {
+                    Toast.makeText(context, "Error loading images", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private void setOnClickListeners() {
         ibAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +154,7 @@ public class PostDetailActivity extends AppCompatActivity {
         this.post = getIntent().getParcelableExtra("post");
         this.context = this;
         this.mComments = new ArrayList<>();
+        this.mImages = new ArrayList<>();
     }
 
     private void initializeViews() {
@@ -150,7 +177,6 @@ public class PostDetailActivity extends AppCompatActivity {
         ibAddComment = findViewById(R.id.ibAddComment);
     }
 
-
     private void setUpComments() {
         commentAdapter = new CommentAdapter(context, post, mComments);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
@@ -158,8 +184,15 @@ public class PostDetailActivity extends AppCompatActivity {
         rvComments.setAdapter(commentAdapter);
     }
 
-    private void bindPostDetailContent(Post post) {
+    private void setUpImages() {
+        imagePreviewAdapter = new ImagePreviewAdapter(context, mImages);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false);
+        rvDetailImagePreview.setLayoutManager(linearLayoutManager);
+        rvDetailImagePreview.setAdapter(imagePreviewAdapter);
+    }
 
+    private void bindPostDetailContent(Post post) {
         tvDetailUsername.setText(post.getUser().getUsername());
         ParseFile profile = post.getUser().getParseFile(User.KEY_PROFILE);
         if (profile != null) {
