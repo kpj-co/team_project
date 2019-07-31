@@ -24,6 +24,7 @@ import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
+import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.utils.ImagePreviewAdapter;
 import com.parse.FindCallback;
@@ -145,7 +146,7 @@ public class ComposePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //grab images from gallery
-                rvImagePreview.setVisibility(View.GONE);
+                rvImagePreview.setVisibility(View.VISIBLE);
                 onLaunchGallery();
             }
         });
@@ -240,17 +241,7 @@ public class ComposePostActivity extends AppCompatActivity {
         // Set content of post
         if (newTitle.length() != 0) { newPost.setTitle(newTitle); }
         if (newBody.length() != 0) { newPost.setDescription(newBody); }
-        if (imagePath.length() != 0) {
-            File imageFile = new File(imagePath);
-            if (imageFile != null) {
-                ParseFile imageParseFile = new ParseFile(imageFile);
-                newPost.setMedia(imageParseFile);
-            }
-        }
-        if (photoFile != null) {
-            ParseFile imageParseFile = new ParseFile(photoFile);
-            newPost.setMedia(imageParseFile);
-        }
+
         // Save associated course
         if (course != null) {
             newPost.setCourse(course);
@@ -273,8 +264,19 @@ public class ComposePostActivity extends AppCompatActivity {
                     postHashtagRelation.setHashtag(hashtag);
                     postHashtagRelation.saveInBackground();
                 }
+                // save photos
+                if (mImages.size() != 0) {
+                    for (ImagePreview image : mImages) {
+                        PostImageRelation postImageRelation = new PostImageRelation();
+                        postImageRelation.setPost(newPost);
+                        postImageRelation.setImage(image.getParseFile());
+                        postImageRelation.saveInBackground();
+                    }
+                }
             }
         });
+
+
 
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
         goToMainActivity();

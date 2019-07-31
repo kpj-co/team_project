@@ -45,4 +45,13 @@ public class ImagePreview {
         }
     }
 
+    public ParseFile getParseFile() {
+        if (photoFile != null) {
+            return new ParseFile(photoFile);
+        } else if (imagePath != null || imagePath.length() != 0) {
+            return new ParseFile(new File(imagePath));
+        } else {
+            return parseFile;
+        }
+    }
 }
