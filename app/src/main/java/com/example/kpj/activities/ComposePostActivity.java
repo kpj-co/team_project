@@ -294,7 +294,7 @@ public class ComposePostActivity extends AppCompatActivity {
     }
 
     //Returns an ArrayList of all the Hash Tags given by the user
-    private ArrayList<String> returnHashtags(String hashtags) {
+    public static ArrayList<String> returnHashtags(String hashtags) {
         //Boolean to know if there is something in the current sequence of characters to be analyzed
         boolean hasContent;
         //Variable to store our "base point", or the # symbol that will start the hashtag

@@ -15,7 +15,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.kpj.PostFilter;
 import com.example.kpj.R;
+import com.example.kpj.UniversityFilter;
 import com.example.kpj.activities.MainActivity;
 import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Course;
@@ -27,12 +29,16 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private Context context;
-    private List<Post> mPosts;
+    private List<Post> filteredPosts;
+    private List<Post>fullPostsList;
+    private PostFilter filter;
+
     private Course course;
     private OnPostClicked onPostClicked;
     private final static String KEY_SEND_POST_TO_CHAT = "A";
@@ -44,7 +50,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         this.context = context;
         this.course = course;
         this.onPostClicked = onPostClicked;
-        mPosts = posts;
+        fullPostsList = new ArrayList<>();
+        fullPostsList.addAll(posts);
+        filteredPosts = posts;
+        filteredPosts.addAll(posts);
         currentUser = ParseUser.getCurrentUser();
     }
 
@@ -59,7 +68,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Post post = mPosts.get(position);
+        final Post post = filteredPosts.get(position);
         bindPostContent(holder, post);
         post.isLiked = false;
         post.isDisliked = false;
@@ -133,6 +142,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvHashtag1.setText(hashtags);
         holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
         holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
+
     }
 
     /** Up Vote a post and update parse db
@@ -302,7 +312,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mPosts.size();
+        return filteredPosts.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -345,5 +355,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     public interface OnPostClicked {
         void onPostClickListener(int position);
+    }
+
+    public void filterList(String s) {
+        filter = new PostFilter((ArrayList<Post>) fullPostsList, this);
+        filter.getFilter().filter(s);
+    }
+
+    public void setList(List<Post> posts) {
+        filteredPosts = posts;
+    }
+
+    public void updateFullList(List<Post> posts) {
+        fullPostsList.addAll(posts);
     }
 }

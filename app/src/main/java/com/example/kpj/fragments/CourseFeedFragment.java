@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +98,10 @@ public class CourseFeedFragment extends Fragment {
                 queryPosts();
             }
         });
+        setUpSearchView(view);
+
+
+
         return view;
     }
 
@@ -137,6 +141,8 @@ public class CourseFeedFragment extends Fragment {
                             }
                         });
                     }
+                    postAdapter.updateFullList(posts);
+
                 } else {
                     Toast.makeText(getContext(), "Fail!", Toast.LENGTH_LONG).show();
                 }
@@ -195,8 +201,8 @@ public class CourseFeedFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                //adapter.filterList(s);
-                //adapter.notifyDataSetChanged();
+                postAdapter.filterList(s);
+                postAdapter.notifyDataSetChanged();
                 return true;
             }
         });
