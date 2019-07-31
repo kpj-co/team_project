@@ -102,6 +102,7 @@ public class ComposePostActivity extends AppCompatActivity {
         rvImagePreview = findViewById(R.id.rvImagePreview);
         this.mImages = new ArrayList<>();
         setUpImagePreview();
+        rvImagePreview.setVisibility(View.GONE);
     }
 
     private void setUpImagePreview() {
@@ -131,6 +132,7 @@ public class ComposePostActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
+                rvImagePreview.setVisibility(View.VISIBLE);
                 onLaunchCamera();
             }
         });
@@ -141,6 +143,7 @@ public class ComposePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //grab images from gallery
+                rvImagePreview.setVisibility(View.GONE);
                 onLaunchGallery();
             }
         });
@@ -208,11 +211,9 @@ public class ComposePostActivity extends AppCompatActivity {
                     // create a new image preview and inset it in the recycler view
                     ImagePreview newImage = new ImagePreview(imagePath);
                     notifyAdapterItemInserted(newImage);
-//                  bindImagesToPreview(imagePath);
                     break;
                 case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
                     // Set the Image in ImageView
-//                  bindImagesToPreview(photoFile);
                     ImagePreview image = new ImagePreview(photoFile);
                     notifyAdapterItemInserted(image);
                     Toast.makeText(context, "Camera photo set", Toast.LENGTH_LONG).show();
@@ -223,22 +224,6 @@ public class ComposePostActivity extends AppCompatActivity {
     private void notifyAdapterItemInserted(ImagePreview newImage) {
         mImages.add(newImage);
         imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
-    }
-
-    private void bindImagesToPreview(File photo) {
-//        Glide.with(context)
-//                .load(photo)
-//                //TODO - change center crop to resize and fit parent container
-//                .apply(new RequestOptions().centerCrop())
-//                .into(ivComposeImage);
-    }
-
-    private void bindImagesToPreview(String photoPath) {
-//        Glide.with(context)
-//                .load(photoPath)
-//                //TODO - change center crop to resize and fit parent container
-//                .apply(new RequestOptions().centerCrop())
-//                .into(ivComposeImage);
     }
 
     private void savePost() {
@@ -271,7 +256,7 @@ public class ComposePostActivity extends AppCompatActivity {
             Toast.makeText(context, "could not find course associated", Toast.LENGTH_SHORT).show();
         }
 
-        //Add the relationship post-hashtag to the database for each hashYWtag
+        //Add the relationship post-hashtag to the database for each hash tag
         for(String hashtag : hashtags) {
             PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
             postHashtagRelation.setPost(newPost);
@@ -324,14 +309,11 @@ public class ComposePostActivity extends AppCompatActivity {
             //If there is a space, it could be a hashtag if it has content
             else if(hashtags.charAt(i) == ' ' && hasContent) {
                 hashtagsList.add(hashtags.substring(basePoint + 1, i));
-
                 hasContent = false;
             }
-
             //The case is slightly different when we are dealing with the last character of the string
             else if(i == hashtags.length() - 1 && hasContent) {
                 hashtagsList.add(hashtags.substring(basePoint + 1, i + 1));
-
                 hasContent = false;
             }
         }
