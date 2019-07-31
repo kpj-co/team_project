@@ -63,7 +63,7 @@ public class ComposePostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose_post2);
+        setContentView(R.layout.activity_compose_post);
         initializeVariables();
         initializeViews();
         //if a user wants to post a message as a post, this method will do the job
@@ -102,7 +102,7 @@ public class ComposePostActivity extends AppCompatActivity {
         setIBtnPdfListener();
         bLaunch = findViewById(R.id.bLaunch);
         setBtnLaunchListener();
-        rvImagePreview = findViewById(R.id.rvImagePreview);
+        rvImagePreview = findViewById(R.id.rvDetailImagePreview);
         this.mImages = new ArrayList<>();
         setUpImagePreview();
         rvImagePreview.setVisibility(View.GONE);
@@ -257,7 +257,7 @@ public class ComposePostActivity extends AppCompatActivity {
         newPost.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                //Add the relationship post-hashtag to the database for each hash tag
+                // Add the relationship post-hashtag to the database for each hash tag
                 for(String hashtag : hashtags) {
                     PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
                     postHashtagRelation.setPost(newPost);

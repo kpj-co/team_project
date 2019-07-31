@@ -43,23 +43,24 @@ public class PostDetailActivity extends AppCompatActivity {
     private CommentAdapter commentAdapter;
 
     Context context;
-    ImageView ivDetailProfilePic, ivDetailPostImage, ivDetailComment;
+    ImageView ivDetailProfilePic, ivDetailComment;
     TextView tvDetailUsername, tvDetailRelativeTime, tvDetailTitle, tvDetailDescription,
             tvDetailHashTags, tvDetailUpVotes, tvDetailDownVotes, tvDetailCommentCount;
     ImageButton ibDetailLike, ibDetailDislike, ibDetailSend, ibAddComment;
-    RecyclerView rvComments;
+    RecyclerView rvComments, rvDetailImagePreview;
     EditText etWriteComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_detail);
+        setContentView(R.layout.activity_post_detail2);
         //get post
         initializeVariables();
         initializeViews();
         bindPostDetailContent(post);
         setOnClickListeners();
         setUpComments();
+        // TODO -- SET UP IMAGES
         queryComments();
         setParseLiveQueryClient();
     }
@@ -83,17 +84,13 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
             }
         });
-
         SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(query);
-
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Comment>() {
                     @Override
                     //Add the element in the beginning of the recycler view and go to that position
                     public void onEvent(ParseQuery<Comment> query, Comment comment) {
-
                         mComments.add(comment);
-
                         //RecyclerView updates need to be run on the ui thread
                         runOnUiThread(new Runnable() {
                             @Override
@@ -139,7 +136,6 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDetailRelativeTime = findViewById(R.id.tvDetailRelativeTime);
         tvDetailTitle = findViewById(R.id.tvDetailTitle);
         tvDetailDescription = findViewById(R.id.tvDetailDescription);
-        ivDetailPostImage = findViewById(R.id.ivDetailPostImage);
         tvDetailHashTags = findViewById(R.id.tvDetailHashTags);
         ibDetailLike = findViewById(R.id.ibDetailLike);
         tvDetailUpVotes = findViewById(R.id.tvDetailUpVotes);
@@ -149,6 +145,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDetailCommentCount = findViewById(R.id.tvDetailCommentCount);
         ibDetailSend = findViewById(R.id.ibDetailSend);
         rvComments = findViewById(R.id.rvComments);
+        rvDetailImagePreview = findViewById(R.id.rvDetailImagePreview);
         etWriteComment = findViewById(R.id.etWriteComment);
         ibAddComment = findViewById(R.id.ibAddComment);
     }
@@ -188,16 +185,11 @@ public class PostDetailActivity extends AppCompatActivity {
             tvDetailDescription.setVisibility(View.INVISIBLE);
         }
 
-        if (post.getMedia() != null) {
-            ivDetailPostImage.setVisibility(View.VISIBLE);
-            ParseFile photoFile = post.getMedia();
-
-            Glide.with(context)
-                    .load(photoFile.getUrl())
-                    .into(ivDetailPostImage);
-        } else {
-            ivDetailPostImage.setVisibility(View.GONE);
-        }
+//        if (post.getMedia() != null) {
+//            rvDetailImagePreview.setVisibility(View.VISIBLE);
+//        } else {
+//            rvDetailImagePreview.setVisibility(View.GONE);
+//        }
 
         tvDetailUpVotes.setText(String.valueOf(post.getUpVotes()));
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
@@ -208,17 +200,12 @@ public class PostDetailActivity extends AppCompatActivity {
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<Comment> parseQuery = ParseQuery.getQuery(Comment.class);
         parseQuery.whereEqualTo("post", post);
-
-
-
         SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
-
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Comment>() {
             @Override
             public void onEvent(ParseQuery<Comment> query, Comment comment) {
                 mComments.add(comment);
-
                 //RecyclerView updates need to be run on the ui thread
                 runOnUiThread(new Runnable() {
                     @Override
