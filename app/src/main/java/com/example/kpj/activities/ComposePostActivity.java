@@ -257,14 +257,11 @@ public class ComposePostActivity extends AppCompatActivity {
         newPost.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                // Add the relationship post-hashtag to the database for each hash tag
-                for(String hashtag : hashtags) {
-                    PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
-                    postHashtagRelation.setPost(newPost);
-                    postHashtagRelation.setHashtag(hashtag);
-                    postHashtagRelation.saveInBackground();
-                }
-                // save photos
+                saveHashtags();
+                savePhotos();
+            }
+            // Save media via PostImage relation
+            private void savePhotos() {
                 if (mImages.size() != 0) {
                     for (ImagePreview image : mImages) {
                         PostImageRelation postImageRelation = new PostImageRelation();
@@ -272,10 +269,23 @@ public class ComposePostActivity extends AppCompatActivity {
                         postImageRelation.setImage(image.getParseFile());
                         postImageRelation.saveInBackground();
                     }
+                    newPost.setHasMedia(true);
+                    newPost.saveInBackground();
+                } else {
+                    newPost.setHasMedia(false);
+                    newPost.saveInBackground();
+                }
+            }
+            // Add the relationship post-hashtag to the database for each hash tag
+            private void saveHashtags() {
+                for(String hashtag : hashtags) {
+                    PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
+                    postHashtagRelation.setPost(newPost);
+                    postHashtagRelation.setHashtag(hashtag);
+                    postHashtagRelation.saveInBackground();
                 }
             }
         });
-
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
         goToMainActivity();
     }

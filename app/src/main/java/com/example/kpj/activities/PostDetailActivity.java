@@ -123,7 +123,6 @@ public class PostDetailActivity extends AppCompatActivity {
             public void done(List<PostImageRelation> relations, ParseException e) {
                 if (e == null) {
                     for (PostImageRelation relation : relations) {
-//                        ParseFile parseFile = relation.getImage();
                         mImages.add(new ImagePreview(relation.getImage()));
                         imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
                     }

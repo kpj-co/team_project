@@ -12,7 +12,6 @@ public class Post extends ParseObject {
 
     //names of the columns in the database
     public static final String KEY_USER = "user";
-    public static final String KEY_MEDIA = "media";
     public static final String KEY_COURSE = "course";
     public static final String KEY_TITLE = "title";
     public static final String KEY_DESCRIPTION = "description";
@@ -33,10 +32,6 @@ public class Post extends ParseObject {
     //getters
     public ParseUser getUser() {
         return getParseUser(KEY_USER);
-    }
-
-    public ParseFile getMedia() {
-        return getParseFile(KEY_MEDIA);
     }
 
     public String getTitle() { return getString(KEY_TITLE); }
@@ -64,10 +59,6 @@ public class Post extends ParseObject {
     public void setHasMedia(Boolean hasMedia) {
         put(KEY_HASMEDIA, hasMedia);
     }
-
-//    public void setMedia(ParseFile media) {
-//        put(KEY_MEDIA, media);
-//    }
 
     public void setCourse(Course course) { put(KEY_COURSE, course); }
 

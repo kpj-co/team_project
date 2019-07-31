@@ -18,8 +18,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.RecyclerViewClickListener;
 import com.example.kpj.activities.ComposePostActivity;
+import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
+import com.example.kpj.model.PostImageRelation;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 
 import java.util.List;
@@ -245,11 +248,22 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 e.printStackTrace();
             }
 
-            if(post.getMedia() != null) {
-                Glide.with(mContext)
-                        .load(post.getMedia().getUrl())
-                        .into(ivPostImage);
+
+            if (post.getHasMedia()) {
+                PostImageRelation.Query query = new PostImageRelation.Query();
+                query.whereEqualTo("post", post);
+                query.orderByDescending("createdAt");
+                query.findInBackground(new FindCallback<PostImageRelation>() {
+                    @Override
+                    public void done(List<PostImageRelation> relations, ParseException e) {
+                        if (e == null) {
+                            ImagePreview image = new ImagePreview((relations.get(0)).getImage());
+                            image.loadImage(mContext, ivPostImage);
+                        }
+                    }
+                });
             }
+
         }
     }
 }

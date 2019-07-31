@@ -21,6 +21,7 @@ import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Post;
+import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.model.UserPostRelation;
 import com.parse.FindCallback;
@@ -88,7 +89,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      * @params: ViewHolder, Post
      * @return: void
      */
-    private void bindPostContent(@NonNull ViewHolder holder, Post post) {
+    private void bindPostContent(@NonNull final ViewHolder holder, Post post) {
+
         //String that contains all the hashtags
         StringBuilder hashtags = new StringBuilder();
         bindPostUserAssets(holder, post);
@@ -108,19 +110,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 String abridgedText = post.getDescription().substring(0,250) + ". . .";
                 holder.tvDescription.setText(abridgedText);
             }
-
         } else {
             holder.tvDescription.setVisibility(View.GONE);
         }
 
-        if (post.getMedia() != null) {
+        if (post.getHasMedia()) {
             holder.ivPostImage.setVisibility(View.VISIBLE);
-            ParseFile photoFile = post.getMedia();
-
-            Glide.with(context)
-                    .load(photoFile.getUrl())
-                    .apply(new RequestOptions().centerCrop())
-                    .into(holder.ivPostImage);
+            PostImageRelation.Query query = new PostImageRelation.Query();
+            query.whereEqualTo("post", post);
+            query.orderByDescending("createdAt");
+            query.findInBackground(new FindCallback<PostImageRelation>() {
+                @Override
+                public void done(List<PostImageRelation> relations, ParseException e) {
+                    if (e == null) {
+                        ImagePreview image = new ImagePreview((relations.get(0)).getImage());
+                        image.loadImageRequest(context, holder.ivPostImage,
+                                new RequestOptions().centerCrop());
+                    }
+                }
+            });
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }
@@ -313,7 +321,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 tvDownVotes, tvCommentCount;
         ImageButton ibLike, ibDislike, ibComment, ibSend;
         OnPostClicked launchDetailIntent;
-        List<ImagePreview> mImagePreviews;
 
         public ViewHolder(@NonNull View itemView, OnPostClicked launchDetailIntent) {
             super(itemView);
