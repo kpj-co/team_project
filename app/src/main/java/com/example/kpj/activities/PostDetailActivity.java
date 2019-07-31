@@ -35,6 +35,8 @@ import com.parse.livequery.SubscriptionHandling;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PostDetailActivity extends AppCompatActivity {
 
@@ -62,6 +64,15 @@ public class PostDetailActivity extends AppCompatActivity {
         setUpComments();
         queryComments();
         setParseLiveQueryClient();
+
+        Timer timer = new Timer ();
+        TimerTask hourlyTask = new TimerTask () {
+            @Override
+            public void run () {
+                // your code here...
+            }
+        };
+
     }
 
     private void queryComments() {
@@ -204,29 +215,40 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void setParseLiveQueryClient() {
-        //TODO: DELETE ONE OF THESE QUERIES
-        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-        ParseQuery<Comment> parseQuery = ParseQuery.getQuery(Comment.class);
-        parseQuery.whereEqualTo("post", post);
 
 
 
-        SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
-
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
-                SubscriptionHandling.HandleEventCallback<Comment>() {
+        final Post.Query postQuery = new Post.Query();
+        postQuery.whereEqualTo("title", post.getTitle());
+        postQuery.withUser();
+        postQuery.findInBackground(new FindCallback<Post>() {
             @Override
-            public void onEvent(ParseQuery<Comment> query, Comment comment) {
-                mComments.add(comment);
+            public void done(List<Post> posts, ParseException e) {
+                Post tempPost = posts.get(0);
 
-                //RecyclerView updates need to be run on the ui thread
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        commentAdapter.notifyItemInserted(mComments.size() - 1);
-                    }
-                });
+                ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+                ParseQuery<Comment> parseQuery = ParseQuery.getQuery(Comment.class);
+                parseQuery.whereEqualTo("post", tempPost);
+                SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+
+                subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
+                        SubscriptionHandling.HandleEventCallback<Comment>() {
+                            @Override
+                            public void onEvent(ParseQuery<Comment> query, Comment comment) {
+                                mComments.add(comment);
+
+                                //RecyclerView updates need to be run on the ui thread
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        commentAdapter.notifyItemInserted(mComments.size() - 1);
+                                    }
+                                });
+                            }
+                        });
             }
         });
+
+
     }
 }

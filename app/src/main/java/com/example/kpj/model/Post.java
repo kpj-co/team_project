@@ -3,6 +3,7 @@ package com.example.kpj.model;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ public class Post extends ParseObject {
     public static final String KEY_UPVOTES = "upvotes";
     public static final String KEY_DOWNVOTES = "downvotes";
     public static final String KEY_CREATED_AT = "createdAt";
+
+    //Limit to get posts
+    private static final int MAX_NUMBER = 25;
 
     public boolean isLiked = false;
     public boolean isDisliked = false;
@@ -109,6 +113,24 @@ public class Post extends ParseObject {
 
     public void addHashtag(String hashtag) {
         hashtags.add(hashtag);
+    }
+
+    //A query just of the comment class
+    public static class Query extends ParseQuery<Post> {
+        public Query() {
+            super(Post.class);
+        }
+
+        public Query getTop() {
+            setLimit(MAX_NUMBER);
+            return this;
+        }
+
+        //returns the comment with the information of the user
+        public Query withUser() {
+            include(KEY_USER);
+            return this;
+        }
     }
 
 }
