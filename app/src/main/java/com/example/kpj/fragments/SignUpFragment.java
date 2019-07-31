@@ -116,21 +116,6 @@ public class SignUpFragment extends Fragment {
         });
     }
 
-    private void requestCameraPermission() {
-        try {
-            if (ActivityCompat.checkSelfPermission(getContext(),
-                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]
-                                {Manifest.permission.CAMERA, Manifest.permission.CAMERA},
-                        CAMERA_PERMISSION_CODE);
-            } else {
-                onLaunchCamera();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void onLaunchCamera() {
         CameraLauncher cameraLauncher = new CameraLauncher(getActivity(), new CameraLauncher.Callback() {
             @Override
