@@ -1,5 +1,6 @@
 package com.example.kpj.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.model.Comment;
+import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
 import com.example.kpj.utils.CommentAdapter;
@@ -25,7 +27,11 @@ import com.example.kpj.utils.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.livequery.ParseLiveQueryClient;
+import com.parse.livequery.SubscriptionHandling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +63,11 @@ public class PostDetailActivity extends AppCompatActivity {
         setOnClickListeners();
         setUpComments();
         queryComments();
+        setParseLiveQueryClient();
     }
 
     private void queryComments() {
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         Comment.Query query = new Comment.Query();
         query.include("user");
         query.whereEqualTo("post", post);
@@ -75,9 +83,33 @@ public class PostDetailActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(context, "Error loading comments", Toast.LENGTH_SHORT).show();
                 }
+
+
             }
         });
 
+
+
+        SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(query);
+
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
+                SubscriptionHandling.HandleEventCallback<Comment>() {
+                    @Override
+                    //Add the element in the beginning of the recycler view and go to that position
+                    public void onEvent(ParseQuery<Comment> query, Comment comment) {
+
+                        mComments.add(comment);
+
+                        //RecyclerView updates need to be run on the ui thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                commentAdapter.notifyItemInserted(mComments.size() - 1);
+                            }
+                        });
+
+                    }
+                });
     }
 
     private void setOnClickListeners() {
@@ -178,5 +210,30 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
     }
 
+    private void setParseLiveQueryClient() {
+        //TODO: DELETE ONE OF THESE QUERIES
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+        ParseQuery<Comment> parseQuery = ParseQuery.getQuery(Comment.class);
+        parseQuery.whereEqualTo("post", post);
 
+
+
+        SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
+                SubscriptionHandling.HandleEventCallback<Comment>() {
+            @Override
+            public void onEvent(ParseQuery<Comment> query, Comment comment) {
+                mComments.add(comment);
+
+                //RecyclerView updates need to be run on the ui thread
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        commentAdapter.notifyItemInserted(mComments.size() - 1);
+                    }
+                });
+            }
+        });
+    }
 }
