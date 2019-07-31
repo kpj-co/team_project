@@ -19,6 +19,7 @@ import com.example.kpj.R;
 import com.example.kpj.activities.MainActivity;
 import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
 import com.example.kpj.model.UserPostRelation;
@@ -90,7 +91,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private void bindPostContent(@NonNull ViewHolder holder, Post post) {
         //String that contains all the hashtags
         StringBuilder hashtags = new StringBuilder();
-
         bindPostUserAssets(holder, post);
 
         if (post.getTitle() != null) {
@@ -102,7 +102,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         if (post.getDescription() != null) {
             holder.tvDescription.setVisibility(View.VISIBLE);
-            holder.tvDescription.setText(post.getDescription());
+            if (post.getDescription().length() < 250) {
+                holder.tvDescription.setText(post.getDescription());
+            } else {
+                String abridgedText = post.getDescription().substring(0,250) + ". . .";
+                holder.tvDescription.setText(abridgedText);
+            }
+
         } else {
             holder.tvDescription.setVisibility(View.GONE);
         }
@@ -307,7 +313,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 tvDownVotes, tvCommentCount;
         ImageButton ibLike, ibDislike, ibComment, ibSend;
         OnPostClicked launchDetailIntent;
-
+        List<ImagePreview> mImagePreviews;
 
         public ViewHolder(@NonNull View itemView, OnPostClicked launchDetailIntent) {
             super(itemView);

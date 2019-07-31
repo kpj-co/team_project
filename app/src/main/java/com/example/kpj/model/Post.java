@@ -19,6 +19,7 @@ public class Post extends ParseObject {
     public static final String KEY_UPVOTES = "upvotes";
     public static final String KEY_DOWNVOTES = "downvotes";
     public static final String KEY_CREATED_AT = "createdAt";
+    public static final String KEY_HASMEDIA = "hasMedia";
 
     public boolean isLiked = false;
     public boolean isDisliked = false;
@@ -52,13 +53,21 @@ public class Post extends ParseObject {
         return getInt(KEY_DOWNVOTES);
     }
 
+    public boolean getHasMedia() {
+        return getBoolean(KEY_HASMEDIA);
+    }
+
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
     }
 
-    public void setMedia(ParseFile media) {
-        put(KEY_MEDIA, media);
+    public void setHasMedia(Boolean hasMedia) {
+        put(KEY_HASMEDIA, hasMedia);
     }
+
+//    public void setMedia(ParseFile media) {
+//        put(KEY_MEDIA, media);
+//    }
 
     public void setCourse(Course course) { put(KEY_COURSE, course); }
 
