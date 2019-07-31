@@ -81,12 +81,8 @@ public class PostDetailActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(context, "Error loading comments", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
-
-
 
         SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(query);
 
@@ -105,7 +101,6 @@ public class PostDetailActivity extends AppCompatActivity {
                                 commentAdapter.notifyItemInserted(mComments.size() - 1);
                             }
                         });
-
                     }
                 });
     }

@@ -261,7 +261,7 @@ public class ComposePostActivity extends AppCompatActivity {
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
-        
+
         // Save post in background thread
         newPost.saveInBackground(new SaveCallback() {
             @Override
