@@ -1,6 +1,8 @@
 package com.example.kpj.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,10 +18,8 @@ import android.widget.Button;
 import com.example.kpj.R;
 import com.example.kpj.UniversityFragmentAdapter;
 import com.example.kpj.model.University;
-import com.example.kpj.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,18 @@ public class UniversityFragment extends Fragment {
 
     private UniversityFragmentAdapter adapter;
 
+    private University university;
+
+    private UniversityFragmentListener callback;
+
+    public void setUniversityData(UniversityFragmentListener universityFragmentListener){
+        this.callback = universityFragmentListener;
+    }
+
+    public interface UniversityFragmentListener{
+        void onSignUpUniversity(String university);
+    }
+
     public static UniversityFragment newInstance(int page) {
         UniversityFragment fragment = new UniversityFragment();
         Bundle args = new Bundle();
@@ -38,6 +50,7 @@ public class UniversityFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,31 +58,32 @@ public class UniversityFragment extends Fragment {
             int mPage = getArguments().getInt(ARG_PAGE);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_university, container, false);
+        setUpRecyclerView(view);
+        setUpSearchView(view);
+        fetchUniversities();
+        setNextButtonListener(view);
 
-        final View view = inflater.inflate(R.layout.fragment_university,
-                container, false);
+        return view;
+    }
 
+    private void setNextButtonListener(View view) {
         Button nextButton = (Button) view.findViewById(R.id.bNext);
         nextButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                //TODO -- sending information to signupflow activity, finish signup at end
-                ParseUser user = ParseUser.getCurrentUser();
-                adapter.setUserUniversity(user);
+                university = (University) adapter.selectedUniversity(university);
+                String selected = university.getName();
+
+                callback.onSignUpUniversity(selected);
+                setUpSharedPref(selected);
                 goToSelectCourses();
             }
         });
-
-        setUpRecyclerView(view);
-
-        setUpSearchView(view);
-
-        fetchUniversities();
-        return view;
     }
 
     private void setUpRecyclerView(View view) {
@@ -79,6 +93,7 @@ public class UniversityFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+        adapter.filterList("");
     }
 
     private void setUpSearchView(View view) {
@@ -99,6 +114,13 @@ public class UniversityFragment extends Fragment {
         });
     }
 
+    private void setUpSharedPref(String selected){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("university",selected);
+        editor.apply();
+    }
+
     private void fetchUniversities() {
         final University.Query query = new University.Query();
         query.findInBackground(new FindCallback<University>() {
@@ -116,7 +138,7 @@ public class UniversityFragment extends Fragment {
         });
     }
 
-    private void goToSelectCourses() {
+    public void goToSelectCourses() {
         Fragment fragment = new SelectCoursesFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

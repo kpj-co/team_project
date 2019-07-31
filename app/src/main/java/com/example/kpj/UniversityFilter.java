@@ -11,12 +11,14 @@ import java.util.List;
 public class UniversityFilter implements Filterable {
 
     private List<University> universityList;
+    private List<University> filteredUniversities;
+
     private UniversityFragmentAdapter adapter;
-    private List<University> filteredUniversities = new ArrayList<>();
 
     public UniversityFilter(List<University> universities, UniversityFragmentAdapter adapter) {
         this.adapter = adapter;
         this.universityList = universities;
+        this.filteredUniversities = new ArrayList<>();
     }
 
     @Override
@@ -25,6 +27,7 @@ public class UniversityFilter implements Filterable {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
+
                 if (constraint != null && constraint.length() != 0) {
                     for (University university : universityList) {
                         if (university.getName().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
