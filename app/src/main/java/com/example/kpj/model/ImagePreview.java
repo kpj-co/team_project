@@ -46,7 +46,7 @@ public class ImagePreview {
         }
     }
 
-    public void loadImageRequest(Context context, ImageView imageView, RequestOptions requestOptions) {
+    public void loadImage(Context context, ImageView imageView, RequestOptions requestOptions) {
         if (photoFile != null) {
             Glide.with(context)
                     .load(photoFile)

@@ -124,7 +124,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 public void done(List<PostImageRelation> relations, ParseException e) {
                     if (e == null) {
                         ImagePreview image = new ImagePreview((relations.get(0)).getImage());
-                        image.loadImageRequest(context, holder.ivPostImage,
+                        image.loadImage(context, holder.ivPostImage,
                                 new RequestOptions().centerCrop());
                     }
                 }
@@ -320,12 +320,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         TextView tvUser, tvDate, tvTitle, tvDescription, tvHashtag1, tvUpVotes,
                 tvDownVotes, tvCommentCount;
         ImageButton ibLike, ibDislike, ibComment, ibSend;
-        OnPostClicked launchDetailIntent;
+        OnPostClicked onPostClicked;
 
-        public ViewHolder(@NonNull View itemView, OnPostClicked launchDetailIntent) {
+        public ViewHolder(@NonNull View itemView, OnPostClicked onPostClicked) {
             super(itemView);
             initializeViews(itemView);
-            this.launchDetailIntent = launchDetailIntent;
+            this.onPostClicked = onPostClicked;
         }
 
         private void initializeViews(@NonNull View itemView) {
@@ -348,7 +348,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         @Override
         public void onClick(final View v) {
-            launchDetailIntent.onPostClickListener(getAdapterPosition());
+            onPostClicked.onPostClickListener(getAdapterPosition());
         }
     }
 

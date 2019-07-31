@@ -153,6 +153,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
         ibDetailSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,7 +211,11 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void bindPostDetailContent(Post post) {
-        tvDetailUsername.setText(post.getUser().getUsername());
+        try {
+            tvDetailUsername.setText((post.getUser().fetchIfNeeded()).getUsername());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         ParseFile profile = post.getUser().getParseFile(User.KEY_PROFILE);
         if (profile != null) {
             Glide.with(context)
@@ -234,13 +239,6 @@ public class PostDetailActivity extends AppCompatActivity {
         } else {
             tvDetailDescription.setVisibility(View.INVISIBLE);
         }
-
-//        if (post.getMedia() != null) {
-//            rvDetailImagePreview.setVisibility(View.VISIBLE);
-//        } else {
-//            rvDetailImagePreview.setVisibility(View.GONE);
-//        }
-
         tvDetailUpVotes.setText(String.valueOf(post.getUpVotes()));
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
     }
