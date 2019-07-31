@@ -7,6 +7,8 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,10 +20,12 @@ import com.example.kpj.CameraLauncher;
 import com.example.kpj.GalleryHelper;
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.User;
+import com.example.kpj.utils.ImagePreviewAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -36,8 +40,9 @@ public class ComposePostActivity extends AppCompatActivity {
 
     EditText etComposePostTitle, etComposeBody, etHashtags;
     TextView tvComposeTitleLabel, tvComposeUsername, tvComposeBodyLabel;
-    ImageView ivComposeProfile, ivComposeImage;
+    ImageView ivComposeProfile;
     ImageButton ibAddPdf, ibCamera, ibExitCompose, ibAddImage;
+    RecyclerView rvImagePreview;
     Button bLaunch;
 
     public final static String APP_TAG = "compose post activity";
@@ -49,13 +54,15 @@ public class ComposePostActivity extends AppCompatActivity {
     private GalleryHelper galleryHelper;
     private File photoFile;
     private String imagePath;
+    private List<ImagePreview> mImages;
+    private ImagePreviewAdapter imagePreviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose_post);
-        initializeViews();
+        setContentView(R.layout.activity_compose_post2);
         initializeVariables();
+        initializeViews();
         //if a user wants to post a message as a post, this method will do the job
         preparePostFromComment();
     }
@@ -82,7 +89,6 @@ public class ComposePostActivity extends AppCompatActivity {
         tvComposeUsername = findViewById(R.id.tvComposeUsername);
         ivComposeProfile = findViewById(R.id.ivComposeProfile);
         bindUserProfileToView();
-        ivComposeImage = findViewById(R.id.ivComposeImage);
         ibExitCompose = findViewById(R.id.ibExitCompose);
         setIBtnExitListener();
         ibAddImage = findViewById(R.id.ibAddImage);
@@ -93,6 +99,18 @@ public class ComposePostActivity extends AppCompatActivity {
         setIBtnPdfListener();
         bLaunch = findViewById(R.id.bLaunch);
         setBtnLaunchListener();
+        rvImagePreview = findViewById(R.id.rvImagePreview);
+        this.mImages = new ArrayList<>();
+        setUpImagePreview();
+        rvImagePreview.setVisibility(View.GONE);
+    }
+
+    private void setUpImagePreview() {
+        imagePreviewAdapter = new ImagePreviewAdapter(context, mImages);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false);
+        rvImagePreview.setLayoutManager(linearLayoutManager);
+        rvImagePreview.setAdapter(imagePreviewAdapter);
     }
 
     public void setIBtnExitListener() {
@@ -114,6 +132,7 @@ public class ComposePostActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
+                rvImagePreview.setVisibility(View.VISIBLE);
                 onLaunchCamera();
             }
         });
@@ -124,6 +143,7 @@ public class ComposePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //grab images from gallery
+                rvImagePreview.setVisibility(View.GONE);
                 onLaunchGallery();
             }
         });
@@ -188,30 +208,22 @@ public class ComposePostActivity extends AppCompatActivity {
             switch (requestCode) {
                 case GALLERY_REQUEST_CODE:
                     imagePath = galleryHelper.getImagePath(data);
-                    bindImagesToPreview(imagePath);
+                    // create a new image preview and inset it in the recycler view
+                    ImagePreview newImage = new ImagePreview(imagePath);
+                    notifyAdapterItemInserted(newImage);
                     break;
                 case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
                     // Set the Image in ImageView
-                    bindImagesToPreview(photoFile);
+                    ImagePreview image = new ImagePreview(photoFile);
+                    notifyAdapterItemInserted(image);
                     Toast.makeText(context, "Camera photo set", Toast.LENGTH_LONG).show();
                     break;
             }
     }
 
-    private void bindImagesToPreview(File photo) {
-        Glide.with(context)
-                .load(photo)
-                //TODO - change center crop to resize and fit parent container
-                .apply(new RequestOptions().centerCrop())
-                .into(ivComposeImage);
-    }
-
-    private void bindImagesToPreview(String photoPath) {
-        Glide.with(context)
-                .load(photoPath)
-                //TODO - change center crop to resize and fit parent container
-                .apply(new RequestOptions().centerCrop())
-                .into(ivComposeImage);
+    private void notifyAdapterItemInserted(ImagePreview newImage) {
+        mImages.add(newImage);
+        imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
     }
 
     private void savePost() {
@@ -244,7 +256,7 @@ public class ComposePostActivity extends AppCompatActivity {
             Toast.makeText(context, "could not find course associated", Toast.LENGTH_SHORT).show();
         }
 
-        //Add the relationship post-hashtag to the database for each hashYWtag
+        //Add the relationship post-hashtag to the database for each hash tag
         for(String hashtag : hashtags) {
             PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
             postHashtagRelation.setPost(newPost);
@@ -297,14 +309,11 @@ public class ComposePostActivity extends AppCompatActivity {
             //If there is a space, it could be a hashtag if it has content
             else if(hashtags.charAt(i) == ' ' && hasContent) {
                 hashtagsList.add(hashtags.substring(basePoint + 1, i));
-
                 hasContent = false;
             }
-
             //The case is slightly different when we are dealing with the last character of the string
             else if(i == hashtags.length() - 1 && hasContent) {
                 hashtagsList.add(hashtags.substring(basePoint + 1, i + 1));
-
                 hasContent = false;
             }
         }

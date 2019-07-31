@@ -34,7 +34,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @NonNull
     @Override
-    public CommentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int ViewType) {
+    public CommentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View commentView = inflater.inflate(R.layout.comment_item, viewGroup, false);
@@ -52,20 +52,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         return mComments.size();
     }
 
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView ivCommentProfilePic;
-        TextView tvCommentUsername, tvCommentBody;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ivCommentProfilePic = itemView.findViewById(R.id.ivCommentProfilePic);
-            tvCommentUsername = itemView.findViewById(R.id.tvCommentUsername);
-            tvCommentBody = itemView.findViewById(R.id.tvCommentBody);
-        }
-    }
-
     private void bindPostContent(@NonNull CommentAdapter.ViewHolder holder, Comment comment) {
         if (comment.getUser().getParseFile(User.KEY_PROFILE) != null) {
             holder.ivCommentProfilePic.setVisibility(View.VISIBLE);
@@ -77,8 +63,20 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         } else {
             holder.ivCommentProfilePic.setColorFilter(Color.DKGRAY);
         }
-
         holder.tvCommentUsername.setText(comment.getUser().getUsername());
         holder.tvCommentBody.setText(comment.getDescription());
     }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivCommentProfilePic;
+        TextView tvCommentUsername, tvCommentBody;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivCommentProfilePic = itemView.findViewById(R.id.ivCommentProfilePic);
+            tvCommentUsername = itemView.findViewById(R.id.tvCommentUsername);
+            tvCommentBody = itemView.findViewById(R.id.tvCommentBody);
+        }
+    }
+
+
 }

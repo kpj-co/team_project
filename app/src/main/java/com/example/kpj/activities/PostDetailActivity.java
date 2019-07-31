@@ -50,8 +50,6 @@ public class PostDetailActivity extends AppCompatActivity {
     RecyclerView rvComments;
     EditText etWriteComment;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,14 +138,6 @@ public class PostDetailActivity extends AppCompatActivity {
         this.mComments = new ArrayList<>();
     }
 
-    private void setUpComments() {
-        commentAdapter = new CommentAdapter(context, post, mComments);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        rvComments.setLayoutManager(linearLayoutManager);
-        rvComments.setAdapter(commentAdapter);
-    }
-
-
     private void initializeViews() {
         ivDetailProfilePic = findViewById(R.id.ivDetailProfilePic);
         tvDetailUsername = findViewById(R.id.tvDetailUsername);
@@ -166,6 +156,14 @@ public class PostDetailActivity extends AppCompatActivity {
         rvComments = findViewById(R.id.rvComments);
         etWriteComment = findViewById(R.id.etWriteComment);
         ibAddComment = findViewById(R.id.ibAddComment);
+    }
+
+
+    private void setUpComments() {
+        commentAdapter = new CommentAdapter(context, post, mComments);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        rvComments.setLayoutManager(linearLayoutManager);
+        rvComments.setAdapter(commentAdapter);
     }
 
     private void bindPostDetailContent(Post post) {
