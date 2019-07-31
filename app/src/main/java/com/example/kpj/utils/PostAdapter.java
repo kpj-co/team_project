@@ -79,10 +79,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 bundle.putParcelable(KEY_SEND_POST_TO_CHAT, post);
                 bundle.putParcelable(KEY_SEND_COURSE_TO_CHAT, course);
                 dialogBox.setArguments(bundle);
-                // send course to dialog fragment via bundle
-//                Bundle bundleCourse = new Bundle();
-//                bundleCourse.putParcelable(KEY_SEND_COURSE_TO_CHAT, course);
-//                dialogBox.setArguments(bundleCourse);
             }
         });
     }

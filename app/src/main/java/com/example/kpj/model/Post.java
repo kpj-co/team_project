@@ -62,6 +62,10 @@ public class Post extends ParseObject {
 
     public void setCourse(Course course) { put(KEY_COURSE, course); }
 
+    public Course getCourse() {
+        return (Course) getParseObject(KEY_COURSE);
+    }
+
     public void setTitle(String title) {
         put(KEY_TITLE, title);
     }

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
+import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Comment;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
@@ -54,6 +57,9 @@ public class PostDetailActivity extends AppCompatActivity {
     ImageButton ibDetailLike, ibDetailDislike, ibDetailSend, ibAddComment;
     RecyclerView rvComments, rvDetailImagePreview;
     EditText etWriteComment;
+
+    private final static String KEY_SEND_POST_TO_CHAT = "A";
+    private final static String KEY_SEND_COURSE_TO_CHAT = "B";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +152,18 @@ public class PostDetailActivity extends AppCompatActivity {
                     etWriteComment.setText("");
                     Toast.makeText(context, "Commented!", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        ibDetailSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialogBox = new SendToChatDialogFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                dialogBox.show(fragmentManager, "post detail");
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(KEY_SEND_POST_TO_CHAT, post);
+                bundle.putParcelable(KEY_SEND_COURSE_TO_CHAT, post.getCourse());
+                dialogBox.setArguments(bundle);
             }
         });
     }
