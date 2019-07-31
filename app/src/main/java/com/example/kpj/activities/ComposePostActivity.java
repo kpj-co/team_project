@@ -32,6 +32,8 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.parse.SaveCallback;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -228,11 +230,11 @@ public class ComposePostActivity extends AppCompatActivity {
 
     private void savePost() {
         // Create new post instance
-        Post newPost = new Post();
+        final Post newPost = new Post();
         // Grab text content from compose
         String newTitle = etComposePostTitle.getText().toString();
         String newBody = etComposeBody.getText().toString();
-        ArrayList<String> hashtags = returnHashtags(etHashtags.getText().toString());
+        final ArrayList<String> hashtags = returnHashtags(etHashtags.getText().toString());
         // Set user of post
         newPost.setUser(ParseUser.getCurrentUser());
         // Set content of post
@@ -256,19 +258,24 @@ public class ComposePostActivity extends AppCompatActivity {
             Toast.makeText(context, "could not find course associated", Toast.LENGTH_SHORT).show();
         }
 
-        //Add the relationship post-hashtag to the database for each hash tag
-        for(String hashtag : hashtags) {
-            PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
-            postHashtagRelation.setPost(newPost);
-            postHashtagRelation.setHashtag(hashtag);
-            postHashtagRelation.saveInBackground();
-        }
-
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
+        
         // Save post in background thread
-        newPost.saveInBackground();
+        newPost.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                //Add the relationship post-hashtag to the database for each hash tag
+                for(String hashtag : hashtags) {
+                    PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
+                    postHashtagRelation.setPost(newPost);
+                    postHashtagRelation.setHashtag(hashtag);
+                    postHashtagRelation.saveInBackground();
+                }
+            }
+        });
+
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
         goToMainActivity();
     }
