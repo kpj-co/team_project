@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.kpj.R;
 import com.example.kpj.RecyclerViewClickListener;
 import com.example.kpj.activities.ComposePostActivity;
+import com.example.kpj.activities.PostDetailActivity;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
@@ -39,7 +40,6 @@ import java.util.List;
 import static android.content.Context.MODE_PRIVATE;
 import static com.parse.Parse.getApplicationContext;
 
-
 public class MessageFragment extends Fragment implements RecyclerViewClickListener {
     private static final String ARG_PAGE = "ARG_PAGE";
     private final static String PREF_NAME = "sharedData";
@@ -49,7 +49,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private EditText etMessage;
     private String currentUserUsername;
 
-    private ArrayList<Message> messages = new ArrayList<>();
+    private List<Message> messages = new ArrayList<>();
 
     private MessageAdapter messageAdapter;
 
@@ -102,7 +102,15 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     }
 
     void prepareRecyclerView() {
-        messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(), messages, this);
+        messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(),
+                messages, this, new MessageAdapter.OnMessageClicked() {
+            @Override
+            public void onMessageClicked(int position) {
+                Intent intent = new Intent(getContext(), PostDetailActivity.class);
+                intent.putExtra("post", messages.get(position).getPost());
+                startActivity(intent);
+            }
+        });
         recyclerView.setAdapter(messageAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }

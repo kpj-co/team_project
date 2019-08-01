@@ -38,9 +38,10 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.livequery.ParseLiveQueryClient;
 import com.parse.livequery.SubscriptionHandling;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PostDetailActivity extends AppCompatActivity {
 
@@ -74,12 +75,30 @@ public class PostDetailActivity extends AppCompatActivity {
         setUpComments();
         queryImages();
         queryComments();
-        setParseLiveQueryClient();
+        //setParseLiveQueryClient();
+    }
+
+    private void queryImages() {
+        PostImageRelation.Query query = new PostImageRelation.Query();
+        query.whereEqualTo("post", post);
+        query.orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<PostImageRelation>() {
+            @Override
+            public void done(List<PostImageRelation> relations, ParseException e) {
+                if (e == null && relations.size() != 0) {
+                    for (PostImageRelation relation : relations) {
+                        mImages.add(new ImagePreview(relation.getImage()));
+                        imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
+                    }
+                } else {
+                    Toast.makeText(context, "Error loading images", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void queryComments() {
-        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-        Comment.Query query = new Comment.Query();
+        final Comment.Query query = new Comment.Query();
         query.include("user");
         query.whereEqualTo("post", post);
         query.orderByDescending("createdAt");
@@ -94,8 +113,13 @@ public class PostDetailActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(context, "Error loading comments", Toast.LENGTH_SHORT).show();
                 }
+//                setUpCommentSubscription(query);
             }
         });
+    }
+
+    private void setUpCommentSubscription(Comment.Query query) {
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(query);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Comment>() {
@@ -114,25 +138,6 @@ public class PostDetailActivity extends AppCompatActivity {
                 });
     }
 
-    private void queryImages() {
-        PostImageRelation.Query query = new PostImageRelation.Query();
-        query.whereEqualTo("post", post);
-        query.orderByDescending("createdAt");
-        query.findInBackground(new FindCallback<PostImageRelation>() {
-            @Override
-            public void done(List<PostImageRelation> relations, ParseException e) {
-                if (e == null) {
-                    for (PostImageRelation relation : relations) {
-                        mImages.add(new ImagePreview(relation.getImage()));
-                        imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
-                    }
-                } else {
-                    Toast.makeText(context, "Error loading images", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
     private void setOnClickListeners() {
         ibAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,13 +151,18 @@ public class PostDetailActivity extends AppCompatActivity {
                     newComment.setPost(post);
                     newComment.setUser(ParseUser.getCurrentUser());
                     newComment.saveInBackground();
-                    // TODO - notify comment adapter
+                    mComments.add(newComment);
+                    commentAdapter.notifyItemInserted(mComments.size() - 1);
+                    // increase comment count
+                    post.setCommentCount(post.getNumComments() + 1);
+                    post.saveInBackground();
                     // clear the edit text
                     etWriteComment.setText("");
-                    Toast.makeText(context, "Commented!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Commented", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
         ibDetailSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,7 +220,12 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void bindPostDetailContent(Post post) {
-        tvDetailUsername.setText(post.getUser().getUsername());
+        try {
+            tvDetailUsername.setText((post.getUser().fetchIfNeeded()).getUsername());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         ParseFile profile = post.getUser().getParseFile(User.KEY_PROFILE);
         if (profile != null) {
             Glide.with(context)
@@ -235,35 +250,9 @@ public class PostDetailActivity extends AppCompatActivity {
             tvDetailDescription.setVisibility(View.INVISIBLE);
         }
 
-//        if (post.getMedia() != null) {
-//            rvDetailImagePreview.setVisibility(View.VISIBLE);
-//        } else {
-//            rvDetailImagePreview.setVisibility(View.GONE);
-//        }
-
+        tvDetailCommentCount.setText(String.valueOf(post.getNumComments()));
         tvDetailUpVotes.setText(String.valueOf(post.getUpVotes()));
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
     }
 
-    private void setParseLiveQueryClient() {
-        //TODO: DELETE ONE OF THESE QUERIES
-        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-        ParseQuery<Comment> parseQuery = ParseQuery.getQuery(Comment.class);
-        parseQuery.whereEqualTo("post", post);
-        SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
-                SubscriptionHandling.HandleEventCallback<Comment>() {
-            @Override
-            public void onEvent(ParseQuery<Comment> query, Comment comment) {
-                mComments.add(comment);
-                //RecyclerView updates need to be run on the ui thread
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        commentAdapter.notifyItemInserted(mComments.size() - 1);
-                    }
-                });
-            }
-        });
-    }
 }

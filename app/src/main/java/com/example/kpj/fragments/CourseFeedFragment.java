@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +19,7 @@ import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.activities.PostDetailActivity;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.PostHashtagRelation;
+import com.example.kpj.model.User;
 import com.example.kpj.utils.PostAdapter;
 import com.example.kpj.R;
 import com.example.kpj.model.Post;
@@ -97,6 +98,8 @@ public class CourseFeedFragment extends Fragment {
                 queryPosts();
             }
         });
+        setUpSearchView(view);
+
         return view;
     }
 
@@ -108,6 +111,8 @@ public class CourseFeedFragment extends Fragment {
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery("Post");
         query.include(Post.KEY_USER);
+        query.include(Post.KEY_USER).include(User.KEY_UNIVERSITY);
+        query.include(Post.KEY_COURSE);
         query.whereEqualTo("course", course);
         query.orderByDescending(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
@@ -120,20 +125,22 @@ public class CourseFeedFragment extends Fragment {
                     }
 
                     //We require two separate loops to maintain the order of the post despite the arrival time of the hashtags
-                    for(final Post post : postArrayList) {
+                    for (final Post post : postArrayList) {
                         //For each post, fetch its hashtags
                         final PostHashtagRelation.Query innerQuery = new PostHashtagRelation.Query();
                         innerQuery.whereEqualTo("post", post);
                         innerQuery.findInBackground(new FindCallback<PostHashtagRelation>() {
                             @Override
                             public void done(List<PostHashtagRelation> objects, ParseException e) {
-                                for(PostHashtagRelation relation : objects) {
-                                    post.addHashtag(((PostHashtagRelation)relation).getHashtag());
+                                for (PostHashtagRelation relation : objects) {
+                                    post.addHashtag(((PostHashtagRelation) relation).getHashtag());
                                     postAdapter.notifyDataSetChanged();
                                 }
                             }
                         });
                     }
+                    postAdapter.updateFullList(posts);
+
                 } else {
                     Toast.makeText(getContext(), "Fail!", Toast.LENGTH_LONG).show();
                 }
@@ -180,6 +187,30 @@ public class CourseFeedFragment extends Fragment {
         //attach adapter to recycler view
         rvCourseFeed.setAdapter(postAdapter);
     }
+
+    private void setUpSearchView(View view) {
+        SearchView searchView = view.findViewById(R.id.svSearch);
+        searchView.setQueryHint("#YourHashtags #here");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                try {
+                    postAdapter.filterList(s);
+                    postAdapter.notifyDataSetChanged();
+                    return true;
+                } catch (NullPointerException e) {
+                    return false;
+                }
+
+            }
+        });
+    }
+
 }
 
 

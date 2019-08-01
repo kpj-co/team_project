@@ -1,8 +1,8 @@
 package com.example.kpj.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.RecyclerViewClickListener;
-import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
@@ -36,13 +35,17 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Message> mMessages;
     private Context mContext;
     private String username;
+    private OnMessageClicked onMessageClicked;
 
     private static RecyclerViewClickListener itemListener;
 
-    public MessageAdapter(Context context, String username, List<Message> messages, RecyclerViewClickListener itemListener) {
+    public MessageAdapter(Context context, String username, List<Message> messages,
+                          RecyclerViewClickListener itemListener,
+                          MessageAdapter.OnMessageClicked onMessageClicked) {
         mMessages = messages;
         this.username = username;
         mContext = context;
+        this.onMessageClicked = onMessageClicked;
         this.itemListener = itemListener;
     }
 
@@ -52,17 +55,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view;
-
         if(viewType == TYPE_NORMAL) {
             view = inflater.inflate(R.layout.message_item, parent, false);
-
             return new normalMessageViewHolder(view);
-        }
-
-        else {
+        } else {
             view = inflater.inflate(R.layout.message_post_version_item, parent, false);
-
-            return new postMessageViewHolder(view);
+            return new postMessageViewHolder(view, onMessageClicked);
         }
     }
 
@@ -72,9 +70,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         //If there is no post
         if(mMessages.get(position).getPost() == null) {
             return TYPE_NORMAL;
-        }
-
-        else {
+        } else {
             return TYPE_POST;
         }
     }
@@ -83,9 +79,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if(getItemViewType(position) == TYPE_NORMAL) {
             ((normalMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
-        }
-
-        else {
+        } else {
             ((postMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
         }
     }
@@ -173,7 +167,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public class postMessageViewHolder extends RecyclerView.ViewHolder {
+    public class postMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView ivOtherUser;
         ImageView ivCurrentUser;
         ImageView ivPostImage;
@@ -182,8 +176,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView tvPostTitle;
         TextView tvPostDescription;
         TextView tvUserOpinion;
+        MessageAdapter.OnMessageClicked onMessageClicked;
 
-        public postMessageViewHolder(@NonNull View itemView) {
+        public postMessageViewHolder(@NonNull View itemView, MessageAdapter.OnMessageClicked onMessageClicked) {
             super(itemView);
             ivOtherUser = (ImageView)itemView.findViewById(R.id.ivProfileOther);
             ivCurrentUser = (ImageView)itemView.findViewById(R.id.ivProfileMe);
@@ -193,13 +188,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvPostTitle = (TextView) itemView.findViewById(R.id.tvPostTitle);
             tvPostDescription = (TextView) itemView.findViewById(R.id.tvPostDescription);
             tvUserOpinion = (TextView) itemView.findViewById(R.id.tvUserOpinion);
+            this.onMessageClicked = onMessageClicked;
+            itemView.setOnClickListener(this);
         }
 
         private void setDetails(Message message) {
             final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
-
             Post post = (Post) message.getPost();
-
             if (isCurrentUser) {
                 ivCurrentUser.setVisibility(View.VISIBLE);
                 ivOtherUser.setVisibility(View.GONE);
@@ -265,5 +260,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
         }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(mContext, "link was clicked", Toast.LENGTH_SHORT).show();
+            onMessageClicked.onMessageClicked(getAdapterPosition());
+        }
+    }
+
+    public interface OnMessageClicked {
+        void onMessageClicked(int position);
     }
 }

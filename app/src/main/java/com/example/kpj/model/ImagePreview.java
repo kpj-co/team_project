@@ -7,7 +7,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.parse.ParseFile;
-
 import java.io.File;
 
 public class ImagePreview {
@@ -46,7 +45,7 @@ public class ImagePreview {
         }
     }
 
-    public void loadImageRequest(Context context, ImageView imageView, RequestOptions requestOptions) {
+    public void loadImage(Context context, ImageView imageView, RequestOptions requestOptions) {
         if (photoFile != null) {
             Glide.with(context)
                     .load(photoFile)

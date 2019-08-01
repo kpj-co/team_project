@@ -9,8 +9,8 @@ public class PostHashtagRelation extends ParseObject {
 
     private static final int MAX_NUMBER = 25;
 
-    private static final String KEY_POST = "post";
-    private static final String KEY_HASHTAG = "hashtag";
+    public static final String KEY_POST = "post";
+    public static final String KEY_HASHTAG = "hashtag";
 
     public ParseObject getPost() {
         return getParseObject(KEY_POST);

@@ -227,6 +227,7 @@ public class ComposePostActivity extends AppCompatActivity {
     private void notifyAdapterItemInserted(ImagePreview newImage) {
         mImages.add(newImage);
         imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
+        rvImagePreview.scrollToPosition(mImages.size() - 1);
     }
 
     private void savePost() {
@@ -252,14 +253,17 @@ public class ComposePostActivity extends AppCompatActivity {
         // Setup vote count
         newPost.setUpVotes(0);
         newPost.setDownVotes(0);
+        // Setup comment count
+        newPost.setCommentCount(0);
 
         // Save post in background thread
         newPost.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                saveHashtags();
                 savePhotos();
+                saveHashtags();
             }
+
             // Save media via PostImage relation
             private void savePhotos() {
                 if (mImages.size() != 0) {
@@ -270,29 +274,38 @@ public class ComposePostActivity extends AppCompatActivity {
                         postImageRelation.saveInBackground();
                     }
                     newPost.setHasMedia(true);
+                    // save first photo of set
+                    newPost.setMedia(mImages.get(0).getParseFile());
                     newPost.saveInBackground();
                 } else {
                     newPost.setHasMedia(false);
                     newPost.saveInBackground();
                 }
             }
+
             // Add the relationship post-hashtag to the database for each hash tag
             private void saveHashtags() {
-                for(String hashtag : hashtags) {
-                    PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
-                    postHashtagRelation.setPost(newPost);
-                    postHashtagRelation.setHashtag(hashtag);
-                    postHashtagRelation.saveInBackground();
+                if (hashtags.size() != 0 ){
+                    for(String hashtag : hashtags) {
+                        PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
+                        postHashtagRelation.setPost(newPost);
+                        postHashtagRelation.setHashtag(hashtag);
+                        postHashtagRelation.saveInBackground();
+                    }
                 }
             }
+
         });
+
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
         goToMainActivity();
     }
 
     private void goToMainActivity() {
         Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
+
         startActivity(intent);
+        finish();
     }
 
     //if a user wants to post a message as a post, this method will do the job
@@ -304,7 +317,7 @@ public class ComposePostActivity extends AppCompatActivity {
     }
 
     //Returns an ArrayList of all the Hash Tags given by the user
-    private ArrayList<String> returnHashtags(String hashtags) {
+    public static ArrayList<String> returnHashtags(String hashtags) {
         //Boolean to know if there is something in the current sequence of characters to be analyzed
         boolean hasContent;
         //Variable to store our "base point", or the # symbol that will start the hashtag
