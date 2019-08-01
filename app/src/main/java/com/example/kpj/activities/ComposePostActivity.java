@@ -250,13 +250,20 @@ public class ComposePostActivity extends AppCompatActivity {
             Toast.makeText(context, "could not find course associated", Toast.LENGTH_SHORT).show();
         }
 
+        // Setup vote count
+        newPost.setUpVotes(0);
+        newPost.setDownVotes(0);
+        // Setup comment count
+        newPost.setCommentCount(0);
+
         // Save post in background thread
         newPost.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                saveHashtags();
                 savePhotos();
+                saveHashtags();
             }
+
             // Save media via PostImage relation
             private void savePhotos() {
                 if (mImages.size() != 0) {
@@ -267,6 +274,7 @@ public class ComposePostActivity extends AppCompatActivity {
                         postImageRelation.saveInBackground();
                     }
                     newPost.setHasMedia(true);
+                    // save first photo of set
                     newPost.setMedia(mImages.get(0).getParseFile());
                     newPost.saveInBackground();
                 } else {
@@ -277,21 +285,17 @@ public class ComposePostActivity extends AppCompatActivity {
 
             // Add the relationship post-hashtag to the database for each hash tag
             private void saveHashtags() {
-                for(String hashtag : hashtags) {
-                    PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
-                    postHashtagRelation.setPost(newPost);
-                    postHashtagRelation.setHashtag(hashtag);
-                    postHashtagRelation.saveInBackground();
+                if (hashtags.size() != 0 ){
+                    for(String hashtag : hashtags) {
+                        PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
+                        postHashtagRelation.setPost(newPost);
+                        postHashtagRelation.setHashtag(hashtag);
+                        postHashtagRelation.saveInBackground();
+                    }
                 }
             }
 
         });
-
-        // Setup vote count
-        newPost.setUpVotes(0);
-        newPost.setDownVotes(0);
-        // Setup comment count
-        newPost.setCommentCount(0);
 
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
         goToMainActivity();

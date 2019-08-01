@@ -76,14 +76,25 @@ public class PostDetailActivity extends AppCompatActivity {
         queryImages();
         queryComments();
         //setParseLiveQueryClient();
+    }
 
-        Timer timer = new Timer ();
-        TimerTask hourlyTask = new TimerTask () {
+    private void queryImages() {
+        PostImageRelation.Query query = new PostImageRelation.Query();
+        query.whereEqualTo("post", post);
+        query.orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<PostImageRelation>() {
             @Override
-            public void run () {
-                // your code here...
+            public void done(List<PostImageRelation> relations, ParseException e) {
+                if (e == null && relations.size() != 0) {
+                    for (PostImageRelation relation : relations) {
+                        mImages.add(new ImagePreview(relation.getImage()));
+                        imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
+                    }
+                } else {
+                    Toast.makeText(context, "Error loading images", Toast.LENGTH_SHORT).show();
+                }
             }
-        };
+        });
     }
 
     private void queryComments() {
@@ -125,25 +136,6 @@ public class PostDetailActivity extends AppCompatActivity {
                         });
                     }
                 });
-    }
-
-    private void queryImages() {
-        PostImageRelation.Query query = new PostImageRelation.Query();
-        query.whereEqualTo("post", post);
-        query.orderByDescending("createdAt");
-        query.findInBackground(new FindCallback<PostImageRelation>() {
-            @Override
-            public void done(List<PostImageRelation> relations, ParseException e) {
-                if (e == null) {
-                    for (PostImageRelation relation : relations) {
-                        mImages.add(new ImagePreview(relation.getImage()));
-                        imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
-                    }
-                } else {
-                    Toast.makeText(context, "Error loading images", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     private void setOnClickListeners() {
