@@ -271,6 +271,7 @@ public class ComposePostActivity extends AppCompatActivity {
                         postImageRelation.saveInBackground();
                     }
                     newPost.setHasMedia(true);
+                    newPost.setMedia(mImages.get(0).getParseFile());
                     newPost.saveInBackground();
                 } else {
                     newPost.setHasMedia(false);
@@ -293,7 +294,9 @@ public class ComposePostActivity extends AppCompatActivity {
 
     private void goToMainActivity() {
         Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
+        
         startActivity(intent);
+        finish();
     }
 
     //if a user wants to post a message as a post, this method will do the job

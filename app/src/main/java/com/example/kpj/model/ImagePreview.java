@@ -7,7 +7,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.parse.ParseFile;
-
 import java.io.File;
 
 public class ImagePreview {

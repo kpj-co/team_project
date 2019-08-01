@@ -124,19 +124,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         if (post.getHasMedia()) {
             holder.ivPostImage.setVisibility(View.VISIBLE);
-            PostImageRelation.Query query = new PostImageRelation.Query();
-            query.whereEqualTo("post", post);
-            query.orderByDescending("createdAt");
-            query.findInBackground(new FindCallback<PostImageRelation>() {
-                @Override
-                public void done(List<PostImageRelation> relations, ParseException e) {
-                    if (e == null && relations.size() != 0) {
-                        ImagePreview image = new ImagePreview((relations.get(0)).getImage());
-                        image.loadImage(context, holder.ivPostImage,
-                                new RequestOptions().centerCrop());
-                    }
-                }
-            });
+            ImagePreview image = new ImagePreview(post.getMedia());
+            image.loadImage(context, holder.ivPostImage, new RequestOptions().centerCrop());
+//            holder.ivPostImage.setVisibility(View.VISIBLE);
+//            PostImageRelation.Query query = new PostImageRelation.Query();
+//            query.whereEqualTo("post", post);
+//            query.orderByDescending("createdAt");
+//            query.findInBackground(new FindCallback<PostImageRelation>() {
+//                @Override
+//                public void done(List<PostImageRelation> relations, ParseException e) {
+//                    if (e == null && relations.size() != 0) {
+//                        ImagePreview image = new ImagePreview((relations.get(0)).getImage());
+//                        image.loadImage(context, holder.ivPostImage,
+//                                new RequestOptions().centerCrop());
+//                    }
+//                }
+//            });
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }
@@ -257,7 +260,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                 holder.tvDownVotes.setText(String.valueOf(newCount));
                                 post.isLiked = false;
                                 post.setDownVotes(newCount);
-                                Toast.makeText(context, "upvoted post", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "downvoted post", Toast.LENGTH_SHORT).show();
                             } else { // there already exists a relation
                                 // TODO -- check the state of the realtion
                                 UserPostRelation newUserPostRelation = relation.get(0);
@@ -376,4 +379,5 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         fullPostsList.addAll(posts);
         filter.updateFilter(posts);
     }
+
 }

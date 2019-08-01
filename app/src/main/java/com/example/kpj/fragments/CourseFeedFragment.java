@@ -100,8 +100,6 @@ public class CourseFeedFragment extends Fragment {
         });
         setUpSearchView(view);
 
-
-
         return view;
     }
 
@@ -207,6 +205,7 @@ public class CourseFeedFragment extends Fragment {
             }
         });
     }
+
 }
 
 
