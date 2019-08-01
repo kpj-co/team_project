@@ -100,8 +100,6 @@ public class CourseFeedFragment extends Fragment {
         });
         setUpSearchView(view);
 
-
-
         return view;
     }
 
@@ -201,12 +199,18 @@ public class CourseFeedFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                postAdapter.filterList(s);
-                postAdapter.notifyDataSetChanged();
-                return true;
+                try {
+                    postAdapter.filterList(s);
+                    postAdapter.notifyDataSetChanged();
+                    return true;
+                } catch (NullPointerException e) {
+                    return false;
+                }
+
             }
         });
     }
+
 }
 
 

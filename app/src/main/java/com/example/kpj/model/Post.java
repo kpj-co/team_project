@@ -1,5 +1,6 @@
 package com.example.kpj.model;
 
+import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -20,6 +21,8 @@ public class Post extends ParseObject {
     public static final String KEY_DOWNVOTES = "downvotes";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_HASMEDIA = "hasMedia";
+    public static final String KEY_IMAGEPREVIEW = "media";
+    public static final String KEY_NUM_COMMENTS = "commentCount";
 
     //Limit to get posts
     private static final int MAX_NUMBER = 25;
@@ -56,6 +59,18 @@ public class Post extends ParseObject {
         return getBoolean(KEY_HASMEDIA);
     }
 
+    public ParseFile getMedia() {
+        return getParseFile(KEY_IMAGEPREVIEW);
+    }
+
+    public Course getCourse() {
+        return (Course) getParseObject(KEY_COURSE);
+    }
+
+    public int getNumComments() {return getInt(KEY_NUM_COMMENTS); }
+
+    public void setMedia( ParseFile photo) { put(KEY_IMAGEPREVIEW, photo); }
+
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
     }
@@ -65,10 +80,6 @@ public class Post extends ParseObject {
     }
 
     public void setCourse(Course course) { put(KEY_COURSE, course); }
-
-    public Course getCourse() {
-        return (Course) getParseObject(KEY_COURSE);
-    }
 
     public void setTitle(String title) {
         put(KEY_TITLE, title);
@@ -86,29 +97,8 @@ public class Post extends ParseObject {
         put(KEY_DOWNVOTES, downVotes);
     }
 
-    //Methods used to store extra data
-    public void setTitleReference(String title) {
-        this.title = title;
-    }
-
-    public void setDescriptionReference(String description) {
-        this.description = description;
-    }
-
-    public void setMediaReference(ParseFile parseFile) {
-        this.parseFile = parseFile;
-    }
-
-    public String getTitleReference() {
-        return title;
-    }
-
-    public String getDescriptionReference() {
-        return description;
-    }
-
-    public ParseFile getMediaReference() {
-        return parseFile;
+    public void setCommentCount(int num) {
+        put(KEY_NUM_COMMENTS, num);
     }
 
     public ArrayList<String> getHashtags() {

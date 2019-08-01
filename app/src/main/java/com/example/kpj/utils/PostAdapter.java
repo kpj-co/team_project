@@ -126,19 +126,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         if (post.getHasMedia()) {
             holder.ivPostImage.setVisibility(View.VISIBLE);
-            PostImageRelation.Query query = new PostImageRelation.Query();
-            query.whereEqualTo("post", post);
-            query.orderByDescending("createdAt");
-            query.findInBackground(new FindCallback<PostImageRelation>() {
-                @Override
-                public void done(List<PostImageRelation> relations, ParseException e) {
-                    if (e == null && relations.size() != 0) {
-                        ImagePreview image = new ImagePreview((relations.get(0)).getImage());
-                        image.loadImage(context, holder.ivPostImage,
-                                new RequestOptions().centerCrop());
-                    }
-                }
-            });
+            ImagePreview image = new ImagePreview(post.getMedia());
+            image.loadImage(context, holder.ivPostImage, new RequestOptions().centerCrop());
+//            holder.ivPostImage.setVisibility(View.VISIBLE);
+//            PostImageRelation.Query query = new PostImageRelation.Query();
+//            query.whereEqualTo("post", post);
+//            query.orderByDescending("createdAt");
+//            query.findInBackground(new FindCallback<PostImageRelation>() {
+//                @Override
+//                public void done(List<PostImageRelation> relations, ParseException e) {
+//                    if (e == null && relations.size() != 0) {
+//                        ImagePreview image = new ImagePreview((relations.get(0)).getImage());
+//                        image.loadImage(context, holder.ivPostImage,
+//                                new RequestOptions().centerCrop());
+//                    }
+//                }
+//            });
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }
@@ -150,9 +153,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             hashtags.append(" ");
         }
 
-        holder.tvHashtag1.setText(hashtags);
         holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
         holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
+        holder.tvCommentCount.setText(String.valueOf(post.getNumComments()));
+        holder.tvHashtag1.setText(hashtags);
+
     }
 
     /** Up Vote a post and update parse db
@@ -221,6 +226,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                             // if there is none the list is empty or of length 0
                             if (relation.isEmpty() || relation.size() == 0) {
                                 VoteSystemManager.manageVote(VoteSystemManager.DOWNVOTE, holder.tvUpVotes, holder.tvDownVotes, currentUser, post);
+
                                 Toast.makeText(context, "downvoted post", Toast.LENGTH_SHORT).show();
                             } else { // there already exists a relation
                                 // TODO -- check the state of the realtion
@@ -322,4 +328,5 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         fullPostsList.addAll(posts);
         filter.updateFilter(posts);
     }
+
 }
