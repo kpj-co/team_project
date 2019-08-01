@@ -49,9 +49,26 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
         Log.d("SelectedCourse", "On Bind Called");
-        viewHolder.bind(courseFilteredList.get(position));
+        final Course course = courseFilteredList.get(position);
+        if(course.isChecked())
+            viewHolder.tvSelectCourses.setBackgroundColor(Color.GREEN);
+        else
+            viewHolder.tvSelectCourses.setBackgroundColor(Color.TRANSPARENT);
+
+        String courseName = course.getName();
+        viewHolder.tvSelectCourses.setText(courseName);
+        viewHolder.tvSelectCourses.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                course.setChecked(!course.isChecked());
+                if(course.isChecked())
+                    viewHolder.tvSelectCourses.setBackgroundColor(Color.GREEN);
+                else
+                    viewHolder.tvSelectCourses.setBackgroundColor(Color.TRANSPARENT);
+            }
+        });
     }
 
     public void setSearchList(List<Course> list) {
@@ -87,25 +104,6 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSelectCourses = itemView.findViewById(R.id.tvSelectCourse);
-        }
-
-        void bind(final Course course) {
-            tvSelectCourses.setText(course.getName());
-            tvSelectCourses.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("SelectedCourseAdapter", "Item Clicked");
-                    course.setChecked(!course.isChecked());
-                    if(course.isChecked()){
-                        tvSelectCourses.setBackgroundColor(Color.GREEN);
-                        selectedCourses.add(course);
-                    }
-                    else {
-                        tvSelectCourses.setBackgroundColor(Color.TRANSPARENT);
-                        selectedCourses.remove(course);
-                    }
-                }
-            });
         }
     }
 }
