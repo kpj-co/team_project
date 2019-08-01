@@ -161,9 +161,12 @@ public class PostDetailActivity extends AppCompatActivity {
                     newComment.saveInBackground();
                     mComments.add(newComment);
                     commentAdapter.notifyItemInserted(mComments.size() - 1);
+                    // increase comment count
+                    post.setCommentCount(post.getNumComments() + 1);
+                    post.saveInBackground();
                     // clear the edit text
                     etWriteComment.setText("");
-                    Toast.makeText(context, "Commented!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Commented", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -230,6 +233,7 @@ public class PostDetailActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         ParseFile profile = post.getUser().getParseFile(User.KEY_PROFILE);
         if (profile != null) {
             Glide.with(context)
@@ -253,6 +257,8 @@ public class PostDetailActivity extends AppCompatActivity {
         } else {
             tvDetailDescription.setVisibility(View.INVISIBLE);
         }
+
+        tvDetailCommentCount.setText(String.valueOf(post.getNumComments()));
         tvDetailUpVotes.setText(String.valueOf(post.getUpVotes()));
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
     }

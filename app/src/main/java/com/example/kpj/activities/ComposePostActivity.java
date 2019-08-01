@@ -250,10 +250,6 @@ public class ComposePostActivity extends AppCompatActivity {
             Toast.makeText(context, "could not find course associated", Toast.LENGTH_SHORT).show();
         }
 
-        // Setup vote count
-        newPost.setUpVotes(0);
-        newPost.setDownVotes(0);
-
         // Save post in background thread
         newPost.saveInBackground(new SaveCallback() {
             @Override
@@ -278,6 +274,7 @@ public class ComposePostActivity extends AppCompatActivity {
                     newPost.saveInBackground();
                 }
             }
+
             // Add the relationship post-hashtag to the database for each hash tag
             private void saveHashtags() {
                 for(String hashtag : hashtags) {
@@ -287,14 +284,22 @@ public class ComposePostActivity extends AppCompatActivity {
                     postHashtagRelation.saveInBackground();
                 }
             }
+
         });
+
+        // Setup vote count
+        newPost.setUpVotes(0);
+        newPost.setDownVotes(0);
+        // Setup comment count
+        newPost.setCommentCount(0);
+
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
         goToMainActivity();
     }
 
     private void goToMainActivity() {
         Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
-        
+
         startActivity(intent);
         finish();
     }

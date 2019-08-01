@@ -97,16 +97,16 @@ public class Post extends ParseObject {
         put(KEY_DOWNVOTES, downVotes);
     }
 
+    public void setCommentCount(int num) {
+        put(KEY_NUM_COMMENTS, num);
+    }
+
     public ArrayList<String> getHashtags() {
         return hashtags;
     }
 
     public void addHashtag(String hashtag) {
         hashtags.add(hashtag);
-    }
-
-    public void increaseCommentNum() {
-        put(KEY_NUM_COMMENTS, getNumComments() + 1);
     }
 
     //A query just of the comment class

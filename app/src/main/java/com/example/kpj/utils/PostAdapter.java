@@ -151,9 +151,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             hashtags.append(" ");
         }
 
-        holder.tvHashtag1.setText(hashtags);
         holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
         holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
+        holder.tvCommentCount.setText(String.valueOf(post.getNumComments()));
+        holder.tvHashtag1.setText(hashtags);
+
     }
 
     /** Up Vote a post and update parse db
