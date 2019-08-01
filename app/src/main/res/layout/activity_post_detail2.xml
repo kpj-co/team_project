@@ -215,7 +215,7 @@
         <EditText
             android:id="@+id/etWriteComment"
             android:layout_width="0dp"
-            android:layout_height="24dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"

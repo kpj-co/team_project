@@ -38,7 +38,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.livequery.ParseLiveQueryClient;
 import com.parse.livequery.SubscriptionHandling;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -76,7 +75,7 @@ public class PostDetailActivity extends AppCompatActivity {
         setUpComments();
         queryImages();
         queryComments();
-        setParseLiveQueryClient();
+        //setParseLiveQueryClient();
 
         Timer timer = new Timer ();
         TimerTask hourlyTask = new TimerTask () {
@@ -85,12 +84,10 @@ public class PostDetailActivity extends AppCompatActivity {
                 // your code here...
             }
         };
-
     }
 
     private void queryComments() {
-        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-        Comment.Query query = new Comment.Query();
+        final Comment.Query query = new Comment.Query();
         query.include("user");
         query.whereEqualTo("post", post);
         query.orderByDescending("createdAt");
@@ -105,8 +102,13 @@ public class PostDetailActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(context, "Error loading comments", Toast.LENGTH_SHORT).show();
                 }
+//                setUpCommentSubscription(query);
             }
         });
+    }
+
+    private void setUpCommentSubscription(Comment.Query query) {
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(query);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Comment>() {
@@ -157,7 +159,8 @@ public class PostDetailActivity extends AppCompatActivity {
                     newComment.setPost(post);
                     newComment.setUser(ParseUser.getCurrentUser());
                     newComment.saveInBackground();
-                    // TODO - notify comment adapter
+                    mComments.add(newComment);
+                    commentAdapter.notifyItemInserted(mComments.size() - 1);
                     // clear the edit text
                     etWriteComment.setText("");
                     Toast.makeText(context, "Commented!", Toast.LENGTH_SHORT).show();
@@ -254,38 +257,4 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
     }
 
-    private void setParseLiveQueryClient() {
-        final Post.Query postQuery = new Post.Query();
-        postQuery.whereEqualTo("title", post.getTitle());
-        postQuery.withUser();
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                Post tempPost = posts.get(0);
-
-                ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-                ParseQuery<Comment> parseQuery = ParseQuery.getQuery(Comment.class);
-                parseQuery.whereEqualTo("post", tempPost);
-                SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
-
-                subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
-                        SubscriptionHandling.HandleEventCallback<Comment>() {
-                            @Override
-                            public void onEvent(ParseQuery<Comment> query, Comment comment) {
-                                mComments.add(comment);
-
-                                //RecyclerView updates need to be run on the ui thread
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        commentAdapter.notifyItemInserted(mComments.size() - 1);
-                                    }
-                                });
-                            }
-                        });
-            }
-        });
-
-
-    }
 }

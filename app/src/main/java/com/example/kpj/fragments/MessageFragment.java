@@ -40,7 +40,6 @@ import java.util.List;
 import static android.content.Context.MODE_PRIVATE;
 import static com.parse.Parse.getApplicationContext;
 
-
 public class MessageFragment extends Fragment implements RecyclerViewClickListener {
     private static final String ARG_PAGE = "ARG_PAGE";
     private final static String PREF_NAME = "sharedData";
