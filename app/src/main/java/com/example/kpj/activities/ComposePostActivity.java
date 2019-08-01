@@ -227,6 +227,7 @@ public class ComposePostActivity extends AppCompatActivity {
     private void notifyAdapterItemInserted(ImagePreview newImage) {
         mImages.add(newImage);
         imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
+        rvImagePreview.scrollToPosition(mImages.size() - 1);
     }
 
     private void savePost() {

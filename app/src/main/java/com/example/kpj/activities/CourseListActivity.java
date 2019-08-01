@@ -32,7 +32,6 @@ public class CourseListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_list);
         this.context = CourseListActivity.this;
         filterCourses = new ArrayList<>();
-        // TODO - Uncomment later
         findCoursesByUserId(ParseUser.getCurrentUser());
         // set up recycler view
         recyclerView = findViewById(R.id.rvCourse);
