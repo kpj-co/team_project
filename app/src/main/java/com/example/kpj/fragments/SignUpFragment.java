@@ -100,7 +100,7 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getStringsFromEditTexts();
-                setUpSharedPref(photo);
+                setUpSharedPref();
                 callback.onSignUpSet(username, password, email);
                 goToUniversityFragment();
             }
@@ -125,7 +125,6 @@ public class SignUpFragment extends Fragment {
         });
         cameraLauncher.requestCameraPermission();
         photoFile = cameraLauncher.onLaunchCamera();
-        photo = photoFile.toString();
     }
 
     @Override
@@ -146,10 +145,10 @@ public class SignUpFragment extends Fragment {
                 //crop photo to size of thing
                 .apply(new RequestOptions().override(200, 200).centerCrop())
                 .into(ivNewProfilePic);
-
     }
 
-    private void setUpSharedPref(String photo){
+    private void setUpSharedPref(){
+        photo = photoFile.toString();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("photo",photo);

@@ -18,7 +18,6 @@ public class CourseFilter implements Filterable {
     public CourseFilter(List<Course> courses, SelectedCoursesFragmentAdapter adapter){
         this.courseList = courses;
         this.adapter = adapter;
-        this.filteredCourses = new ArrayList<>();
     }
     @Override
     public Filter getFilter() {
@@ -26,8 +25,8 @@ public class CourseFilter implements Filterable {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
-
                 if(constraint != null && constraint.length() != 0){
+                    filteredCourses = new ArrayList<>();
                     for(Course course: courseList){
                         if(course.getName().toLowerCase().startsWith(constraint.toString().toLowerCase())){
                             filteredCourses.add(course);
@@ -41,9 +40,6 @@ public class CourseFilter implements Filterable {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 filteredCourses = (List<Course>) results.values;
-                if(filteredCourses == null){
-                    filteredCourses = courseList;
-                }
                 adapter.setSearchList(filteredCourses);
                 adapter.notifyDataSetChanged();
             }

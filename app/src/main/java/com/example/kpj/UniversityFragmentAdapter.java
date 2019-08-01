@@ -9,11 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.kpj.model.University;
-import com.example.kpj.model.User;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +23,13 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
     private List<University> universityFilteredList;
 
     private University userUniversity;
+    private UniversityFilter filter;
 
     public UniversityFragmentAdapter(Context context, ArrayList<University> universities) {
         this.universities = universities;
         this.context = context;
         universityFilteredList = new ArrayList<>();
+        filter = new UniversityFilter(universities, this);
     }
 
     @NonNull
@@ -73,27 +72,23 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
                 }
             }
         });
-
     }
 
     public void setList(List<University> list) {
-        universityFilteredList = list;
+        if (list == null) {
+            universityFilteredList = universities;
+        } else {
+            universityFilteredList = list;
+        }
     }
 
     public void filterList(String s) {
-        UniversityFilter filter = new UniversityFilter(universities, this);
         filter.getFilter().filter(s);
     }
 
     public ParseObject selectedUniversity(ParseObject university){
         university = userUniversity;
-
         return university;
-    }
-
-    public void setUserUniversity(ParseUser user) {
-        user.put(User.KEY_UNIVERSITY, userUniversity);
-        user.saveInBackground();
     }
 
     @Override
@@ -101,7 +96,6 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         Log.d("Adapter", "Item Count is called " + universities.size());
         return universityFilteredList.size();
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvUniversity;
@@ -113,4 +107,3 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         }
     }
 }
-

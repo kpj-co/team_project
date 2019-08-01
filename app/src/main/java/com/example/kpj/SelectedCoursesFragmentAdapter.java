@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kpj.model.Course;
+import com.example.kpj.model.UserCourseRelation;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +25,14 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
     private List<Course> selectedCourses;
     private List<Course> courseFilteredList;
 
+    private CourseFilter filter;
+
     public SelectedCoursesFragmentAdapter(Context context, ArrayList<Course> courses) {
         this.context = context;
         this.universityCourses = courses;
         this.selectedCourses = new ArrayList<>();
         this.courseFilteredList = new ArrayList<>();
+        this.filter = new CourseFilter(universityCourses, this);
     }
 
     @NonNull
@@ -49,11 +54,6 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
         viewHolder.bind(courseFilteredList.get(position));
     }
 
-    public void setUserSelectedCourseList(List<Course> list){
-        list.addAll(selectedCourses);
-        Log.d("SelectCourses", "selectedcourse" + list);
-    }
-
     public void setSearchList(List<Course> list) {
         if (list == null) {
             courseFilteredList = universityCourses;
@@ -61,9 +61,16 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
             courseFilteredList = list;
         }
     }
+    public void addSelectedCourses(ParseUser user) {
+        for (int i = 0; i < selectedCourses.size(); i++) {
+            UserCourseRelation userCourseRelation = new UserCourseRelation();
+            userCourseRelation.setUser(user);
+            userCourseRelation.setCourse(selectedCourses.get(i));
+            userCourseRelation.saveInBackground();
+        }
+    }
 
     public void filterList(String s) {
-        CourseFilter filter = new CourseFilter(universityCourses, this);
         filter.getFilter().filter(s);
     }
 
@@ -72,7 +79,6 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
         Log.d("SelectedCourse", "Item Count");
         return courseFilteredList.size();
     }
-    
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

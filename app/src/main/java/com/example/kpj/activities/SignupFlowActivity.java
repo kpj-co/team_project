@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.kpj.R;
+import com.example.kpj.SelectedCoursesFragmentAdapter;
 import com.example.kpj.fragments.SelectCoursesFragment;
 import com.example.kpj.fragments.SignUpFragment;
 import com.example.kpj.fragments.UniversityFragment;
@@ -21,7 +22,6 @@ import com.example.kpj.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -32,7 +32,7 @@ public class SignupFlowActivity extends AppCompatActivity {
 
     ParseUser user = new ParseUser();
 
-    File photoFile;
+    private File photoFile;
 
     public void onAttachFragment(final Fragment fragment){
         if(fragment instanceof SignUpFragment) {
@@ -70,11 +70,11 @@ public class SignupFlowActivity extends AppCompatActivity {
         }
         else if(fragment instanceof SelectCoursesFragment){
             final SelectCoursesFragment selectCoursesFragment = (SelectCoursesFragment) fragment;
-            selectCoursesFragment.setUserSelectedCoursesData(new SelectCoursesFragment.SelectedCoursesListener() {
+            selectCoursesFragment.setUserSelectedCoursesListener(new SelectCoursesFragment.SelectedCoursesListener() {
                 @Override
                 public void onSelectCourse() {
-                    setSignUp();
-                    selectCoursesFragment.addSelectedCourses(user);
+                    SignUp(user);
+                    finish();
                 }
             });
         }
@@ -94,8 +94,10 @@ public class SignupFlowActivity extends AppCompatActivity {
         }
     }
 
-    public void setSignUp(){
+
+    public void SignUp(ParseUser user){
         user.signUpInBackground(new SignUpCallback() {
+            @Override
             public void done(ParseException e) {
                 if (e == null) {
                     saveNewProfileAssetsToParse();
@@ -119,8 +121,8 @@ public class SignupFlowActivity extends AppCompatActivity {
             //send profile photo to parse
             user.put(User.KEY_PROFILE, parseFile);
             //save in background thread
-            user.saveInBackground();
         }
+        user.saveInBackground();
         Toast.makeText(getApplicationContext(), "Account created", Toast.LENGTH_LONG).show();
     }
 

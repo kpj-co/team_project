@@ -63,9 +63,10 @@ public class UniversityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_university, container, false);
+
+        fetchUniversities();
         setUpRecyclerView(view);
         setUpSearchView(view);
-        fetchUniversities();
         setNextButtonListener(view);
 
         return view;

@@ -41,13 +41,14 @@ public class SelectCoursesFragment extends Fragment {
 
     private SelectedCoursesListener callback;
 
-    public void setUserSelectedCoursesData(SelectedCoursesListener selectedCoursesListener){
+    public void setUserSelectedCoursesListener(SelectedCoursesListener selectedCoursesListener){
         this.callback = selectedCoursesListener;
     }
 
     public interface SelectedCoursesListener{
         void onSelectCourse();
     }
+
     public static SelectCoursesFragment newInstance(int page) {
         SelectCoursesFragment fragment = new SelectCoursesFragment();
         Bundle args = new Bundle();
@@ -101,6 +102,7 @@ public class SelectCoursesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 callback.onSelectCourse();
+                adapter.addSelectedCourses(ParseUser.getCurrentUser());
                 Intent intent = new Intent(getActivity(), CourseListActivity.class);
                 startActivity(intent);
             }
@@ -117,6 +119,23 @@ public class SelectCoursesFragment extends Fragment {
         adapter.filterList("");
     }
 
+    private void getSharedPrefs(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String university = prefs.getString("university", "");
+        University.Query query = new University.Query();
+        query.whereEqualTo("name", university);
+        query.findInBackground(new FindCallback<University>() {
+            @Override
+            public void done(List<University> objects, ParseException e) {
+                if(e == null){
+                    for(int i = 0; i < objects.size(); i++){
+                        fetchCourseByUniversity(objects.get(i));
+                    }
+                }
+            }
+        });
+    }
+
     private void fetchCourseByUniversity(ParseObject university) {
         final Course.Query courseQuery = new Course.Query();
         courseQuery.whereEqualTo("University", university);
@@ -129,34 +148,6 @@ public class SelectCoursesFragment extends Fragment {
                         filterCourses.add(course);
                         adapter.notifyItemInserted(filterCourses.size() - 1);
                         Log.d("SelectCourseFragment", "List" + filterCourses);
-                    }
-                }
-            }
-        });
-    }
-
-    public void addSelectedCourses(ParseUser user) {
-        userSelectedCourses = new ArrayList<>();
-        adapter.setUserSelectedCourseList(userSelectedCourses);
-        for (int i = 0; i < userSelectedCourses.size(); i++) {
-            UserCourseRelation userCourseRelation = new UserCourseRelation();
-            userCourseRelation.setUser(user);
-            userCourseRelation.setCourse(userSelectedCourses.get(i));
-            userCourseRelation.saveInBackground();
-        }
-    }
-
-    private void getSharedPrefs(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String university = prefs.getString("university", "");
-        University.Query query = new University.Query();
-        query.whereEqualTo("name", university);
-        query.findInBackground(new FindCallback<University>() {
-            @Override
-            public void done(List<University> objects, ParseException e) {
-                if(e == null){
-                    for(int i = 0; i < objects.size(); i++){
-                        fetchCourseByUniversity(objects.get(i));
                     }
                 }
             }
