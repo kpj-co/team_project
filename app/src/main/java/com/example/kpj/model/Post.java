@@ -13,13 +13,13 @@ public class Post extends ParseObject {
 
     //names of the columns in the database
     public static final String KEY_USER = "user";
-    public static final String KEY_MEDIA = "media";
     public static final String KEY_COURSE = "course";
     public static final String KEY_TITLE = "title";
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_UPVOTES = "upvotes";
     public static final String KEY_DOWNVOTES = "downvotes";
     public static final String KEY_CREATED_AT = "createdAt";
+    public static final String KEY_HASMEDIA = "hasMedia";
 
     //Limit to get posts
     private static final int MAX_NUMBER = 25;
@@ -38,10 +38,6 @@ public class Post extends ParseObject {
         return getParseUser(KEY_USER);
     }
 
-    public ParseFile getMedia() {
-        return getParseFile(KEY_MEDIA);
-    }
-
     public String getTitle() { return getString(KEY_TITLE); }
 
     public String getDescription() {
@@ -56,15 +52,23 @@ public class Post extends ParseObject {
         return getInt(KEY_DOWNVOTES);
     }
 
+    public boolean getHasMedia() {
+        return getBoolean(KEY_HASMEDIA);
+    }
+
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
     }
 
-    public void setMedia(ParseFile media) {
-        put(KEY_MEDIA, media);
+    public void setHasMedia(Boolean hasMedia) {
+        put(KEY_HASMEDIA, hasMedia);
     }
 
     public void setCourse(Course course) { put(KEY_COURSE, course); }
+
+    public Course getCourse() {
+        return (Course) getParseObject(KEY_COURSE);
+    }
 
     public void setTitle(String title) {
         put(KEY_TITLE, title);

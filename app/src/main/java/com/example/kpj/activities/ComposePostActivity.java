@@ -24,6 +24,7 @@ import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
+import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.utils.ImagePreviewAdapter;
 import com.parse.FindCallback;
@@ -62,7 +63,7 @@ public class ComposePostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose_post2);
+        setContentView(R.layout.activity_compose_post);
         initializeVariables();
         initializeViews();
         //if a user wants to post a message as a post, this method will do the job
@@ -101,7 +102,7 @@ public class ComposePostActivity extends AppCompatActivity {
         setIBtnPdfListener();
         bLaunch = findViewById(R.id.bLaunch);
         setBtnLaunchListener();
-        rvImagePreview = findViewById(R.id.rvImagePreview);
+        rvImagePreview = findViewById(R.id.rvDetailImagePreview);
         this.mImages = new ArrayList<>();
         setUpImagePreview();
         rvImagePreview.setVisibility(View.GONE);
@@ -145,7 +146,7 @@ public class ComposePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //grab images from gallery
-                rvImagePreview.setVisibility(View.GONE);
+                rvImagePreview.setVisibility(View.VISIBLE);
                 onLaunchGallery();
             }
         });
@@ -240,17 +241,7 @@ public class ComposePostActivity extends AppCompatActivity {
         // Set content of post
         if (newTitle.length() != 0) { newPost.setTitle(newTitle); }
         if (newBody.length() != 0) { newPost.setDescription(newBody); }
-        if (imagePath.length() != 0) {
-            File imageFile = new File(imagePath);
-            if (imageFile != null) {
-                ParseFile imageParseFile = new ParseFile(imageFile);
-                newPost.setMedia(imageParseFile);
-            }
-        }
-        if (photoFile != null) {
-            ParseFile imageParseFile = new ParseFile(photoFile);
-            newPost.setMedia(imageParseFile);
-        }
+
         // Save associated course
         if (course != null) {
             newPost.setCourse(course);
@@ -266,7 +257,27 @@ public class ComposePostActivity extends AppCompatActivity {
         newPost.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                //Add the relationship post-hashtag to the database for each hash tag
+                saveHashtags();
+                savePhotos();
+            }
+            // Save media via PostImage relation
+            private void savePhotos() {
+                if (mImages.size() != 0) {
+                    for (ImagePreview image : mImages) {
+                        PostImageRelation postImageRelation = new PostImageRelation();
+                        postImageRelation.setPost(newPost);
+                        postImageRelation.setImage(image.getParseFile());
+                        postImageRelation.saveInBackground();
+                    }
+                    newPost.setHasMedia(true);
+                    newPost.saveInBackground();
+                } else {
+                    newPost.setHasMedia(false);
+                    newPost.saveInBackground();
+                }
+            }
+            // Add the relationship post-hashtag to the database for each hash tag
+            private void saveHashtags() {
                 for(String hashtag : hashtags) {
                     PostHashtagRelation postHashtagRelation = new PostHashtagRelation();
                     postHashtagRelation.setPost(newPost);
@@ -275,7 +286,6 @@ public class ComposePostActivity extends AppCompatActivity {
                 }
             }
         });
-
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
         goToMainActivity();
     }

@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.parse.ParseFile;
 
 import java.io.File;
@@ -32,7 +33,7 @@ public class ImagePreview {
             Glide.with(context)
                     .load(photoFile)
                     .into(imageView);
-        } else if (imagePath != null || imagePath.length() != 0){
+        } else if (imagePath != null){
             Glide.with(context)
                     .load(imagePath)
                     .into(imageView);
@@ -45,4 +46,34 @@ public class ImagePreview {
         }
     }
 
+    public void loadImage(Context context, ImageView imageView, RequestOptions requestOptions) {
+        if (photoFile != null) {
+            Glide.with(context)
+                    .load(photoFile)
+                    .apply(requestOptions)
+                    .into(imageView);
+        } else if (imagePath != null){
+            Glide.with(context)
+                    .load(imagePath)
+                    .apply(requestOptions)
+                    .into(imageView);
+        } else if (parseFile != null) {
+            Glide.with(context)
+                    .load(parseFile.getUrl())
+                    .apply(requestOptions)
+                    .into(imageView);
+        } else {
+            Toast.makeText(context, "can not load images", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public ParseFile getParseFile() {
+        if (photoFile != null) {
+            return new ParseFile(photoFile);
+        } else if (imagePath != null || imagePath.length() != 0) {
+            return new ParseFile(new File(imagePath));
+        } else {
+            return parseFile;
+        }
+    }
 }

@@ -1,15 +1,12 @@
 package com.example.kpj;
-
 import android.widget.Filter;
 import android.widget.Filterable;
-
 import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.utils.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,19 +16,15 @@ public class PostFilter implements Filterable {
     private ArrayList<Post> postsList;
     private ArrayList<PostHashtagRelation> postHashtagRelations = new ArrayList<>();
     private ArrayList<Post> filteredPosts = new ArrayList<>();
-
     //The int is how many hashtags has a certain post. The string is the post id
     private Map<String, Integer> map = new HashMap<>();
-
     //To retrieve posts by ID
     private Map<String, Post> postByID = new HashMap<>();
-
     private PostAdapter adapter;
 
     public PostFilter(ArrayList<Post> posts, final PostAdapter adapter) {
         postsList = posts;
         this.adapter =adapter;
-
         for(final Post post : posts) {
             PostHashtagRelation.Query query = new PostHashtagRelation.Query();
             query.whereEqualTo(PostHashtagRelation.KEY_POST, post);
@@ -45,10 +38,8 @@ public class PostFilter implements Filterable {
                     postByID.put(post.getObjectId(), post);
 
                     postHashtagRelations.addAll(objects);
-
                 }
             });
-
         }
     }
 
@@ -68,11 +59,8 @@ public class PostFilter implements Filterable {
                             String id = tempPost.getObjectId();
                             map.remove(tempPost.getObjectId());
                             map.put(id, times);
-
-                            int i = 2;
                         }
                     }
-
                     for(Map.Entry element : map.entrySet()) {
                         //If the post has all the hashtags
                         if(element.getValue() == (Integer)constraints.size()) {
@@ -82,18 +70,15 @@ public class PostFilter implements Filterable {
                     }
                     results.values = filteredPosts;
                 }
-
                 return results;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 filteredPosts = (ArrayList<Post>) results.values;
-
                 if(filteredPosts == null || constraint.equals("")) {
                     filteredPosts = postsList;
                 }
-
                 adapter.setList(filteredPosts);
                 adapter.notifyDataSetChanged();
             }

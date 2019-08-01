@@ -135,7 +135,7 @@
         android:inputType="textMultiLine|textPersonName"
         android:textSize="14sp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/rvImagePreview"
+        app:layout_constraintBottom_toTopOf="@+id/rvDetailImagePreview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +149,7 @@
         app:layout_constraintEnd_toStartOf="@+id/ibAddPdf"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ibCamera"
-        app:layout_constraintTop_toBottomOf="@+id/rvImagePreview"
+        app:layout_constraintTop_toBottomOf="@+id/rvDetailImagePreview"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
@@ -185,7 +185,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ibAddImage" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvImagePreview"
+        android:id="@+id/rvDetailImagePreview"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginStart="20dp"

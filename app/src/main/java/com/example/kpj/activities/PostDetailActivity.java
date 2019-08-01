@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,11 +20,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
+import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Comment;
+import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
+import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.utils.CommentAdapter;
+import com.example.kpj.utils.ImagePreviewAdapter;
 import com.example.kpj.utils.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -42,26 +48,33 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private Post post;
     private List<Comment> mComments;
+    private List<ImagePreview> mImages;
     private CommentAdapter commentAdapter;
+    private ImagePreviewAdapter imagePreviewAdapter;
 
     Context context;
-    ImageView ivDetailProfilePic, ivDetailPostImage, ivDetailComment;
+    ImageView ivDetailProfilePic, ivDetailComment;
     TextView tvDetailUsername, tvDetailRelativeTime, tvDetailTitle, tvDetailDescription,
             tvDetailHashTags, tvDetailUpVotes, tvDetailDownVotes, tvDetailCommentCount;
     ImageButton ibDetailLike, ibDetailDislike, ibDetailSend, ibAddComment;
-    RecyclerView rvComments;
+    RecyclerView rvComments, rvDetailImagePreview;
     EditText etWriteComment;
+
+    private final static String KEY_SEND_POST_TO_CHAT = "A";
+    private final static String KEY_SEND_COURSE_TO_CHAT = "B";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_detail);
+        setContentView(R.layout.activity_post_detail2);
         //get post
         initializeVariables();
         initializeViews();
         bindPostDetailContent(post);
         setOnClickListeners();
+        setUpImages();
         setUpComments();
+        queryImages();
         queryComments();
         setParseLiveQueryClient();
 
@@ -94,17 +107,13 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
             }
         });
-
         SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(query);
-
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Comment>() {
                     @Override
                     //Add the element in the beginning of the recycler view and go to that position
                     public void onEvent(ParseQuery<Comment> query, Comment comment) {
-
                         mComments.add(comment);
-
                         //RecyclerView updates need to be run on the ui thread
                         runOnUiThread(new Runnable() {
                             @Override
@@ -114,6 +123,25 @@ public class PostDetailActivity extends AppCompatActivity {
                         });
                     }
                 });
+    }
+
+    private void queryImages() {
+        PostImageRelation.Query query = new PostImageRelation.Query();
+        query.whereEqualTo("post", post);
+        query.orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<PostImageRelation>() {
+            @Override
+            public void done(List<PostImageRelation> relations, ParseException e) {
+                if (e == null) {
+                    for (PostImageRelation relation : relations) {
+                        mImages.add(new ImagePreview(relation.getImage()));
+                        imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
+                    }
+                } else {
+                    Toast.makeText(context, "Error loading images", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void setOnClickListeners() {
@@ -136,12 +164,26 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ibDetailSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialogBox = new SendToChatDialogFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                dialogBox.show(fragmentManager, "post detail");
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(KEY_SEND_POST_TO_CHAT, post);
+                bundle.putParcelable(KEY_SEND_COURSE_TO_CHAT, post.getCourse());
+                dialogBox.setArguments(bundle);
+            }
+        });
     }
 
     private void initializeVariables() {
         this.post = getIntent().getParcelableExtra("post");
         this.context = this;
         this.mComments = new ArrayList<>();
+        this.mImages = new ArrayList<>();
     }
 
     private void initializeViews() {
@@ -150,7 +192,6 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDetailRelativeTime = findViewById(R.id.tvDetailRelativeTime);
         tvDetailTitle = findViewById(R.id.tvDetailTitle);
         tvDetailDescription = findViewById(R.id.tvDetailDescription);
-        ivDetailPostImage = findViewById(R.id.ivDetailPostImage);
         tvDetailHashTags = findViewById(R.id.tvDetailHashTags);
         ibDetailLike = findViewById(R.id.ibDetailLike);
         tvDetailUpVotes = findViewById(R.id.tvDetailUpVotes);
@@ -160,10 +201,10 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDetailCommentCount = findViewById(R.id.tvDetailCommentCount);
         ibDetailSend = findViewById(R.id.ibDetailSend);
         rvComments = findViewById(R.id.rvComments);
+        rvDetailImagePreview = findViewById(R.id.rvDetailImagePreview);
         etWriteComment = findViewById(R.id.etWriteComment);
         ibAddComment = findViewById(R.id.ibAddComment);
     }
-
 
     private void setUpComments() {
         commentAdapter = new CommentAdapter(context, post, mComments);
@@ -172,9 +213,20 @@ public class PostDetailActivity extends AppCompatActivity {
         rvComments.setAdapter(commentAdapter);
     }
 
-    private void bindPostDetailContent(Post post) {
+    private void setUpImages() {
+        imagePreviewAdapter = new ImagePreviewAdapter(context, mImages);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false);
+        rvDetailImagePreview.setLayoutManager(linearLayoutManager);
+        rvDetailImagePreview.setAdapter(imagePreviewAdapter);
+    }
 
-        tvDetailUsername.setText(post.getUser().getUsername());
+    private void bindPostDetailContent(Post post) {
+        try {
+            tvDetailUsername.setText((post.getUser().fetchIfNeeded()).getUsername());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         ParseFile profile = post.getUser().getParseFile(User.KEY_PROFILE);
         if (profile != null) {
             Glide.with(context)
@@ -198,26 +250,11 @@ public class PostDetailActivity extends AppCompatActivity {
         } else {
             tvDetailDescription.setVisibility(View.INVISIBLE);
         }
-
-        if (post.getMedia() != null) {
-            ivDetailPostImage.setVisibility(View.VISIBLE);
-            ParseFile photoFile = post.getMedia();
-
-            Glide.with(context)
-                    .load(photoFile.getUrl())
-                    .into(ivDetailPostImage);
-        } else {
-            ivDetailPostImage.setVisibility(View.GONE);
-        }
-
         tvDetailUpVotes.setText(String.valueOf(post.getUpVotes()));
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
     }
 
     private void setParseLiveQueryClient() {
-
-
-
         final Post.Query postQuery = new Post.Query();
         postQuery.whereEqualTo("title", post.getTitle());
         postQuery.withUser();

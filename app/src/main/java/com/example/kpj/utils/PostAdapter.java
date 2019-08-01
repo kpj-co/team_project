@@ -21,7 +21,9 @@ import com.example.kpj.UniversityFilter;
 import com.example.kpj.activities.MainActivity;
 import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Post;
+import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.model.UserPostRelation;
 import com.parse.FindCallback;
@@ -88,10 +90,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 bundle.putParcelable(KEY_SEND_POST_TO_CHAT, post);
                 bundle.putParcelable(KEY_SEND_COURSE_TO_CHAT, course);
                 dialogBox.setArguments(bundle);
-                // send course to dialog fragment via bundle
-//                Bundle bundleCourse = new Bundle();
-//                bundleCourse.putParcelable(KEY_SEND_COURSE_TO_CHAT, course);
-//                dialogBox.setArguments(bundleCourse);
             }
         });
     }
@@ -100,10 +98,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      * @params: ViewHolder, Post
      * @return: void
      */
-    private void bindPostContent(@NonNull ViewHolder holder, Post post) {
+    private void bindPostContent(@NonNull final ViewHolder holder, Post post) {
+
         //String that contains all the hashtags
         StringBuilder hashtags = new StringBuilder();
-
         bindPostUserAssets(holder, post);
 
         if (post.getTitle() != null) {
@@ -115,19 +113,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         if (post.getDescription() != null) {
             holder.tvDescription.setVisibility(View.VISIBLE);
-            holder.tvDescription.setText(post.getDescription());
+            if (post.getDescription().length() < 250) {
+                holder.tvDescription.setText(post.getDescription());
+            } else {
+                String abridgedText = post.getDescription().substring(0,250) + ". . .";
+                holder.tvDescription.setText(abridgedText);
+            }
         } else {
             holder.tvDescription.setVisibility(View.GONE);
         }
 
-        if (post.getMedia() != null) {
+        if (post.getHasMedia()) {
             holder.ivPostImage.setVisibility(View.VISIBLE);
-            ParseFile photoFile = post.getMedia();
-
-            Glide.with(context)
-                    .load(photoFile.getUrl())
-                    .apply(new RequestOptions().centerCrop())
-                    .into(holder.ivPostImage);
+            PostImageRelation.Query query = new PostImageRelation.Query();
+            query.whereEqualTo("post", post);
+            query.orderByDescending("createdAt");
+            query.findInBackground(new FindCallback<PostImageRelation>() {
+                @Override
+                public void done(List<PostImageRelation> relations, ParseException e) {
+                    if (e == null) {
+                        ImagePreview image = new ImagePreview((relations.get(0)).getImage());
+                        image.loadImage(context, holder.ivPostImage,
+                                new RequestOptions().centerCrop());
+                    }
+                }
+            });
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }
@@ -320,13 +330,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         TextView tvUser, tvDate, tvTitle, tvDescription, tvHashtag1, tvUpVotes,
                 tvDownVotes, tvCommentCount;
         ImageButton ibLike, ibDislike, ibComment, ibSend;
-        OnPostClicked launchDetailIntent;
+        OnPostClicked onPostClicked;
 
-
-        public ViewHolder(@NonNull View itemView, OnPostClicked launchDetailIntent) {
+        public ViewHolder(@NonNull View itemView, OnPostClicked onPostClicked) {
             super(itemView);
             initializeViews(itemView);
-            this.launchDetailIntent = launchDetailIntent;
+            this.onPostClicked = onPostClicked;
         }
 
         private void initializeViews(@NonNull View itemView) {
@@ -349,7 +358,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         @Override
         public void onClick(final View v) {
-            launchDetailIntent.onPostClickListener(getAdapterPosition());
+            onPostClicked.onPostClickListener(getAdapterPosition());
         }
     }
 
