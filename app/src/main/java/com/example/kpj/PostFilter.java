@@ -16,7 +16,7 @@ public class PostFilter implements Filterable {
     private ArrayList<Post> postsList;
     private ArrayList<PostHashtagRelation> postHashtagRelations = new ArrayList<>();
     private ArrayList<Post> filteredPosts;
-    //The int is how many hashtags has a certain post. The string is the post id
+    //The int is how many hashtags (typed by the user)has a certain post. The string is the post id
     private Map<String, Integer> map = new HashMap<>();
     //To retrieve posts by ID
     private Map<String, Post> postByID = new HashMap<>();
@@ -38,7 +38,7 @@ public class PostFilter implements Filterable {
                 ArrayList<String> constraints = ComposePostActivity.returnHashtags(constraint.toString());
                 if(constraint != null && constraint.length() != 0) {
                     for(PostHashtagRelation postHashtagRelation : postHashtagRelations) {
-                        if(constraints.contains(postHashtagRelation.getHashtag())) {
+                        if(hashtagIsEligable(constraints, postHashtagRelation.getHashtag())) {
                             Post tempPost = (Post) postHashtagRelation.getPost();
                             int times = map.get(tempPost.getObjectId());
                             times++;
@@ -72,6 +72,7 @@ public class PostFilter implements Filterable {
         };
     }
 
+    //Updates the map to filter correctly
     public void updateFilter(List<Post> posts) {
         for(final Post post : posts) {
             PostHashtagRelation.Query query = new PostHashtagRelation.Query();
@@ -87,5 +88,26 @@ public class PostFilter implements Filterable {
                 }
             });
         }
+    }
+
+    /**
+     * hashtagIsEligable
+     *
+     * Returns true if what the user typed is the beginning of the
+     * String hashtag
+     *
+     * @param constraints the hashtags typed by the user
+     * @param hashtag a specific hashtag that we are using to compare
+     * @return wheter or not this hashtag matches the desires of the user
+     */
+    private boolean hashtagIsEligable(ArrayList<String> constraints, String hashtag) {
+        boolean bJudge = false;
+        for(String constraint : constraints) {
+            if(hashtag.toLowerCase().startsWith(constraint.toLowerCase())) {
+                bJudge = true;
+                break;
+            }
+        }
+        return bJudge;
     }
 }

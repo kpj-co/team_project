@@ -130,7 +130,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             query.findInBackground(new FindCallback<PostImageRelation>() {
                 @Override
                 public void done(List<PostImageRelation> relations, ParseException e) {
-                    if (e == null) {
+                    if (e == null && relations.size() != 0) {
                         ImagePreview image = new ImagePreview((relations.get(0)).getImage());
                         image.loadImage(context, holder.ivPostImage,
                                 new RequestOptions().centerCrop());
