@@ -15,7 +15,7 @@ import java.util.Map;
 public class PostFilter implements Filterable {
     private ArrayList<Post> postsList;
     private ArrayList<PostHashtagRelation> postHashtagRelations = new ArrayList<>();
-    private ArrayList<Post> filteredPosts = new ArrayList<>();
+    private ArrayList<Post> filteredPosts;
     //The int is how many hashtags has a certain post. The string is the post id
     private Map<String, Integer> map = new HashMap<>();
     //To retrieve posts by ID
@@ -25,22 +25,7 @@ public class PostFilter implements Filterable {
     public PostFilter(ArrayList<Post> posts, final PostAdapter adapter) {
         postsList = posts;
         this.adapter =adapter;
-        for(final Post post : posts) {
-            PostHashtagRelation.Query query = new PostHashtagRelation.Query();
-            query.whereEqualTo(PostHashtagRelation.KEY_POST, post);
-            query.withPost();
-            query.findInBackground(new FindCallback<PostHashtagRelation>() {
-                @Override
-                public void done(List<PostHashtagRelation> objects, ParseException e) {
-                    //Added to the map just when you find the relation, to avoid bugs in getFilter()
-                    map.put(post.getObjectId(), 0);
-
-                    postByID.put(post.getObjectId(), post);
-
-                    postHashtagRelations.addAll(objects);
-                }
-            });
-        }
+        updateFilter(posts);
     }
 
     @Override
@@ -48,6 +33,7 @@ public class PostFilter implements Filterable {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
+                filteredPosts = new ArrayList<>();
                 FilterResults results = new FilterResults();
                 ArrayList<String> constraints = ComposePostActivity.returnHashtags(constraint.toString());
                 if(constraint != null && constraint.length() != 0) {
@@ -67,6 +53,10 @@ public class PostFilter implements Filterable {
                             String postID = (String)element.getKey();
                             filteredPosts.add((Post)postByID.get(postID));
                         }
+
+                        //Since the maps do not restart, you need to refresh the integer value
+                        map.put((String)element.getKey(), 0);
+
                     }
                     results.values = filteredPosts;
                 }
@@ -83,5 +73,22 @@ public class PostFilter implements Filterable {
                 adapter.notifyDataSetChanged();
             }
         };
+    }
+
+    public void updateFilter(List<Post> posts) {
+        for(final Post post : posts) {
+            PostHashtagRelation.Query query = new PostHashtagRelation.Query();
+            query.whereEqualTo(PostHashtagRelation.KEY_POST, post);
+            query.withPost();
+            query.findInBackground(new FindCallback<PostHashtagRelation>() {
+                @Override
+                public void done(List<PostHashtagRelation> objects, ParseException e) {
+                    //Added to the map just when you find the relation, to avoid bugs in getFilter()
+                    map.put(post.getObjectId(), 0);
+                    postByID.put(post.getObjectId(), post);
+                    postHashtagRelations.addAll(objects);
+                }
+            });
+        }
     }
 }

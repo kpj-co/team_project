@@ -57,6 +57,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         filteredPosts = posts;
         filteredPosts.addAll(posts);
         currentUser = ParseUser.getCurrentUser();
+        filter = new PostFilter((ArrayList<Post>) fullPostsList, this);
     }
 
     @NonNull
@@ -367,7 +368,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     public void filterList(String s) {
-        filter = new PostFilter((ArrayList<Post>) fullPostsList, this);
         filter.getFilter().filter(s);
     }
 
@@ -377,5 +377,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     public void updateFullList(List<Post> posts) {
         fullPostsList.addAll(posts);
+        filter.updateFilter(posts);
     }
 }
