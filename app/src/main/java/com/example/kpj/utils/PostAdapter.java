@@ -40,13 +40,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private List<Post> filteredPosts;
     private List<Post>fullPostsList;
     private PostFilter filter;
-
     private Course course;
     private OnPostClicked onPostClicked;
     private final static String KEY_SEND_POST_TO_CHAT = "A";
     private final static String KEY_SEND_COURSE_TO_CHAT = "B";
     private final ParseUser currentUser;
-
 
     public PostAdapter(Context context, Course course, List<Post> posts, OnPostClicked onPostClicked) {
         this.context = context;
@@ -153,7 +151,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvHashtag1.setText(hashtags);
         holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
         holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
-
     }
 
     /** Up Vote a post and update parse db

@@ -43,7 +43,6 @@ public class PostFilter implements Filterable {
                             int times = map.get(tempPost.getObjectId());
                             times++;
                             String id = tempPost.getObjectId();
-                            map.remove(tempPost.getObjectId());
                             map.put(id, times);
                         }
                     }
@@ -53,10 +52,8 @@ public class PostFilter implements Filterable {
                             String postID = (String)element.getKey();
                             filteredPosts.add((Post)postByID.get(postID));
                         }
-
                         //Since the maps do not restart, you need to refresh the integer value
                         map.put((String)element.getKey(), 0);
-
                     }
                     results.values = filteredPosts;
                 }
