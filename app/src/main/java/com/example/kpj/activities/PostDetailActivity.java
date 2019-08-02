@@ -176,14 +176,18 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void initializeVariables() {
-        Bundle bundle = getIntent().getExtras();
-        this.post = bundle.getParcelable("post");
-        this.postHashtags = bundle.getStringArrayList("postHashTags");
+        try {
+            Bundle bundle = getIntent().getExtras();
+            this.post = bundle.getParcelable("post");
+            this.postHashtags = bundle.getStringArrayList("postHashTags");
+        } catch (Exception e) {
+
+
+        }
         this.context = this;
         this.mComments = new ArrayList<>();
         this.mImages = new ArrayList<>();
     }
-
 
 
     private void initializeViews() {

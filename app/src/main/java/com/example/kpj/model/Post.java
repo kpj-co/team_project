@@ -116,7 +116,6 @@ public class Post extends ParseObject {
         this.hashtags = hashtags;
     }
 
-
     public void addHashtag(String hashtag) {
         hashtags.add(hashtag);
     }

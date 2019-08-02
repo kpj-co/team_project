@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.activities.PostDetailActivity;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.Hashtag;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.utils.PostAdapter;

@@ -85,6 +85,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             public void onClick(View v) {
                 // go into detail activity of associated post
                 onPostClicked.onPostClickListener(holder.getAdapterPosition());
+
                 // TODO -- SCROLL TO THE COMMENT SECTION OF A POST
             }
         });
