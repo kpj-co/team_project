@@ -203,7 +203,10 @@ public class CourseFeedFragment extends Fragment {
             public void onPostClickListener(int position) {
                 Toast.makeText(fragmentActivity, "post clicked", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), PostDetailActivity.class);
-                intent.putExtra("post", postArrayList.get(position));
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("post", postArrayList.get(position));
+                bundle.putStringArrayList("postHashTags", (ArrayList) postArrayList.get(position).getHashtags());
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

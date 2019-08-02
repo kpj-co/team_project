@@ -110,6 +110,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:text="TextView"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/ibDetailLike"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

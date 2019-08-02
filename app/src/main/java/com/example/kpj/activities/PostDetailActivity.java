@@ -39,6 +39,7 @@ import java.util.List;
 public class PostDetailActivity extends AppCompatActivity {
 
     private Post post;
+    private List postHashtags;
     private List<Comment> mComments;
     private List<ImagePreview> mImages;
     private CommentAdapter commentAdapter;
@@ -175,11 +176,15 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void initializeVariables() {
-        this.post = getIntent().getParcelableExtra("post");
+        Bundle bundle = getIntent().getExtras();
+        this.post = bundle.getParcelable("post");
+        this.postHashtags = bundle.getStringArrayList("postHashTags");
         this.context = this;
         this.mComments = new ArrayList<>();
         this.mImages = new ArrayList<>();
     }
+
+
 
     private void initializeViews() {
         ivDetailProfilePic = findViewById(R.id.ivDetailProfilePic);
@@ -253,6 +258,8 @@ public class PostDetailActivity extends AppCompatActivity {
             tvDetailDescription.setVisibility(View.INVISIBLE);
         }
 
+        post.setHashtags((ArrayList) postHashtags);
+        tvDetailHashTags.setText(post.getDisplayHashTags());
         tvDetailCommentCount.setText(String.valueOf(post.getNumComments()));
         tvDetailUpVotes.setText(String.valueOf(post.getUpVotes()));
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));

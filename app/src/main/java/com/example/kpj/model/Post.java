@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @ParseClassName("Post")
 public class Post extends ParseObject {
@@ -40,7 +41,7 @@ public class Post extends ParseObject {
     private String title;
     private String description;
     private ParseFile parseFile;
-    private ArrayList<String> hashtags = new ArrayList<>();
+    private List<String> hashtags = new ArrayList<>();
 
     //getters
     public ParseUser getUser() {
@@ -107,12 +108,27 @@ public class Post extends ParseObject {
         put(KEY_NUM_COMMENTS, num);
     }
 
-    public ArrayList<String> getHashtags() {
+    public List<String> getHashtags() {
         return hashtags;
     }
 
+    public void setHashtags(ArrayList hashtags) {
+        this.hashtags = hashtags;
+    }
+
+
     public void addHashtag(String hashtag) {
         hashtags.add(hashtag);
+    }
+
+    public StringBuilder getDisplayHashTags() {
+        StringBuilder hashtags = new StringBuilder();
+        for(String hashtag : getHashtags()) {
+            hashtags.append("#");
+            hashtags.append(hashtag);
+            hashtags.append(" ");
+        }
+        return hashtags;
     }
 
     public String getSimpleDate() {
