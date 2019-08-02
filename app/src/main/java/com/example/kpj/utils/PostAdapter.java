@@ -329,4 +329,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         filter.updateFilter(posts);
     }
 
+    public void clearFullList() {
+        fullPostsList.clear();
+        filter.clearFilter();
+    }
+
 }

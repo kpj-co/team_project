@@ -90,6 +90,12 @@ public class PostFilter implements Filterable {
         }
     }
 
+    public void clearFilter() {
+        map.clear();
+        postByID.clear();
+        postHashtagRelations.clear();
+    }
+
     /**
      * hashtagIsEligable
      *
