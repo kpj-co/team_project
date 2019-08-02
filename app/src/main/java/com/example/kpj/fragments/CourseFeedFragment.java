@@ -106,7 +106,7 @@ public class CourseFeedFragment extends Fragment {
         return view;
     }
 
-    private void setSwipeRefreshLayout() {
+    public void setSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -192,6 +192,7 @@ public class CourseFeedFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ComposePostActivity.class);
                 startActivity(intent);
+                getActivity().finish();
             }
         });
     }

@@ -260,8 +260,15 @@ public class ComposePostActivity extends AppCompatActivity {
         newPost.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                savePhotos();
-                saveHashtags();
+                if (e == null) {
+                    savePhotos();
+                    saveHashtags();
+                    Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
+                    goToMainActivity();
+                } else {
+                    Toast.makeText(ComposePostActivity.this, "ERROR: could not save post", Toast.LENGTH_LONG).show();
+                    goToMainActivity();
+                }
             }
 
             // Save media via PostImage relation
@@ -295,17 +302,11 @@ public class ComposePostActivity extends AppCompatActivity {
                 }
             }
 
-
-
         });
-
-        Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
-        goToMainActivity();
     }
 
     private void goToMainActivity() {
         Intent intent = new Intent(ComposePostActivity.this, MainActivity.class);
-
         startActivity(intent);
         finish();
     }

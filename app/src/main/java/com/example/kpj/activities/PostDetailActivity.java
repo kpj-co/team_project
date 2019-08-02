@@ -99,7 +99,6 @@ public class PostDetailActivity extends AppCompatActivity {
         } else {
             rvDetailImagePreview.setVisibility(View.GONE);
         }
-
     }
 
     private void queryComments() {
