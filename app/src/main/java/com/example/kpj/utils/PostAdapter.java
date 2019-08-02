@@ -78,6 +78,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         setUpUpVoteListener(holder, post);
         setUpDownVoteListener(holder, post);
         setUpIbSendListener(holder, post);
+        setUpIbCommentListener(holder, post);
+    }
+
+    private void setUpIbCommentListener(final ViewHolder holder, Post post) {
+        holder.ibComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPostClicked.onPostClickListener(holder.getAdapterPosition());
+                // TODO -- SCROLL TO THE COMMENT SECTION OF A POST
+            }
+        });
     }
 
     private void setUpIbSendListener(final ViewHolder holder, final Post post) {
@@ -128,20 +139,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.ivPostImage.setVisibility(View.VISIBLE);
             ImagePreview image = new ImagePreview(post.getMedia());
             image.loadImage(context, holder.ivPostImage, new RequestOptions().centerCrop());
-//            holder.ivPostImage.setVisibility(View.VISIBLE);
-//            PostImageRelation.Query query = new PostImageRelation.Query();
-//            query.whereEqualTo("post", post);
-//            query.orderByDescending("createdAt");
-//            query.findInBackground(new FindCallback<PostImageRelation>() {
-//                @Override
-//                public void done(List<PostImageRelation> relations, ParseException e) {
-//                    if (e == null && relations.size() != 0) {
-//                        ImagePreview image = new ImagePreview((relations.get(0)).getImage());
-//                        image.loadImage(context, holder.ivPostImage,
-//                                new RequestOptions().centerCrop());
-//                    }
-//                }
-//            });
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }

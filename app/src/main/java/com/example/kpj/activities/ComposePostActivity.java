@@ -295,6 +295,8 @@ public class ComposePostActivity extends AppCompatActivity {
                 }
             }
 
+
+
         });
 
         Toast.makeText(ComposePostActivity.this, "Save successful", Toast.LENGTH_LONG).show();
