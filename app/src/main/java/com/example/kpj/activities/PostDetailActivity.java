@@ -1,9 +1,7 @@
 package com.example.kpj.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -23,25 +21,20 @@ import com.example.kpj.R;
 import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Comment;
 import com.example.kpj.model.ImagePreview;
-import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.utils.CommentAdapter;
 import com.example.kpj.utils.ImagePreviewAdapter;
-import com.example.kpj.utils.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.livequery.ParseLiveQueryClient;
 import com.parse.livequery.SubscriptionHandling;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class PostDetailActivity extends AppCompatActivity {
 
@@ -79,22 +72,26 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void queryImages() {
-        PostImageRelation.Query query = new PostImageRelation.Query();
-        query.whereEqualTo("post", post);
-        query.orderByDescending("createdAt");
-        query.findInBackground(new FindCallback<PostImageRelation>() {
-            @Override
-            public void done(List<PostImageRelation> relations, ParseException e) {
-                if (e == null && relations.size() != 0) {
-                    for (PostImageRelation relation : relations) {
-                        mImages.add(new ImagePreview(relation.getImage()));
-                        imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
+        if (post.getHasMedia()) {
+            PostImageRelation.Query query = new PostImageRelation.Query();
+            query.whereEqualTo("post", post);
+            query.orderByDescending("createdAt");
+            query.findInBackground(new FindCallback<PostImageRelation>() {
+                @Override
+                public void done(List<PostImageRelation> relations, ParseException e) {
+                    if (e == null && relations.size() != 0) {
+                        for (PostImageRelation relation : relations) {
+                            mImages.add(new ImagePreview(relation.getImage()));
+                            imagePreviewAdapter.notifyItemInserted(mImages.size() - 1);
+                        }
+                    } else {
+                        Toast.makeText(context, "Error loading images", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(context, "Error loading images", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+            });
+        } else {
+            rvDetailImagePreview.setVisibility(View.GONE);
+        }
     }
 
     private void queryComments() {
@@ -187,7 +184,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private void initializeViews() {
         ivDetailProfilePic = findViewById(R.id.ivDetailProfilePic);
         tvDetailUsername = findViewById(R.id.tvDetailUsername);
-        tvDetailRelativeTime = findViewById(R.id.tvDetailRelativeTime);
+        tvDetailRelativeTime = findViewById(R.id.tvDetailTime);
         tvDetailTitle = findViewById(R.id.tvDetailTitle);
         tvDetailDescription = findViewById(R.id.tvDetailDescription);
         tvDetailHashTags = findViewById(R.id.tvDetailHashTags);
@@ -241,6 +238,12 @@ public class PostDetailActivity extends AppCompatActivity {
             tvDetailTitle.setText(post.getTitle());
         } else {
             tvDetailTitle.setVisibility(View.INVISIBLE);
+        }
+
+        try {
+            tvDetailRelativeTime.setText(post.getSimpleDate());
+        } catch (NullPointerException e) {
+            // do nothing
         }
 
         if (post.getDescription() != null) {

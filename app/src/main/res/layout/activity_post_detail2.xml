@@ -70,12 +70,12 @@
             android:text="username"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/tvDetailRelativeTime"
+            app:layout_constraintBottom_toTopOf="@+id/tvDetailTime"
             app:layout_constraintStart_toEndOf="@+id/ivDetailProfilePic"
             app:layout_constraintTop_toTopOf="@+id/ivDetailProfilePic" />
 
         <TextView
-            android:id="@+id/tvDetailRelativeTime"
+            android:id="@+id/tvDetailTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

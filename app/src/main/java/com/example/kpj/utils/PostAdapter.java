@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
@@ -78,6 +80,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         setUpUpVoteListener(holder, post);
         setUpDownVoteListener(holder, post);
         setUpIbSendListener(holder, post);
+        setUpIbCommentListener(holder, post);
+    }
+
+    private void setUpIbCommentListener(final ViewHolder holder, Post post) {
+        holder.ibComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // go into detail activity of associated post
+                onPostClicked.onPostClickListener(holder.getAdapterPosition());
+                // TODO -- SCROLL TO THE COMMENT SECTION OF A POST
+            }
+        });
     }
 
     private void setUpIbSendListener(final ViewHolder holder, final Post post) {
@@ -100,7 +114,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      * @return: void
      */
     private void bindPostContent(@NonNull final ViewHolder holder, Post post) {
-
         //String that contains all the hashtags
         StringBuilder hashtags = new StringBuilder();
         bindPostUserAssets(holder, post);
@@ -124,24 +137,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.tvDescription.setVisibility(View.GONE);
         }
 
+
         if (post.getHasMedia()) {
             holder.ivPostImage.setVisibility(View.VISIBLE);
             ImagePreview image = new ImagePreview(post.getMedia());
             image.loadImage(context, holder.ivPostImage, new RequestOptions().centerCrop());
-//            holder.ivPostImage.setVisibility(View.VISIBLE);
-//            PostImageRelation.Query query = new PostImageRelation.Query();
-//            query.whereEqualTo("post", post);
-//            query.orderByDescending("createdAt");
-//            query.findInBackground(new FindCallback<PostImageRelation>() {
-//                @Override
-//                public void done(List<PostImageRelation> relations, ParseException e) {
-//                    if (e == null && relations.size() != 0) {
-//                        ImagePreview image = new ImagePreview((relations.get(0)).getImage());
-//                        image.loadImage(context, holder.ivPostImage,
-//                                new RequestOptions().centerCrop());
-//                    }
-//                }
-//            });
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
         }
@@ -151,6 +151,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             hashtags.append("#");
             hashtags.append(hashtag);
             hashtags.append(" ");
+        }
+
+        try {
+            holder.tvDate.setText(post.getSimpleDate());
+        } catch (NullPointerException e) {
+            // do nothing
         }
 
         holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
@@ -327,6 +333,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void updateFullList(List<Post> posts) {
         fullPostsList.addAll(posts);
         filter.updateFilter(posts);
+    }
+
+    public void clearFullList() {
+        fullPostsList.clear();
+        filter.clearFilter();
     }
 
 }

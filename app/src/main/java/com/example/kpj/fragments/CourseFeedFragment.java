@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.SearchView;
@@ -46,6 +47,7 @@ public class CourseFeedFragment extends Fragment {
     public RecyclerView rvCourseFeed;
     public ArrayList<Post> postArrayList;
     private PostAdapter postAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public FragmentActivity fragmentActivity;
     private Course course;
@@ -79,6 +81,7 @@ public class CourseFeedFragment extends Fragment {
         initializeViews(view);
         initializeVariables();
         setComposeButtonListener();
+        setSwipeRefreshLayout();
         // Get course from main activity
         String courseName = getCurrentCourseName();
         // Set feed title to match course
@@ -103,6 +106,21 @@ public class CourseFeedFragment extends Fragment {
         return view;
     }
 
+    public void setSwipeRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryPosts();
+            }
+        });
+
+        swipeRefreshLayout.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
     private String getCurrentCourseName() {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         return settings.getString("courseName", "");
@@ -119,6 +137,10 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 if (e == null) {
+                    //Clean the posts if we find something useful for the user
+                    postArrayList.clear();
+                    postAdapter.notifyDataSetChanged();
+
                     for (Post post : posts) {
                         postArrayList.add(post);
                         postAdapter.notifyItemInserted(postArrayList.size() - 1);
@@ -139,11 +161,13 @@ public class CourseFeedFragment extends Fragment {
                             }
                         });
                     }
+                    postAdapter.clearFullList();
                     postAdapter.updateFullList(posts);
 
                 } else {
                     Toast.makeText(getContext(), "Fail!", Toast.LENGTH_LONG).show();
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -151,6 +175,7 @@ public class CourseFeedFragment extends Fragment {
     private void initializeViews(View view) {
         // Find views from xml
         rvCourseFeed = view.findViewById(R.id.rvCourseFeed);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         ibCompose = view.findViewById(R.id.ibCompose);
         tvFeedTitle = view.findViewById(R.id.tvFeedTitle);
         // TODO -- Figure out how to set up a search view
@@ -167,6 +192,7 @@ public class CourseFeedFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ComposePostActivity.class);
                 startActivity(intent);
+                getActivity().finish();
             }
         });
     }

@@ -1,5 +1,7 @@
 package com.example.kpj.model;
 
+import android.text.format.DateUtils;
+
 import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
@@ -7,7 +9,11 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 @ParseClassName("Post")
 public class Post extends ParseObject {
@@ -107,6 +113,15 @@ public class Post extends ParseObject {
 
     public void addHashtag(String hashtag) {
         hashtags.add(hashtag);
+    }
+
+    public String getSimpleDate() {
+        String shortDate = (String) DateUtils.getRelativeTimeSpanString(
+                getCreatedAt().getTime(),
+                Calendar.getInstance().getTimeInMillis(),
+                DateUtils.MINUTE_IN_MILLIS,
+                DateUtils.FORMAT_ABBREV_RELATIVE);
+        return shortDate;
     }
 
     //A query just of the comment class
