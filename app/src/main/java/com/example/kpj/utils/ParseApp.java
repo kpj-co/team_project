@@ -11,10 +11,12 @@ import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.University;
+import com.example.kpj.model.User;
 import com.example.kpj.model.UserCourseRelation;
 import com.example.kpj.model.UserPostRelation;
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

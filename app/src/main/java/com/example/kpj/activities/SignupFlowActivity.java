@@ -125,6 +125,5 @@ public class SignupFlowActivity extends AppCompatActivity {
         user.saveInBackground();
         Toast.makeText(getApplicationContext(), "Account created", Toast.LENGTH_LONG).show();
     }
-
 }
 
