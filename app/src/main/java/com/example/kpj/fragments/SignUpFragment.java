@@ -1,12 +1,9 @@
 package com.example.kpj.fragments;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,7 +19,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.CameraLauncher;
 import com.example.kpj.R;
+import com.example.kpj.model.User;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+
 import java.io.File;
+import java.util.List;
+
 import static android.app.Activity.RESULT_OK;
 
 public class SignUpFragment extends Fragment {
@@ -45,12 +48,13 @@ public class SignUpFragment extends Fragment {
     private String username;
     private String password;
     private String photo;
+    private Boolean completed = true;
 
-    public void setSignUpData(SignUpFragmentListener callback){
+    public void setSignUpData(SignUpFragmentListener callback) {
         this.callback = callback;
     }
 
-    public interface SignUpFragmentListener{
+    public interface SignUpFragmentListener {
         void onSignUpSet(String username, String password, String email);
     }
 
@@ -100,9 +104,15 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getStringsFromEditTexts();
+                fetchUsername(username);
+                fetchEmail(email);
                 setUpSharedPref();
-                callback.onSignUpSet(username, password, email);
-                goToUniversityFragment();
+                if (completed) {
+                    callback.onSignUpSet(username, password, email);
+                    goToUniversityFragment();
+                }
+                else
+                    return;
             }
         });
     }
@@ -147,12 +157,18 @@ public class SignUpFragment extends Fragment {
                 .into(ivNewProfilePic);
     }
 
-    private void setUpSharedPref(){
-        photo = photoFile.toString();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("photo",photo);
-        editor.apply();
+    private void setUpSharedPref() {
+        if (photoFile == null) {
+            Toast.makeText(getContext(), "Profile Picture not set", Toast.LENGTH_LONG).show();
+            completed = false;
+        }
+        else {
+            photo = photoFile.toString();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("photo", photo);
+            editor.apply();
+        }
     }
 
     public void goToUniversityFragment() {
@@ -162,5 +178,35 @@ public class SignUpFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    public void fetchUsername(final String username) {
+        final User.Query userQuery = new User.Query();
+        userQuery.whereEqualTo("username", username);
+        completed = false;
+        userQuery.findInBackground(new FindCallback<User>() {
+            @Override
+            public void done(List<User> objects, ParseException e) {
+                if(e == null){
+                    for(int i = 0; i < objects.size(); i++){
+                        Toast.makeText(getContext(), "Username taken!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+    }
+
+    public void fetchEmail(final String email){
+        final User.Query userQuery = new User.Query();
+        userQuery.whereEqualTo("email", email);
+        completed = false;
+        userQuery.findInBackground(new FindCallback<User>() {
+            @Override
+            public void done(List<User> objects, ParseException e) {
+                for(int i = 0; i < objects.size(); i++){
+                    Toast.makeText(getContext(), "Email already in use", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }
