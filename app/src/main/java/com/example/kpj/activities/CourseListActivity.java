@@ -1,11 +1,14 @@
 package com.example.kpj.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kpj.R;
@@ -24,13 +27,17 @@ public class CourseListActivity extends AppCompatActivity {
     private ArrayList<Course> filterCourses;
     private RecyclerView recyclerView;
     private CourseAdapter adapter;
+    private TextView tvToCreateNewCourse;
     public Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_list);
         this.context = CourseListActivity.this;
+        this.tvToCreateNewCourse = findViewById(R.id.tvToCreateNewCourse);
+        setCreateNewCourseListener();
         filterCourses = new ArrayList<>();
         findCoursesByUserId(ParseUser.getCurrentUser());
         // set up recycler view
@@ -42,6 +49,17 @@ public class CourseListActivity extends AppCompatActivity {
         // set the layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         Toast.makeText(context, "IN CourseListActivity", Toast.LENGTH_LONG).show();
+    }
+
+    private void setCreateNewCourseListener() {
+        tvToCreateNewCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CreateNewCourse.class);
+                // TODO - pass universtiy name
+                startActivity(intent);
+            }
+        });
     }
 
     private void findCoursesByUserId(ParseUser user){
