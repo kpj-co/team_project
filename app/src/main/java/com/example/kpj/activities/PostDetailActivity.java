@@ -22,6 +22,7 @@ import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Comment;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Post;
+import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.utils.CommentAdapter;
@@ -69,7 +70,6 @@ public class PostDetailActivity extends AppCompatActivity {
         setUpComments();
         queryImages();
         queryComments();
-        //setParseLiveQueryClient();
     }
 
     private void queryImages() {
@@ -111,29 +111,8 @@ public class PostDetailActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(context, "Error loading comments", Toast.LENGTH_SHORT).show();
                 }
-//                setUpCommentSubscription(query);
             }
         });
-    }
-
-    private void setUpCommentSubscription(Comment.Query query) {
-        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-        SubscriptionHandling<Comment> subscriptionHandling = parseLiveQueryClient.subscribe(query);
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
-                SubscriptionHandling.HandleEventCallback<Comment>() {
-                    @Override
-                    //Add the element in the beginning of the recycler view and go to that position
-                    public void onEvent(ParseQuery<Comment> query, Comment comment) {
-                        mComments.add(comment);
-                        //RecyclerView updates need to be run on the ui thread
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                commentAdapter.notifyItemInserted(mComments.size() - 1);
-                            }
-                        });
-                    }
-                });
     }
 
     private void setOnClickListeners() {
@@ -181,14 +160,27 @@ public class PostDetailActivity extends AppCompatActivity {
             this.post = bundle.getParcelable("post");
             this.postHashtags = bundle.getStringArrayList("postHashTags");
         } catch (Exception e) {
-
-
+            // do nothing
         }
         this.context = this;
         this.mComments = new ArrayList<>();
         this.mImages = new ArrayList<>();
     }
 
+    private void queryHashTags(final Post post) {
+        final PostHashtagRelation.Query query = new PostHashtagRelation.Query();
+        query.whereEqualTo("post", post);
+        query.findInBackground(new FindCallback<PostHashtagRelation>() {
+            @Override
+            public void done(List<PostHashtagRelation> relations, ParseException e) {
+                for (PostHashtagRelation relation : relations) {
+                    postHashtags.add(relation.getHashtag());
+                }
+                post.setHashtags((ArrayList) postHashtags);
+                tvDetailHashTags.setText(post.getDisplayHashTags());
+            }
+        });
+    }
 
     private void initializeViews() {
         ivDetailProfilePic = findViewById(R.id.ivDetailProfilePic);
@@ -262,8 +254,13 @@ public class PostDetailActivity extends AppCompatActivity {
             tvDetailDescription.setVisibility(View.INVISIBLE);
         }
 
-        post.setHashtags((ArrayList) postHashtags);
-        tvDetailHashTags.setText(post.getDisplayHashTags());
+        if (postHashtags.size() == 0) {
+            queryHashTags(post);
+        } else {
+            post.setHashtags((ArrayList) postHashtags);
+            tvDetailHashTags.setText(post.getDisplayHashTags());
+        }
+
         tvDetailCommentCount.setText(String.valueOf(post.getNumComments()));
         tvDetailUpVotes.setText(String.valueOf(post.getUpVotes()));
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
