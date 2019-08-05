@@ -41,21 +41,20 @@ public class SignUpFragment extends Fragment {
     private SignUpFragmentListener callback;
 
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    private final static int CAMERA_PERMISSION_CODE = 1;
     public File photoFile;
 
     private String email;
     private String username;
     private String password;
     private String photo;
-    private Boolean completed = true;
+    private Boolean completed;
 
     public void setSignUpData(SignUpFragmentListener callback) {
         this.callback = callback;
     }
 
     public interface SignUpFragmentListener {
-        void onSignUpSet(String username, String password, String email);
+        void onSignUpSet(String username, String email, String password);
     }
 
     public static SignUpFragment newInstance(int page) {
@@ -79,6 +78,7 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
         initializeViews(view);
+        this.completed = false;
         setSignUpButtonListener();
         setCameraListener();
         return view;
@@ -104,11 +104,10 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getStringsFromEditTexts();
-                fetchUsername(username);
-                fetchEmail(email);
                 setUpSharedPref();
-                if (completed) {
-                    callback.onSignUpSet(username, password, email);
+                checkIfUserExists(username);
+                if(completed){
+                    callback.onSignUpSet(username, email, password);
                     goToUniversityFragment();
                 }
                 else
@@ -158,18 +157,31 @@ public class SignUpFragment extends Fragment {
     }
 
     private void setUpSharedPref() {
-        if (photoFile == null) {
-            Toast.makeText(getContext(), "Profile Picture not set", Toast.LENGTH_LONG).show();
-            completed = false;
-        }
-        else {
             photo = photoFile.toString();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("photo", photo);
             editor.apply();
         }
-    }
+
+   private Boolean checkIfUserExists(String username){
+        User.Query userQuery = new User.Query();
+        userQuery.whereEqualTo("username", username);
+        userQuery.findInBackground(new FindCallback<User>() {
+            @Override
+            public void done(List<User> objects, ParseException e) {
+                if(e == null){
+                    if(objects.size() == 0)
+                        completed = true;
+                    else{
+                        Toast.makeText(getContext(), "Username is taken", Toast.LENGTH_LONG).show();
+                        completed = false;
+                    }
+                }
+            }
+        });
+        return completed;
+   }
 
     public void goToUniversityFragment() {
         Fragment fragment = new UniversityFragment();
@@ -178,35 +190,5 @@ public class SignUpFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-    }
-
-    public void fetchUsername(final String username) {
-        final User.Query userQuery = new User.Query();
-        userQuery.whereEqualTo("username", username);
-        completed = false;
-        userQuery.findInBackground(new FindCallback<User>() {
-            @Override
-            public void done(List<User> objects, ParseException e) {
-                if(e == null){
-                    for(int i = 0; i < objects.size(); i++){
-                        Toast.makeText(getContext(), "Username taken!", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        });
-    }
-
-    public void fetchEmail(final String email){
-        final User.Query userQuery = new User.Query();
-        userQuery.whereEqualTo("email", email);
-        completed = false;
-        userQuery.findInBackground(new FindCallback<User>() {
-            @Override
-            public void done(List<User> objects, ParseException e) {
-                for(int i = 0; i < objects.size(); i++){
-                    Toast.makeText(getContext(), "Email already in use", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 }
