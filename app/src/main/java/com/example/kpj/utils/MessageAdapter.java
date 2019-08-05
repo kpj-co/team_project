@@ -76,10 +76,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        if(getItemViewType(position) == TYPE_NORMAL) {
-            ((normalMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
-        } else {
-            ((postMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
+        try {
+            if(getItemViewType(position) == TYPE_NORMAL) {
+                ((normalMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
+            } else {
+                ((postMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
+            }
+        } catch (ParseException e) {
+            Toast.makeText(mContext, "can not load messages", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -191,7 +195,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             itemView.setOnClickListener(this);
         }
 
-        private void setDetails(Message message) {
+        private void setDetails(Message message) throws ParseException {
             final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
             Post post = (Post) message.getPost();
             if (isCurrentUser) {
@@ -228,16 +232,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             }
 
-            try {
-                tvPostTitle.setText(((Post)post.fetchIfNeeded()).getTitle());
-                tvPostDescription.setText(((Post)post.fetchIfNeeded()).getDescription());
-                tvUserOpinion.setText(((Message)message.fetchIfNeeded()).getDescription());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            bindPostLinkText(tvPostTitle, ((Post) post.fetchIfNeeded()).getTitle());
+            bindPostLinkText(tvPostDescription, ((Post) post.fetchIfNeeded()).getTitle());
+            bindPostLinkText(tvUserOpinion, ((Message)message.fetchIfNeeded()).getDescription());
 
             if (post.getHasMedia()) {
+                ivPostImage.setVisibility(View.VISIBLE);
                 PostImageRelation.Query query = new PostImageRelation.Query();
                 query.whereEqualTo("post", post);
                 query.orderByDescending("createdAt");
@@ -250,8 +250,24 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     }
                 });
+            } else {
+                ivPostImage.setVisibility(View.GONE);
             }
 
+        }
+
+        private void bindPostLinkText(TextView textView, String text) {
+            try {
+                if (text != null) {
+                    textView.setVisibility(View.VISIBLE);
+                    textView.setText(text);
+                } else {
+                    textView.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                textView.setVisibility(View.GONE);
+                e.printStackTrace();
+            }
         }
 
         @Override
