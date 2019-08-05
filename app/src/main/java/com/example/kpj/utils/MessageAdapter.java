@@ -197,22 +197,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (isCurrentUser) {
                 ivCurrentUser.setVisibility(View.VISIBLE);
                 ivOtherUser.setVisibility(View.GONE);
-
-                //Change the text view states
-                tvCurrentUserName.setVisibility(View.INVISIBLE);
-                tvOtherUserName.setVisibility(View.VISIBLE);
-                tvOtherUserName.setText(message.getUsername());
-
+                tvOtherUserName.setVisibility(View.GONE);
+                // set username of current
+                tvCurrentUserName.setText(message.getUsername());
                 Log.d("ME", username + " is current, the message  " + message.getUsername());
             } else {
                 ivOtherUser.setVisibility(View.VISIBLE);
                 ivCurrentUser.setVisibility(View.GONE);
-
-                //Change the text view states
-                tvOtherUserName.setVisibility(View.INVISIBLE);
-                tvCurrentUserName.setVisibility(View.VISIBLE);
-                tvCurrentUserName.setText(message.getUsername());
-
+                tvCurrentUserName.setVisibility(View.GONE);
+                // set username of other
+                tvOtherUserName.setText(message.getUsername());
                 Log.d("OTHER", username + " is current, the message  " + message.getUsername());
             }
 
