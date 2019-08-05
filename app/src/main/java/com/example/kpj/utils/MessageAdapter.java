@@ -116,14 +116,22 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ivOtherUser.setVisibility(View.GONE);
                 tvOtherUserName.setVisibility(View.GONE);
                 // set username of current
-                tvCurrentUserName.setText(message.getUsername());
+                if (message.getUsername() == null || message.getUsername().length() == 0) {
+                    tvCurrentUserName.setText("USER NOT FOUND");
+                } else {
+                    tvCurrentUserName.setText(message.getUsername());
+                }
                 Log.d("ME", username + " is current, the message  " + message.getUsername());
             } else {
                 ivOtherUser.setVisibility(View.VISIBLE);
                 ivCurrentUser.setVisibility(View.GONE);
                 tvCurrentUserName.setVisibility(View.GONE);
                 // set username of other
-                tvOtherUserName.setText(message.getUsername());
+                if (message.getUsername() == null || message.getUsername().length() == 0) {
+                    tvOtherUserName.setText("USER NOT FOUND");
+                } else {
+                    tvOtherUserName.setText(message.getUsername());
+                }
                 Log.d("OTHER", username + " is current, the message  " + message.getUsername());
             }
 
@@ -194,14 +202,22 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ivOtherUser.setVisibility(View.GONE);
                 tvOtherUserName.setVisibility(View.GONE);
                 // set username of current
-                tvCurrentUserName.setText(message.getUsername());
+                if (message.getUsername() == null || message.getUsername().length() == 0) {
+                    tvCurrentUserName.setText("USER NOT FOUND");
+                } else {
+                    tvCurrentUserName.setText(message.getUsername());
+                }
                 Log.d("ME", username + " is current, the message  " + message.getUsername());
             } else {
                 ivOtherUser.setVisibility(View.VISIBLE);
                 ivCurrentUser.setVisibility(View.GONE);
                 tvCurrentUserName.setVisibility(View.GONE);
                 // set username of other
-                tvOtherUserName.setText(message.getUsername());
+                if (message.getUsername() == null || message.getUsername().length() == 0) {
+                    tvOtherUserName.setText("USER NOT FOUND");
+                } else {
+                    tvOtherUserName.setText(message.getUsername());
+                }
                 Log.d("OTHER", username + " is current, the message  " + message.getUsername());
             }
 
