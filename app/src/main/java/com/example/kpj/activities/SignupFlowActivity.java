@@ -33,13 +33,14 @@ public class SignupFlowActivity extends AppCompatActivity {
     ParseUser user = new ParseUser();
 
     private File photoFile;
+    private Boolean completed = true;
 
     public void onAttachFragment(final Fragment fragment){
         if(fragment instanceof SignUpFragment) {
             SignUpFragment signUpFragment = (SignUpFragment) fragment;
             signUpFragment.setSignUpData(new SignUpFragment.SignUpFragmentListener() {
                 @Override
-                public void onSignUpSet(String username, String password, String email) {
+                public void onSignUpSet(String username, String email, String password) {
                     user.setUsername(username);
                     user.setPassword(password);
                     user.setEmail(email);
@@ -53,18 +54,7 @@ public class SignupFlowActivity extends AppCompatActivity {
                 @Override
                 public void onSignUpUniversity(final String university) {
                     University.Query query = new University.Query();
-                    query.whereEqualTo("name", university);
-                    query.findInBackground(new FindCallback<University>() {
-                        @Override
-                        public void done(List<University> objects, ParseException e) {
-                            if(e == null){
-                                for(int i = 0; i < objects.size(); i++){
-                                    University selectedUniversity = (University) objects.get(i);
-                                    user.put("University", selectedUniversity);
-                                }
-                            }
-                        }
-                    });
+                    fetchUniversity(university, query);
                 }
             });
         }
@@ -78,6 +68,21 @@ public class SignupFlowActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void fetchUniversity(String university, University.Query query) {
+        query.whereEqualTo("name", university);
+        query.findInBackground(new FindCallback<University>() {
+            @Override
+            public void done(List<University> objects, ParseException e) {
+                if(e == null){
+                    for(int i = 0; i < objects.size(); i++){
+                        University selectedUniversity = (University) objects.get(i);
+                        user.put("University", selectedUniversity);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -95,7 +100,7 @@ public class SignupFlowActivity extends AppCompatActivity {
     }
 
 
-    public void SignUp(ParseUser user){
+    private void SignUp(ParseUser user){
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
@@ -109,12 +114,12 @@ public class SignupFlowActivity extends AppCompatActivity {
         });
     }
 
-    public void getSharedPrefs(){
+    private void getSharedPrefs(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String photo = prefs.getString("photo", "");
         photoFile = new File(photo);
     }
-    public void saveNewProfileAssetsToParse() {
+    private void saveNewProfileAssetsToParse() {
         getSharedPrefs();
         if (photoFile != null) {
             ParseFile parseFile = new ParseFile(photoFile);
@@ -126,4 +131,5 @@ public class SignupFlowActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Account created", Toast.LENGTH_LONG).show();
     }
 }
+
 
