@@ -106,8 +106,12 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                 messages, this, new MessageAdapter.OnMessageClicked() {
             @Override
             public void onMessageClicked(int position) {
+                Post post = (Post) messages.get(position).getPost();
                 Intent intent = new Intent(getContext(), PostDetailActivity.class);
-                intent.putExtra("post", messages.get(position).getPost());
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("post", post);
+                bundle.putStringArrayList("postHashTags", (ArrayList<String>) post.getHashtags());
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

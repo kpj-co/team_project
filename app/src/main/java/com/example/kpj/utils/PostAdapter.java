@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +17,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.PostFilter;
 import com.example.kpj.R;
-import com.example.kpj.UniversityFilter;
 import com.example.kpj.VoteSystemManager;
 import com.example.kpj.activities.MainActivity;
 import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Post;
-import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.model.UserPostRelation;
 import com.parse.FindCallback;
@@ -34,7 +31,6 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
@@ -89,6 +85,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             public void onClick(View v) {
                 // go into detail activity of associated post
                 onPostClicked.onPostClickListener(holder.getAdapterPosition());
+
                 // TODO -- SCROLL TO THE COMMENT SECTION OF A POST
             }
         });
@@ -115,7 +112,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      */
     private void bindPostContent(@NonNull final ViewHolder holder, Post post) {
         //String that contains all the hashtags
-        StringBuilder hashtags = new StringBuilder();
         bindPostUserAssets(holder, post);
 
         if (post.getTitle() != null) {
@@ -137,20 +133,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.tvDescription.setVisibility(View.GONE);
         }
 
-
         if (post.getHasMedia()) {
             holder.ivPostImage.setVisibility(View.VISIBLE);
             ImagePreview image = new ImagePreview(post.getMedia());
             image.loadImage(context, holder.ivPostImage, new RequestOptions().centerCrop());
         } else {
             holder.ivPostImage.setVisibility(View.GONE);
-        }
-
-        //Put the hashtags, if there is any
-        for(String hashtag : post.getHashtags()) {
-            hashtags.append("#");
-            hashtags.append(hashtag);
-            hashtags.append(" ");
         }
 
         try {
@@ -162,7 +150,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
         holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
         holder.tvCommentCount.setText(String.valueOf(post.getNumComments()));
-        holder.tvHashtag1.setText(hashtags);
+        holder.tvHashtag1.setText(post.getDisplayHashTags());
 
     }
 

@@ -2,10 +2,8 @@ package com.example.kpj.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +57,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             view = inflater.inflate(R.layout.message_item, parent, false);
             return new normalMessageViewHolder(view);
         } else {
-            view = inflater.inflate(R.layout.message_post_version_item, parent, false);
+            view = inflater.inflate(R.layout.messge_post_version_item, parent, false);
             return new postMessageViewHolder(view, onMessageClicked);
         }
     }
@@ -77,10 +75,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        if(getItemViewType(position) == TYPE_NORMAL) {
-            ((normalMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
-        } else {
-            ((postMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
+        try {
+            if(getItemViewType(position) == TYPE_NORMAL) {
+                ((normalMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
+            } else {
+                ((postMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
+            }
+        } catch (ParseException e) {
+            Toast.makeText(mContext, "can not load messages", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -98,39 +100,38 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public normalMessageViewHolder(View itemView) {
             super(itemView);
-            ivOtherUser = (ImageView)itemView.findViewById(R.id.ivProfileOther);
-            ivCurrentUser = (ImageView)itemView.findViewById(R.id.ivProfileMe);
-            body = (TextView)itemView.findViewById(R.id.tvBody);
-            tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvCurrentUserName);
-            tvOtherUserName = (TextView) itemView.findViewById(R.id.tvAnotherUserName);
-
+            ivOtherUser = itemView.findViewById(R.id.ivProfileOther);
+            ivCurrentUser = itemView.findViewById(R.id.ivProfileMe);
+            tvCurrentUserName = itemView.findViewById(R.id.tvMyUsername);
+            tvOtherUserName = itemView.findViewById(R.id.tvAnotherUsername);
+            body = itemView.findViewById(R.id.tvBody);
             itemView.setOnLongClickListener(this);
         }
 
         private void setDetails(Message message) {
             final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
-
+            Post post = (Post) message.getPost();
             if (isCurrentUser) {
                 ivCurrentUser.setVisibility(View.VISIBLE);
                 ivOtherUser.setVisibility(View.GONE);
-                body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-
-                //Change the text view states
-                tvCurrentUserName.setVisibility(View.INVISIBLE);
-                tvOtherUserName.setVisibility(View.VISIBLE);
-                tvOtherUserName.setText(message.getUsername());
-
+                tvOtherUserName.setVisibility(View.GONE);
+                // set username of current
+                if (message.getUsername() == null || message.getUsername().length() == 0) {
+                    tvCurrentUserName.setText("USER NOT FOUND");
+                } else {
+                    tvCurrentUserName.setText(message.getUsername());
+                }
                 Log.d("ME", username + " is current, the message  " + message.getUsername());
             } else {
                 ivOtherUser.setVisibility(View.VISIBLE);
                 ivCurrentUser.setVisibility(View.GONE);
-                body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-
-                //Change the text view states
-                tvOtherUserName.setVisibility(View.INVISIBLE);
-                tvCurrentUserName.setVisibility(View.VISIBLE);
-                tvCurrentUserName.setText(message.getUsername());
-
+                tvCurrentUserName.setVisibility(View.GONE);
+                // set username of other
+                if (message.getUsername() == null || message.getUsername().length() == 0) {
+                    tvOtherUserName.setText("USER NOT FOUND");
+                } else {
+                    tvOtherUserName.setText(message.getUsername());
+                }
                 Log.d("OTHER", username + " is current, the message  " + message.getUsername());
             }
 
@@ -151,6 +152,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     e.printStackTrace();
                 }
             }
+
             body.setText(message.getDescription());
         }
 
@@ -158,14 +160,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public boolean onLongClick(View v) {
             Toast.makeText(mContext, "Long click", Toast.LENGTH_LONG).show();
             Log.d("MessageAdapter", "Executed long click");
-
-
             itemListener.recyclerViewListClicked(v, this.getLayoutPosition());
 
             //indicate that the click has handled
             return true;
         }
     }
+
+
 
     public class postMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView ivOtherUser;
@@ -180,40 +182,42 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public postMessageViewHolder(@NonNull View itemView, MessageAdapter.OnMessageClicked onMessageClicked) {
             super(itemView);
-            ivOtherUser = (ImageView)itemView.findViewById(R.id.ivProfileOther);
-            ivCurrentUser = (ImageView)itemView.findViewById(R.id.ivProfileMe);
-            ivPostImage = (ImageView) itemView.findViewById(R.id.ivPostImage);
-            tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvCurrentUserName);
-            tvOtherUserName = (TextView) itemView.findViewById(R.id.tvAnotherUserName);
-            tvPostTitle = (TextView) itemView.findViewById(R.id.tvPostTitle);
-            tvPostDescription = (TextView) itemView.findViewById(R.id.tvPostDescription);
-            tvUserOpinion = (TextView) itemView.findViewById(R.id.tvUserOpinion);
+            ivOtherUser = itemView.findViewById(R.id.ivProfileOther);
+            ivCurrentUser = itemView.findViewById(R.id.ivProfileMe);
+            tvCurrentUserName = itemView.findViewById(R.id.tvMyUsername);
+            tvOtherUserName =  itemView.findViewById(R.id.tvAnotherUsername);
+            tvPostTitle = itemView.findViewById(R.id.tvPostTitle);
+            ivPostImage = itemView.findViewById(R.id.ivPostImage);
+            tvPostDescription = itemView.findViewById(R.id.tvPostDescription);
+            tvUserOpinion = itemView.findViewById(R.id.tvUserOpinion);
             this.onMessageClicked = onMessageClicked;
             itemView.setOnClickListener(this);
         }
 
-        private void setDetails(Message message) {
+        private void setDetails(Message message) throws ParseException {
             final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
             Post post = (Post) message.getPost();
             if (isCurrentUser) {
                 ivCurrentUser.setVisibility(View.VISIBLE);
                 ivOtherUser.setVisibility(View.GONE);
-
-                //Change the text view states
-                tvCurrentUserName.setVisibility(View.INVISIBLE);
-                tvOtherUserName.setVisibility(View.VISIBLE);
-                tvOtherUserName.setText(message.getUsername());
-
+                tvOtherUserName.setVisibility(View.GONE);
+                // set username of current
+                if (message.getUsername() == null || message.getUsername().length() == 0) {
+                    tvCurrentUserName.setText("USER NOT FOUND");
+                } else {
+                    tvCurrentUserName.setText(message.getUsername());
+                }
                 Log.d("ME", username + " is current, the message  " + message.getUsername());
             } else {
                 ivOtherUser.setVisibility(View.VISIBLE);
                 ivCurrentUser.setVisibility(View.GONE);
-
-                //Change the text view states
-                tvOtherUserName.setVisibility(View.INVISIBLE);
-                tvCurrentUserName.setVisibility(View.VISIBLE);
-                tvCurrentUserName.setText(message.getUsername());
-
+                tvCurrentUserName.setVisibility(View.GONE);
+                // set username of other
+                if (message.getUsername() == null || message.getUsername().length() == 0) {
+                    tvOtherUserName.setText("USER NOT FOUND");
+                } else {
+                    tvOtherUserName.setText(message.getUsername());
+                }
                 Log.d("OTHER", username + " is current, the message  " + message.getUsername());
             }
 
@@ -235,16 +239,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             }
 
-            try {
-                tvPostTitle.setText(((Post)post.fetchIfNeeded()).getTitle());
-                tvPostDescription.setText(((Post)post.fetchIfNeeded()).getDescription());
-                tvUserOpinion.setText(((Message)message.fetchIfNeeded()).getDescription());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            bindPostLinkText(tvPostTitle, ((Post) post.fetchIfNeeded()).getTitle());
+            bindPostLinkText(tvPostDescription, ((Post) post.fetchIfNeeded()).getTitle());
+            bindPostLinkText(tvUserOpinion, ((Message)message.fetchIfNeeded()).getDescription());
 
             if (post.getHasMedia()) {
+                ivPostImage.setVisibility(View.VISIBLE);
                 PostImageRelation.Query query = new PostImageRelation.Query();
                 query.whereEqualTo("post", post);
                 query.orderByDescending("createdAt");
@@ -257,8 +257,24 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     }
                 });
+            } else {
+                ivPostImage.setVisibility(View.GONE);
             }
 
+        }
+
+        private void bindPostLinkText(TextView textView, String text) {
+            try {
+                if (text != null) {
+                    textView.setVisibility(View.VISIBLE);
+                    textView.setText(text);
+                } else {
+                    textView.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                textView.setVisibility(View.GONE);
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -267,6 +283,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             onMessageClicked.onMessageClicked(getAdapterPosition());
         }
     }
+
 
     public interface OnMessageClicked {
         void onMessageClicked(int position);

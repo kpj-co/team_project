@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.activities.PostDetailActivity;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.Hashtag;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.User;
 import com.example.kpj.utils.PostAdapter;
@@ -39,8 +40,6 @@ public class CourseFeedFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
     private final static String PREF_NAME = "sharedData";
     private int mPage;
-
-    private SearchView svSearch;
     private ImageButton ibCompose;
     private TextView tvFeedTitle;
 
@@ -137,29 +136,17 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 if (e == null) {
-                    //Clean the posts if we find something useful for the user
+                    // clear recycler view
                     postArrayList.clear();
                     postAdapter.notifyDataSetChanged();
-
+                    // add posts to adapter
                     for (Post post : posts) {
                         postArrayList.add(post);
                         postAdapter.notifyItemInserted(postArrayList.size() - 1);
                     }
-
-                    //We require two separate loops to maintain the order of the post despite the arrival time of the hashtags
+                    // query for hash tags of each post
                     for (final Post post : postArrayList) {
-                        //For each post, fetch its hashtags
-                        final PostHashtagRelation.Query innerQuery = new PostHashtagRelation.Query();
-                        innerQuery.whereEqualTo("post", post);
-                        innerQuery.findInBackground(new FindCallback<PostHashtagRelation>() {
-                            @Override
-                            public void done(List<PostHashtagRelation> objects, ParseException e) {
-                                for (PostHashtagRelation relation : objects) {
-                                    post.addHashtag(((PostHashtagRelation) relation).getHashtag());
-                                    postAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        });
+                        queryHashTags(post);
                     }
                     postAdapter.clearFullList();
                     postAdapter.updateFullList(posts);
@@ -168,6 +155,20 @@ public class CourseFeedFragment extends Fragment {
                     Toast.makeText(getContext(), "Fail!", Toast.LENGTH_LONG).show();
                 }
                 swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void queryHashTags(final Post post) {
+        final PostHashtagRelation.Query innerQuery = new PostHashtagRelation.Query();
+        innerQuery.whereEqualTo("post", post);
+        innerQuery.findInBackground(new FindCallback<PostHashtagRelation>() {
+            @Override
+            public void done(List<PostHashtagRelation> objects, ParseException e) {
+                for (PostHashtagRelation relation : objects) {
+                    post.addHashtag(relation.getHashtag());
+                    postAdapter.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -203,7 +204,10 @@ public class CourseFeedFragment extends Fragment {
             public void onPostClickListener(int position) {
                 Toast.makeText(fragmentActivity, "post clicked", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), PostDetailActivity.class);
-                intent.putExtra("post", postArrayList.get(position));
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("post", postArrayList.get(position));
+                bundle.putStringArrayList("postHashTags", (ArrayList) postArrayList.get(position).getHashtags());
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
