@@ -4,8 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/tvAnotherUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="sans-serif-light"
+        android:text="TextView"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivProfileOther"
+        app:layout_constraintStart_toEndOf="@+id/ivProfileOther"
+        app:layout_constraintTop_toTopOf="@+id/ivProfileOther" />
+
     <ImageView
-        android:id="@+id/ivProfileMe2"
+        android:id="@+id/ivProfileMe"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginTop="8dp"
@@ -17,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/ivProfileOther2"
+        android:id="@+id/ivProfileOther"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
@@ -29,32 +42,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvCurrentUserName"
+        android:id="@+id/tvMyUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:fontFamily="sans-serif-black"
         android:text="TextView"
-        android:textSize="12sp"
-        app:layout_constraintTop_toTopOf="@+id/ivProfileOther2"
-        tools:layout_editor_absoluteX="51dp" />
-
-    <TextView
-        android:id="@+id/tvAnotherUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:text="TextView"
-        android:textSize="12sp"
-        app:layout_constraintTop_toTopOf="@+id/ivProfileMe2"
-        tools:layout_editor_absoluteX="310dp" />
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivProfileMe"
+        app:layout_constraintEnd_toStartOf="@+id/ivProfileMe"
+        app:layout_constraintTop_toTopOf="@+id/ivProfileMe" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="307dp"
-        android:layout_height="719dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="45dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:orientation="vertical"
@@ -64,6 +70,27 @@
 
         <TextView
             android:id="@+id/tvPostTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tvPostDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="TextView" />
+
+        <ImageView
+            android:id="@+id/ivPostImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvUserOpinion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

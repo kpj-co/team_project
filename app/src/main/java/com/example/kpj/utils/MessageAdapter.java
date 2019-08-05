@@ -2,7 +2,6 @@ package com.example.kpj.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -59,7 +58,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             view = inflater.inflate(R.layout.message_item, parent, false);
             return new normalMessageViewHolder(view);
         } else {
-            view = inflater.inflate(R.layout.message_post_version_item, parent, false);
+            view = inflater.inflate(R.layout.messge_post_version_item2, parent, false);
             return new postMessageViewHolder(view, onMessageClicked);
         }
     }
@@ -101,8 +100,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ivOtherUser = (ImageView)itemView.findViewById(R.id.ivProfileOther);
             ivCurrentUser = (ImageView)itemView.findViewById(R.id.ivProfileMe);
             body = (TextView)itemView.findViewById(R.id.tvBody);
-            tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvCurrentUserName);
-            tvOtherUserName = (TextView) itemView.findViewById(R.id.tvAnotherUserName);
+            tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvMyUsername);
+            tvOtherUserName = (TextView) itemView.findViewById(R.id.tvMyUsername);
 
             itemView.setOnLongClickListener(this);
         }
@@ -182,10 +181,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
             ivOtherUser = (ImageView)itemView.findViewById(R.id.ivProfileOther);
             ivCurrentUser = (ImageView)itemView.findViewById(R.id.ivProfileMe);
-            ivPostImage = (ImageView) itemView.findViewById(R.id.ivPostImage);
-            tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvCurrentUserName);
-            tvOtherUserName = (TextView) itemView.findViewById(R.id.tvAnotherUserName);
+            tvCurrentUserName = (TextView) itemView.findViewById(R.id.tvMyUsername);
+            tvOtherUserName = (TextView) itemView.findViewById(R.id.tvAnotherUsername);
             tvPostTitle = (TextView) itemView.findViewById(R.id.tvPostTitle);
+            ivPostImage = (ImageView) itemView.findViewById(R.id.ivPostImage);
             tvPostDescription = (TextView) itemView.findViewById(R.id.tvPostDescription);
             tvUserOpinion = (TextView) itemView.findViewById(R.id.tvUserOpinion);
             this.onMessageClicked = onMessageClicked;

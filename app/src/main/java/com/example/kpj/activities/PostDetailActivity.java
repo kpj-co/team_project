@@ -30,10 +30,8 @@ import com.example.kpj.utils.ImagePreviewAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.livequery.ParseLiveQueryClient;
-import com.parse.livequery.SubscriptionHandling;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +58,7 @@ public class PostDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_detail2);
+        setContentView(R.layout.activity_post_detail);
         //get post
         initializeVariables();
         initializeViews();
