@@ -32,7 +32,7 @@ public class Post extends ParseObject {
     public static final String KEY_NUM_COMMENTS = "commentCount";
 
     //Limit to get posts
-    public static final int MAX_NUMBER = 25;
+    public static final int MAX_NUMBER = 7;
 
     public boolean isLiked = false;
     public boolean isDisliked = false;

@@ -53,8 +53,6 @@ public class CourseFeedFragment extends Fragment {
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private LinearLayoutManager linearLayoutManager;
 
-    //
-
     public CourseFeedFragment() {
         // Required empty public constructor
     }
@@ -115,7 +113,7 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public void onRefresh() {
                 postAdapter.clearFullList();
-
+                endlessRecyclerViewScrollListener.resetState();
                 queryPosts(true);
             }
         });
@@ -132,7 +130,6 @@ public class CourseFeedFragment extends Fragment {
         return settings.getString("courseName", "");
     }
 
-    //Queries the next Post.MAX_NUMBER posts and adds them to the list
     private void queryPosts(final boolean clearPostAdapter) {
         ParseQuery<Post> query = ParseQuery.getQuery("Post");
         query.include(Post.KEY_USER);
@@ -141,7 +138,7 @@ public class CourseFeedFragment extends Fragment {
         query.whereEqualTo("course", course);
         query.orderByDescending(Post.KEY_CREATED_AT);
         //Do not query all of them with one call
-        query.setLimit(7);
+        query.setLimit(Post.MAX_NUMBER);
         //Do not query the same posts always
         query.setSkip(postAdapter.getFullListSize());
 
@@ -149,7 +146,6 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 if (e == null) {
-
                     if(clearPostAdapter) {
                         // clear recycler view
                         postArrayList.clear();
@@ -253,7 +249,6 @@ public class CourseFeedFragment extends Fragment {
                 } catch (NullPointerException e) {
                     return false;
                 }
-
             }
         });
     }
@@ -262,8 +257,6 @@ public class CourseFeedFragment extends Fragment {
         endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Toast.makeText(fragmentActivity, "AAAAAAHHHH", Toast.LENGTH_LONG).show();
-                Log.d("Scroll", "done");
                 queryPosts(false);
             }
         };
