@@ -51,6 +51,8 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private String currentUserUsername;
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private LinearLayoutManager linearLayoutManager;
+    //boolean that indicates if the liveQuery has been set
+    private boolean isQueryLiveset = false;
 
     private List<Message> messages = new ArrayList<>();
 
@@ -218,8 +220,11 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                             }
                         }
 
-                        //We need to set the ParseLiveQueryClient after finding the course
-                        setParseLiveQueryClient();
+                        if(!isQueryLiveset) {
+                            //We need to set the ParseLiveQueryClient after finding the course
+                            setParseLiveQueryClient();
+                            isQueryLiveset = true;
+                        }
                     }
                 });
             }
@@ -249,6 +254,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
 
     private void setParseLiveQueryClient() {
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+
 
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
 
@@ -282,6 +288,8 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                         });
                     }
                 });
+
+        messageAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -295,7 +303,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     }
 
     private void setEndlessRecyclerViewScrollListener() {
-        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager, false) {
+        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager, false, 2) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.d("MessageFragment", "New pagination");
