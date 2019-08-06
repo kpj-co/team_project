@@ -14,17 +14,16 @@ import org.parceler.Parcel;
 
 import java.util.List;
 
-
 @ParseClassName("Message")
 public class Message extends ParseObject {
 
-    private static final int MAX_NUMBER = 25;
-
+    public static final int MAX_NUMBER = 12;
     private static final String KEY_COURSE = "course";
     private static final String KEY_USER = "user";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_UNIVERSITY = "university";
     private static final String KEY_POST = "post";
+    public static final String KEY_CREATED_AT = "createdAt";
     private String username;
     private ParseFile parseFileUserImage = null;
 
@@ -57,22 +56,6 @@ public class Message extends ParseObject {
 
     //TODO: Implement the method or something equivalent to it in the adapter
     public void setUserPhoto() throws ParseException{
-/*            ParseQuery<ParseUser> query = ParseUser.getQuery();
-            ParseUser user = this.getUser();
-            Log.d("Username", user.fetchIfNeeded().getUsername());
-            query.whereEqualTo("User", this.getUser());
-            query.findInBackground(new FindCallback<ParseUser>() {
-
-                @Override
-                public void done(List<ParseUser> users, ParseException e) {
-                    try {
-                        parseFileUserImage = users.get(0).fetchIfNeeded().getParseFile("photoImage");
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
-
-                }
-            });*/
         parseFileUserImage = this.getUser().fetchIfNeeded().getParseFile("photoImage");
     }
 

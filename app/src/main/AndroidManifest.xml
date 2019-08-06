@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.PostDetailActivity"></activity>
+        <activity android:name=".activities.CreateNewCourse"></activity>
+        <activity android:name=".activities.PostDetailActivity" />
         <activity android:name=".activities.CourseListActivity" />
         <activity android:name=".activities.LoginActivity">
             <intent-filter>

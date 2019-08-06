@@ -1,6 +1,7 @@
 package com.example.kpj.utils;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -71,8 +72,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Post post = filteredPosts.get(position);
         bindPostContent(holder, post);
-        post.isLiked = false;
-        post.isDisliked = false;
         setUpUpVoteListener(holder, post);
         setUpDownVoteListener(holder, post);
         setUpIbSendListener(holder, post);
@@ -110,7 +109,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      * @params: ViewHolder, Post
      * @return: void
      */
-    private void bindPostContent(@NonNull final ViewHolder holder, Post post) {
+    private void bindPostContent(@NonNull final ViewHolder holder, final Post post) {
         //String that contains all the hashtags
         bindPostUserAssets(holder, post);
 
@@ -142,16 +141,24 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
 
         try {
+            holder.tvDate.setVisibility(View.VISIBLE);
             holder.tvDate.setText(post.getSimpleDate());
         } catch (NullPointerException e) {
-            // do nothing
+            holder.tvDate.setVisibility(View.GONE);
         }
 
-        holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
-        holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
-        holder.tvCommentCount.setText(String.valueOf(post.getNumComments()));
-        holder.tvHashtag1.setText(post.getDisplayHashTags());
+        if (post.getDisplayHashTags().length() != 0) {
+            holder.tvHashtag1.setVisibility(View.VISIBLE);
+            holder.tvHashtag1.setText(post.getDisplayHashTags());
+        } else {
+            holder.tvHashtag1.setVisibility(View.GONE);
+        }
 
+        voteSystemManager.bindVoteContent(post, ParseUser.getCurrentUser(), holder.ibLike,
+                holder.tvUpVotes, holder.ibDislike, holder.tvDownVotes);
+
+        holder.ibComment.setImageResource(R.drawable.outline_comment_black_18dp);
+        holder.tvCommentCount.setText(String.valueOf(post.getNumComments()));
     }
 
     /** Up Vote a post and update parse db
@@ -172,24 +179,46 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         if (e == null) {
                             // if there is none the list is empty or of length 0
                             if (relation.isEmpty() || relation.size() == 0) {
-                                VoteSystemManager.manageVote(VoteSystemManager.UPVOTE, holder.tvUpVotes, holder.tvDownVotes, currentUser, post);
+                                // set like to drawable to baseline up vote
+                                holder.ibLike.setImageResource(R.drawable.baseline_thumb_up_black_18dp);
+                                // update vote manager
+                                VoteSystemManager.manageVote(VoteSystemManager.UPVOTE,
+                                        holder.tvUpVotes, holder.tvDownVotes, currentUser, post);
                                 Toast.makeText(context, "upvoted post", Toast.LENGTH_SHORT).show();
                             } else { // there already exists a relation
-                                // TODO -- check the state of the realtion
+                                // TODO -- check the state of the relation
                                 UserPostRelation newUserPostRelation = relation.get(0);
+
                                 //If the user previously have liked the post
                                 if(newUserPostRelation.getVote() == UserPostRelation.UPVOTE) {
-                                    VoteSystemManager.manageVote(VoteSystemManager.UPVOTE, VoteSystemManager.NOVOTE, holder.tvUpVotes, holder.tvDownVotes, post, newUserPostRelation);
+                                    // set like to drawable neutral up vote
+                                    holder.ibLike.setImageResource(R.drawable.outline_thumb_up_black_18dp);
+                                    // update vote system manager
+                                    VoteSystemManager.manageVote(VoteSystemManager.UPVOTE,
+                                    VoteSystemManager.NOVOTE, holder.tvUpVotes, holder.tvDownVotes,
+                                    post, newUserPostRelation);
                                 }
 
                                 //If the user had previously disliked the post
                                 else if(newUserPostRelation.getVote() == UserPostRelation.DOWNVOTE) {
-                                    VoteSystemManager.manageVote(VoteSystemManager.DOWNVOTE, VoteSystemManager.UPVOTE, holder.tvUpVotes, holder.tvDownVotes, post, newUserPostRelation);
+                                    // set like to drawable to baseline up vote
+                                    holder.ibLike.setImageResource(R.drawable.baseline_thumb_up_black_18dp);
+                                    // set dislike to drawable neutral down vote
+                                    holder.ibDislike.setImageResource(R.drawable.outline_thumb_down_black_18dp);
+                                    // update vote system manager
+                                    VoteSystemManager.manageVote(VoteSystemManager.DOWNVOTE,
+                                    VoteSystemManager.UPVOTE, holder.tvUpVotes, holder.tvDownVotes,
+                                    post, newUserPostRelation);
                                 }
 
                                 //If the user was neutral
                                 else if(newUserPostRelation.getVote() == UserPostRelation.NOVOTE) {
-                                    VoteSystemManager.manageVote(VoteSystemManager.NOVOTE, VoteSystemManager.UPVOTE, holder.tvUpVotes, holder.tvDownVotes, post, newUserPostRelation);
+                                    // set like to drawable baseline up vote
+                                    holder.ibLike.setImageResource(R.drawable.baseline_thumb_up_black_18dp);
+                                    // update vote system manager
+                                    VoteSystemManager.manageVote(VoteSystemManager.NOVOTE,
+                                    VoteSystemManager.UPVOTE, holder.tvUpVotes, holder.tvDownVotes,
+                                    post, newUserPostRelation);
                                 }
                             }
                         } else {
@@ -219,25 +248,46 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         if (e == null) {
                             // if there is none the list is empty or of length 0
                             if (relation.isEmpty() || relation.size() == 0) {
-                                VoteSystemManager.manageVote(VoteSystemManager.DOWNVOTE, holder.tvUpVotes, holder.tvDownVotes, currentUser, post);
-
+                                // set like to drawable to baseline up vote
+                                holder.ibDislike.setImageResource(R.drawable.baseline_thumb_down_black_18dp);
+                                // update vote manager
+                                VoteSystemManager.manageVote(VoteSystemManager.DOWNVOTE,
+                                holder.tvUpVotes, holder.tvDownVotes, currentUser, post);
                                 Toast.makeText(context, "downvoted post", Toast.LENGTH_SHORT).show();
                             } else { // there already exists a relation
                                 // TODO -- check the state of the realtion
                                 UserPostRelation newUserPostRelation = relation.get(0);
+
                                 //If the user previously have liked the post
                                 if(newUserPostRelation.getVote() == UserPostRelation.UPVOTE) {
-                                    VoteSystemManager.manageVote(VoteSystemManager.UPVOTE, VoteSystemManager.DOWNVOTE, holder.tvUpVotes, holder.tvDownVotes, post, newUserPostRelation);
+                                    // set dislike to drawable baseline down vote
+                                    holder.ibDislike.setImageResource(R.drawable.baseline_thumb_down_black_18dp);
+                                    // set like to drawable neutral up vote
+                                    holder.ibLike.setImageResource(R.drawable.outline_thumb_up_black_18dp);
+                                    // update vote manager
+                                    VoteSystemManager.manageVote(VoteSystemManager.UPVOTE,
+                                    VoteSystemManager.DOWNVOTE, holder.tvUpVotes, holder.tvDownVotes,
+                                    post, newUserPostRelation);
                                 }
 
                                 //If the user had previously disliked the post
                                 else if(newUserPostRelation.getVote() == UserPostRelation.DOWNVOTE) {
-                                    VoteSystemManager.manageVote(VoteSystemManager.DOWNVOTE, VoteSystemManager.NOVOTE, holder.tvUpVotes, holder.tvDownVotes, post, newUserPostRelation);
+                                    // set dislike to drawable neutral down vote
+                                    holder.ibDislike.setImageResource(R.drawable.outline_thumb_down_black_18dp);
+                                    // update vote manager
+                                    VoteSystemManager.manageVote(VoteSystemManager.DOWNVOTE,
+                                    VoteSystemManager.NOVOTE, holder.tvUpVotes,
+                                    holder.tvDownVotes, post, newUserPostRelation);
                                 }
 
                                 //If the user was neutral
                                 else if(newUserPostRelation.getVote() == UserPostRelation.NOVOTE) {
-                                    VoteSystemManager.manageVote(VoteSystemManager.NOVOTE, VoteSystemManager.DOWNVOTE, holder.tvUpVotes, holder.tvDownVotes, post, newUserPostRelation);
+                                    // set dislike to drawable baseline down vote
+                                    holder.ibDislike.setImageResource(R.drawable.baseline_thumb_down_black_18dp);
+                                    // update vote manager
+                                    VoteSystemManager.manageVote(VoteSystemManager.NOVOTE,
+                                    VoteSystemManager.DOWNVOTE, holder.tvUpVotes,
+                                    holder.tvDownVotes, post, newUserPostRelation);
                                 }
                             }
                         } else {
@@ -327,5 +377,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         fullPostsList.clear();
         filter.clearFilter();
     }
+
+    public int getFullListSize() { return fullPostsList.size();}
 
 }
