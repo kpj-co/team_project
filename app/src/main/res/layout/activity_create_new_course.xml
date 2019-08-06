@@ -7,7 +7,7 @@
     tools:context=".activities.CreateNewCourse">
 
     <TextView
-        android:id="@+id/tvCreateCaption"
+        android:id="@+id/tvLandingText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -17,14 +17,14 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/tvNewCourseCaption"
+        app:layout_constraintBottom_toTopOf="@+id/tvValidCourse"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvNewCourseCaption"
+        android:id="@+id/tvValidCourse"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -34,43 +34,40 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
         android:text="Enter New Course Name"
-        app:layout_constraintBottom_toTopOf="@+id/etEnterCourseName"
+        app:layout_constraintBottom_toTopOf="@+id/etNewCourseName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.069"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCreateCaption" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLandingText" />
 
     <EditText
-        android:id="@+id/etEnterCourseName"
+        android:id="@+id/etNewCourseName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:layout_marginBottom="5dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/tvFeedbackMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNewCourseCaption" />
+        app:layout_constraintTop_toBottomOf="@+id/tvValidCourse" />
 
-    <TextView
-        android:id="@+id/tvFeedbackMessage"
-        android:layout_width="0dp"
+    <Button
+        android:id="@+id/btnCourseRegister"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginRight="50dp"
-        android:text="TextView"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Register"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEnterCourseName" />
+        app:layout_constraintTop_toBottomOf="@+id/etNewCourseName" />
 
 </android.support.constraint.ConstraintLayout>

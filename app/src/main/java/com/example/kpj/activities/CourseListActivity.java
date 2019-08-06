@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.University;
 import com.example.kpj.model.UserCourseRelation;
 import com.example.kpj.utils.CourseAdapter;
 import com.parse.FindCallback;
@@ -30,14 +31,12 @@ public class CourseListActivity extends AppCompatActivity {
     private TextView tvToCreateNewCourse;
     public Context context;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_list);
         this.context = CourseListActivity.this;
         this.tvToCreateNewCourse = findViewById(R.id.tvToCreateNewCourse);
-        setCreateNewCourseListener();
         filterCourses = new ArrayList<>();
         findCoursesByUserId(ParseUser.getCurrentUser());
         // set up recycler view
@@ -48,19 +47,8 @@ public class CourseListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         // set the layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        Toast.makeText(context, "IN CourseListActivity", Toast.LENGTH_LONG).show();
     }
 
-    private void setCreateNewCourseListener() {
-        tvToCreateNewCourse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, CreateNewCourse.class);
-                // TODO - pass universtiy name
-                startActivity(intent);
-            }
-        });
-    }
 
     private void findCoursesByUserId(ParseUser user){
         final UserCourseRelation.Query userCourseRelationQuery = new UserCourseRelation.Query();
@@ -73,6 +61,7 @@ public class CourseListActivity extends AppCompatActivity {
                         Course course = (Course) objects.get(i).getCourse();
                         filterCourses.add(course);
                         adapter.notifyItemInserted(filterCourses.size() - 1);
+                        setCreateNewCourseListener();
                         try {
                             Log.d("UserCourseListFragment", "List of courses:" + course.fetchIfNeeded().getString("name"));
                         } catch (ParseException e1) {
@@ -80,6 +69,21 @@ public class CourseListActivity extends AppCompatActivity {
                         }
                     }
                 }
+            }
+        });
+    }
+
+    private void setCreateNewCourseListener() {
+        tvToCreateNewCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CreateNewCourse.class);
+                try {
+                    intent.putExtra("uni", filterCourses.get(0).getUniversity());
+                } catch (NullPointerException e) {
+                    // do nothing
+                }
+                startActivity(intent);
             }
         });
     }

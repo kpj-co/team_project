@@ -13,8 +13,8 @@ public class Course extends ParseObject {
     //Limit to get courses
     private static final int MAX_NUMBER = 25;
     //columns in the database
-    private static final String KEY_NAME = "name";
-    private static final String KEY_UNIVERSITY = "University";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_UNIVERSITY = "University";
     private boolean isChecked = false;
 
     public String getName() { return getString(KEY_NAME); }
