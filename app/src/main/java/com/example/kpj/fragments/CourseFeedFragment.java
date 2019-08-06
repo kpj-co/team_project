@@ -102,7 +102,7 @@ public class CourseFeedFragment extends Fragment {
                 // query for posts associated
                 setUpAdapter();
                 setEndlessRecyclerViewScrollListener();
-                queryPosts();
+                queryPosts(true);
             }
         });
         setUpSearchView(view);
@@ -115,10 +115,8 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public void onRefresh() {
                 postAdapter.clearFullList();
-                // clear recycler view
-                postArrayList.clear();
-                postAdapter.notifyDataSetChanged();
-                queryPosts();
+
+                queryPosts(true);
             }
         });
 
@@ -135,7 +133,7 @@ public class CourseFeedFragment extends Fragment {
     }
 
     //Queries the next Post.MAX_NUMBER posts and adds them to the list
-    private void queryPosts() {
+    private void queryPosts(final boolean clearPostAdapter) {
         ParseQuery<Post> query = ParseQuery.getQuery("Post");
         query.include(Post.KEY_USER);
         query.include(Post.KEY_USER).include(User.KEY_UNIVERSITY);
@@ -151,6 +149,12 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 if (e == null) {
+
+                    if(clearPostAdapter) {
+                        // clear recycler view
+                        postArrayList.clear();
+                        postAdapter.notifyDataSetChanged();
+                    }
 
                     // add posts to adapter
                     for (Post post : posts) {
@@ -260,7 +264,7 @@ public class CourseFeedFragment extends Fragment {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Toast.makeText(fragmentActivity, "AAAAAAHHHH", Toast.LENGTH_LONG).show();
                 Log.d("Scroll", "done");
-                queryPosts();
+                queryPosts(false);
             }
         };
         rvCourseFeed.addOnScrollListener(endlessRecyclerViewScrollListener);
