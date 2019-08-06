@@ -254,7 +254,7 @@ public class CourseFeedFragment extends Fragment {
     }
 
     private void setEndlessRecyclerViewScrollListener() {
-        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager, true) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 queryPosts(false);
