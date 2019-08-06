@@ -49,7 +49,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private Button sendButton;
     private EditText etMessage;
     private String currentUserUsername;
-    //private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
+    private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private LinearLayoutManager linearLayoutManager;
 
     private List<Message> messages = new ArrayList<>();
@@ -92,9 +92,9 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         setListeners(view);
         //TODO: Remove this function when you can grab universities dynamically
         hardcodedFunction();
-        //setEndlessRecyclerViewScrollListener();
         prepareRecyclerView();
-        populateRecyclerView(getCurrentCourseName());
+        setEndlessRecyclerViewScrollListener();
+        populateRecyclerView(getCurrentCourseName(), true);
 
         return view;
     }
@@ -169,22 +169,23 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         newMessage.saveInBackground();
     }
 
-    void populateRecyclerView(String courseName) {
+    void populateRecyclerView(String courseName, final boolean scrollingDown) {
 
         //NOTE: THIS query will not be needed in the full version. We should know in which course are we
         final Course.Query courseQuery = new Course.Query();
 
         courseQuery.whereEqualTo("name", courseName);
-        //courseQuery.setLimit(Message.MAX_NUMBER);
-        //courseQuery.orderByDescending(Message.KEY_CREATED_AT);
         courseQuery.findInBackground(new FindCallback<Course>() {
             @Override
             public void done(List<Course> objects, ParseException e) {
                 course = objects.get(0);
 
                 final Message.Query messageQuery = new Message.Query();
+                messageQuery.setLimit(Message.MAX_NUMBER);
+                messageQuery.orderByDescending(Message.KEY_CREATED_AT);
                 messageQuery.withUser().withPost();
                 messageQuery.whereEqualTo("course", course);
+                messageQuery.setSkip(messages.size());
                 messageQuery.findInBackground(new FindCallback<Message>() {
                     @Override
                     public void done(List<Message> objects, ParseException e) {
@@ -193,7 +194,6 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                                 Message message = objects.get(i);
                                 message.setUsername(message.getUser().getUsername());
                                 message.setParseFileUserImage(message.getUser().getParseFile("photoImage"));
-
                                 ParseObject postParseObject = message.getPost();
 
                                 if(postParseObject != null) {
@@ -202,18 +202,20 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                                     message.setPostReference(post);
                                 }
 
-                                messages.add(message);
-                                messageAdapter.notifyItemInserted(messages.size() - 1);
-                                Log.d("Size of list", "" + messages.size());
-                                try {
-                                    Log.d("MessageFragment", "Message:" + message.fetchIfNeeded().getString("description"));
-                                } catch (ParseException e1) {
-                                    e1.printStackTrace();
-                                }
+                                messages.add(0, message);
+                                messageAdapter.notifyItemInserted(0);
+                                Log.d("MessageFragment", ": " +messages.size());
+//                                try {
+//                                    Log.d("MessageFragment", "Message:" + message.fetchIfNeeded().getString("description"));
+//                                } catch (ParseException e1) {
+//                                    e1.printStackTrace();
+//                                }
                             }
 
-                            //scroll to the last message
-                            recyclerView.scrollToPosition(messages.size() - 1);
+                            if(scrollingDown) {
+                                //scroll to the last message if you are not scrolling upwards
+                                recyclerView.scrollToPosition(messages.size() - 1);
+                            }
                         }
 
                         //We need to set the ParseLiveQueryClient after finding the course
@@ -292,13 +294,14 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         startActivity(intentPostMessage);
     }
 
-//    private void setEndlessRecyclerViewScrollListener() {
-//        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//                //queryPosts(false);
-//            }
-//        };
-//        recyclerView.addOnScrollListener(endlessRecyclerViewScrollListener);
-//    }
+    private void setEndlessRecyclerViewScrollListener() {
+        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager, false) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.d("MessageFragment", "New pagination");
+                populateRecyclerView(getCurrentCourseName(), false);
+            }
+        };
+        recyclerView.addOnScrollListener(endlessRecyclerViewScrollListener);
+    }
 }

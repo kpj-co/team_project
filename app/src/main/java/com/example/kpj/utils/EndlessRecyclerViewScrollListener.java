@@ -6,6 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 
+/**
+ * This class can be use whether you can to monitor the upper or lower class of a
+ * RecyclerView thanks to the isBottomListener boolean. However, because of
+ * the project's purposes, the listener while scrolling up is not available
+ * for the GridLayout or StaggeredGridLayout
+ */
 public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
     // The minimum amount of items to have below your current scroll position
     // before loading more.
@@ -19,10 +25,14 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     // Sets the starting page index
     private int startingPageIndex = 0;
 
+    //true if we want to put more data while scrolling down
+    private boolean isBottomListener;
+
     private RecyclerView.LayoutManager mLayoutManager;
 
-    public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
+    public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager, boolean isBottomListener) {
         this.mLayoutManager = layoutManager;
+        this.isBottomListener = isBottomListener;
     }
 
     public EndlessRecyclerViewScrollListener(GridLayoutManager layoutManager) {
@@ -54,6 +64,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     @Override
     public void onScrolled(RecyclerView view, int dx, int dy) {
         int lastVisibleItemPosition = 0;
+        int firstVisibleItemPosition = 0;
         int totalItemCount = mLayoutManager.getItemCount();
 
         if (mLayoutManager instanceof StaggeredGridLayoutManager) {
@@ -64,6 +75,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
             lastVisibleItemPosition = ((GridLayoutManager) mLayoutManager).findLastVisibleItemPosition();
         } else if (mLayoutManager instanceof LinearLayoutManager) {
             lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+            firstVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findFirstVisibleItemPosition();
         }
 
         // If the total item count is zero and the previous isn't, assume the
@@ -87,10 +99,18 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
         // the visibleThreshold and need to reload more data.
         // If we do need to reload some more data, we execute onLoadMore to fetch the data.
         // threshold should reflect how many total columns there are too
-        if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
-            currentPage++;
-            onLoadMore(currentPage, totalItemCount, view);
-            loading = true;
+        if(isBottomListener) {
+            if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
+                currentPage++;
+                onLoadMore(currentPage, totalItemCount, view);
+                loading = true;
+            }
+        } else {
+            if (!loading && (firstVisibleItemPosition - visibleThreshold) < 0) {
+                currentPage++;
+                onLoadMore(currentPage, totalItemCount, view);
+                loading = true;
+            }
         }
     }
 
