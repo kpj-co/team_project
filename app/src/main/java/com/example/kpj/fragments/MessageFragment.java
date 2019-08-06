@@ -49,7 +49,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private Button sendButton;
     private EditText etMessage;
     private String currentUserUsername;
-    private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
+    //private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private LinearLayoutManager linearLayoutManager;
 
     private List<Message> messages = new ArrayList<>();
@@ -92,7 +92,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         setListeners(view);
         //TODO: Remove this function when you can grab universities dynamically
         hardcodedFunction();
-        setEndlessRecyclerViewScrollListener();
+        //setEndlessRecyclerViewScrollListener();
         prepareRecyclerView();
         populateRecyclerView(getCurrentCourseName());
 
@@ -292,13 +292,13 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         startActivity(intentPostMessage);
     }
 
-    private void setEndlessRecyclerViewScrollListener() {
-        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                //queryPosts(false);
-            }
-        };
-        recyclerView.addOnScrollListener(endlessRecyclerViewScrollListener);
-    }
+//    private void setEndlessRecyclerViewScrollListener() {
+//        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+//            @Override
+//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+//                //queryPosts(false);
+//            }
+//        };
+//        recyclerView.addOnScrollListener(endlessRecyclerViewScrollListener);
+//    }
 }
