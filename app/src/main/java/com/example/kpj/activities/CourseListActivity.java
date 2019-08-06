@@ -30,6 +30,7 @@ public class CourseListActivity extends AppCompatActivity {
     private CourseAdapter adapter;
     private TextView tvToCreateNewCourse;
     public Context context;
+    private int REGISTER_COURSE_REQUEST = 1997;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +84,30 @@ public class CourseListActivity extends AppCompatActivity {
                 } catch (NullPointerException e) {
                     // do nothing
                 }
-                startActivity(intent);
+                startActivityForResult(intent, REGISTER_COURSE_REQUEST);
             }
         });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == REGISTER_COURSE_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Course newCourse = data.getParcelableExtra("new course");
+                if (newCourse != null) {
+                    insertCourseToList(newCourse);
+                } else {
+                    // do nothing
+                }
+            }
+        }
+    }
+
+    public void insertCourseToList(Course course) {
+        filterCourses.add(course);
+        adapter.notifyItemInserted(filterCourses.size() - 1);
     }
 }

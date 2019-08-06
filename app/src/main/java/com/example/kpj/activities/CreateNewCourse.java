@@ -1,6 +1,7 @@
 package com.example.kpj.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +17,14 @@ import android.widget.Toast;
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.University;
+import com.example.kpj.model.UserCourseRelation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
+import java.nio.channels.InterruptedByTimeoutException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +92,7 @@ public class CreateNewCourse extends AppCompatActivity {
 //            public void clearMetaKeyState(View view, Editable content, int states) {
 //            }
 //        });
-        
+
         btnCourseRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +134,13 @@ public class CreateNewCourse extends AppCompatActivity {
         etNewCourseName.setText("");
     }
 
+    private void sendToCourseListActivity(Course newCourse) {
+        Intent intent = new Intent( CreateNewCourse.this, CourseListActivity.class);
+        intent.putExtra("new course", newCourse);
+        startActivity(intent);
+        finish();
+    }
+
     private void setFailureText(String text) {
         tvValidCourse.setText("Course Already Exists! Can not register " + text);
     }
@@ -138,7 +150,14 @@ public class CreateNewCourse extends AppCompatActivity {
         newCourse.setName(name);
         newCourse.setUniversity(university);
         newCourse.saveInBackground();
+
+        UserCourseRelation newUserCourseRelation = new UserCourseRelation();
+        newUserCourseRelation.setUser(ParseUser.getCurrentUser());
+        newUserCourseRelation.setCourse(newCourse);
+        newUserCourseRelation.saveInBackground();
+
         setSuccessText(name);
+        sendToCourseListActivity(newCourse);
     }
 
     private void bindContent() {
