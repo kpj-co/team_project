@@ -328,4 +328,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         filter.clearFilter();
     }
 
+    public int getFullListSize() { return fullPostsList.size();}
+
 }

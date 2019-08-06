@@ -8,7 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
     // The minimum amount of items to have below your current scroll position
     // before loading more.
-    private int visibleThreshold = 5;
+    private int visibleThreshold = 3;
     // The current offset index of data you have loaded
     private int currentPage = 0;
     // The total number of items in the dataset after the last load
@@ -18,19 +18,19 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     // Sets the starting page index
     private int startingPageIndex = 0;
 
-    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
+        this.mLayoutManager = layoutManager;
     }
 
     public EndlessRecyclerViewScrollListener(GridLayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
+        this.mLayoutManager = layoutManager;
         visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
     }
 
     public EndlessRecyclerViewScrollListener(StaggeredGridLayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
+        this.mLayoutManager = layoutManager;
         visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
     }
 
@@ -53,16 +53,16 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     @Override
     public void onScrolled(RecyclerView view, int dx, int dy) {
         int lastVisibleItemPosition = 0;
-        int totalItemCount = layoutManager.getItemCount();
+        int totalItemCount = mLayoutManager.getItemCount();
 
-        if (layoutManager instanceof StaggeredGridLayoutManager) {
-            int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) layoutManager).findLastVisibleItemPositions(null);
+        if (mLayoutManager instanceof StaggeredGridLayoutManager) {
+            int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) mLayoutManager).findLastVisibleItemPositions(null);
             // get maximum element within the list
             lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions);
-        } else if (layoutManager instanceof GridLayoutManager) {
-            lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
-        } else if (layoutManager instanceof LinearLayoutManager) {
-            lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+        } else if (mLayoutManager instanceof GridLayoutManager) {
+            lastVisibleItemPosition = ((GridLayoutManager) mLayoutManager).findLastVisibleItemPosition();
+        } else if (mLayoutManager instanceof LinearLayoutManager) {
+            lastVisibleItemPosition = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
         }
 
         // If the total item count is zero and the previous isn't, assume the

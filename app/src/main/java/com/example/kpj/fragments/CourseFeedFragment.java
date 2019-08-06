@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.example.kpj.model.Course;
 import com.example.kpj.model.Hashtag;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.User;
+import com.example.kpj.utils.EndlessRecyclerViewScrollListener;
 import com.example.kpj.utils.PostAdapter;
 import com.example.kpj.R;
 import com.example.kpj.model.Post;
@@ -42,14 +44,16 @@ public class CourseFeedFragment extends Fragment {
     private int mPage;
     private ImageButton ibCompose;
     private TextView tvFeedTitle;
-
     public RecyclerView rvCourseFeed;
     public ArrayList<Post> postArrayList;
     private PostAdapter postAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-
     public FragmentActivity fragmentActivity;
     private Course course;
+    private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
+    private LinearLayoutManager linearLayoutManager;
+
+    //
 
     public CourseFeedFragment() {
         // Required empty public constructor
@@ -97,6 +101,7 @@ public class CourseFeedFragment extends Fragment {
                 Toast.makeText(fragmentActivity, message, Toast.LENGTH_LONG).show();
                 // query for posts associated
                 setUpAdapter();
+                setEndlessRecyclerViewScrollListener();
                 queryPosts();
             }
         });
@@ -109,6 +114,10 @@ public class CourseFeedFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                postAdapter.clearFullList();
+                // clear recycler view
+                postArrayList.clear();
+                postAdapter.notifyDataSetChanged();
                 queryPosts();
             }
         });
@@ -125,6 +134,7 @@ public class CourseFeedFragment extends Fragment {
         return settings.getString("courseName", "");
     }
 
+    //Queries the next Post.MAX_NUMBER posts and adds them to the list
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery("Post");
         query.include(Post.KEY_USER);
@@ -132,13 +142,16 @@ public class CourseFeedFragment extends Fragment {
         query.include(Post.KEY_COURSE);
         query.whereEqualTo("course", course);
         query.orderByDescending(Post.KEY_CREATED_AT);
+        //Do not query all of them with one call
+        query.setLimit(7);
+        //Do not query the same posts always
+        query.setSkip(postAdapter.getFullListSize());
+
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 if (e == null) {
-                    // clear recycler view
-                    postArrayList.clear();
-                    postAdapter.notifyDataSetChanged();
+
                     // add posts to adapter
                     for (Post post : posts) {
                         postArrayList.add(post);
@@ -148,7 +161,7 @@ public class CourseFeedFragment extends Fragment {
                     for (final Post post : postArrayList) {
                         queryHashTags(post);
                     }
-                    postAdapter.clearFullList();
+
                     postAdapter.updateFullList(posts);
 
                 } else {
@@ -212,7 +225,7 @@ public class CourseFeedFragment extends Fragment {
             }
         });
         //create linear layout manager for recycler view
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(fragmentActivity);
+        linearLayoutManager = new LinearLayoutManager(fragmentActivity);
         rvCourseFeed.setLayoutManager(linearLayoutManager);
         //attach adapter to recycler view
         rvCourseFeed.setAdapter(postAdapter);
@@ -241,6 +254,17 @@ public class CourseFeedFragment extends Fragment {
         });
     }
 
+    private void setEndlessRecyclerViewScrollListener() {
+        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Toast.makeText(fragmentActivity, "AAAAAAHHHH", Toast.LENGTH_LONG).show();
+                Log.d("Scroll", "done");
+                queryPosts();
+            }
+        };
+        rvCourseFeed.addOnScrollListener(endlessRecyclerViewScrollListener);
+    }
 }
 
 
