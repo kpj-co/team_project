@@ -147,7 +147,7 @@ public class CourseFeedFragment extends Fragment {
             public void done(List<Post> posts, ParseException e) {
                 if (e == null) {
                     if(clearPostAdapter) {
-                        // clear recycler view
+                        // clear recycler view just after finding new results
                         postArrayList.clear();
                         postAdapter.notifyDataSetChanged();
                     }

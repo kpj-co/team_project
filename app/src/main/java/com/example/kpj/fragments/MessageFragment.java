@@ -23,6 +23,7 @@ import com.example.kpj.model.Course;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.University;
+import com.example.kpj.utils.EndlessRecyclerViewScrollListener;
 import com.example.kpj.utils.MessageAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -48,6 +49,8 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private Button sendButton;
     private EditText etMessage;
     private String currentUserUsername;
+    private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
+    private LinearLayoutManager linearLayoutManager;
 
     private List<Message> messages = new ArrayList<>();
 
@@ -89,6 +92,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         setListeners(view);
         //TODO: Remove this function when you can grab universities dynamically
         hardcodedFunction();
+        setEndlessRecyclerViewScrollListener();
         prepareRecyclerView();
         populateRecyclerView(getCurrentCourseName());
 
@@ -116,7 +120,8 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
             }
         });
         recyclerView.setAdapter(messageAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
     }
 
     void setListeners(View view) {
@@ -166,10 +171,12 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
 
     void populateRecyclerView(String courseName) {
 
-        //NOTE: THIS query will not be needed in the full version. We should know in with course are we
+        //NOTE: THIS query will not be needed in the full version. We should know in which course are we
         final Course.Query courseQuery = new Course.Query();
 
         courseQuery.whereEqualTo("name", courseName);
+        //courseQuery.setLimit(Message.MAX_NUMBER);
+        courseQuery.orderByDescending(Message.KEY_CREATED_AT);
         courseQuery.findInBackground(new FindCallback<Course>() {
             @Override
             public void done(List<Course> objects, ParseException e) {
@@ -283,6 +290,15 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         Intent intentPostMessage = new Intent(getContext(), ComposePostActivity.class);
         intentPostMessage.putExtra("message", messages.get(position));
         startActivity(intentPostMessage);
+    }
 
+    private void setEndlessRecyclerViewScrollListener() {
+        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                //queryPosts(false);
+            }
+        };
+        recyclerView.addOnScrollListener(endlessRecyclerViewScrollListener);
     }
 }
