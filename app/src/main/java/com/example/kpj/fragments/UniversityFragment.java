@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.kpj.R;
 import com.example.kpj.UniversityFragmentAdapter;
@@ -77,9 +78,8 @@ public class UniversityFragment extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                university = (University) adapter.selectedUniversity(university);
+                university = adapter.selectedUniversity(university);
                 String selected = university.getName();
-
                 callback.onSignUpUniversity(selected);
                 setUpSharedPref(selected);
                 goToSelectCourses();

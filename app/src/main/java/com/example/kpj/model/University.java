@@ -9,7 +9,6 @@ public class University  extends ParseObject {
 
     //Limit to get universities
     private static final int MAX_NUMBER = 25;
-    private boolean isChecked = false;
 
     //the column in the database that we need
     private static final String KEY_NAME = "name";
@@ -21,10 +20,6 @@ public class University  extends ParseObject {
     public void setName(String name) {
         put(KEY_NAME, name);
     }
-
-    public Boolean isSelected(){ return isChecked;}
-
-    public void setSelected(boolean checked){isChecked = checked;}
 
     public static class Query extends ParseQuery<University> {
         public Query() {

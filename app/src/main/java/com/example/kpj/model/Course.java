@@ -27,10 +27,6 @@ public class Course extends ParseObject {
 
     public void setUniversity(ParseObject university){put(KEY_UNIVERSITY, university);}
 
-    public Boolean isChecked(){ return isChecked;}
-
-    public void setChecked(boolean checked){isChecked = checked;}
-
     public static class Query extends ParseQuery<Course> {
         public Query() {
             super(Course.class);
