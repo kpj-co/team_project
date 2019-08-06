@@ -176,7 +176,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
 
         courseQuery.whereEqualTo("name", courseName);
         //courseQuery.setLimit(Message.MAX_NUMBER);
-        courseQuery.orderByDescending(Message.KEY_CREATED_AT);
+        //courseQuery.orderByDescending(Message.KEY_CREATED_AT);
         courseQuery.findInBackground(new FindCallback<Course>() {
             @Override
             public void done(List<Course> objects, ParseException e) {
