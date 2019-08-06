@@ -27,6 +27,8 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
 
     private CourseFilter filter;
 
+    private Boolean isChecked = false;
+
     public SelectedCoursesFragmentAdapter(Context context, ArrayList<Course> courses) {
         this.context = context;
         this.universityCourses = courses;
@@ -52,26 +54,30 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
         Log.d("SelectedCourse", "On Bind Called");
         final Course course = courseFilteredList.get(position);
-        if(course.isChecked())
+        if(isChecked())
             viewHolder.tvSelectCourses.setBackgroundColor(Color.GREEN);
         else
             viewHolder.tvSelectCourses.setBackgroundColor(Color.TRANSPARENT);
-
         String courseName = course.getName();
         viewHolder.tvSelectCourses.setText(courseName);
         viewHolder.tvSelectCourses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                course.setChecked(!course.isChecked());
-                if(course.isChecked())
+               setChecked(!isChecked());
+                if(isChecked()){
                     viewHolder.tvSelectCourses.setBackgroundColor(Color.GREEN);
-                else
+                    selectedCourses.add(course);
+                }
+                else{
+                    setChecked(isChecked);
                     viewHolder.tvSelectCourses.setBackgroundColor(Color.TRANSPARENT);
+                    selectedCourses.remove(course);
+                }
             }
         });
     }
 
-    public void setSearchList(List<Course> list) {
+    void setSearchList(List<Course> list) {
         if (list == null) {
             courseFilteredList = universityCourses;
         } else {
@@ -90,6 +96,10 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
     public void filterList(String s) {
         filter.getFilter().filter(s);
     }
+
+    private Boolean isChecked(){ return isChecked;}
+
+    private void setChecked(boolean checked){isChecked = checked;}
 
     @Override
     public int getItemCount() {

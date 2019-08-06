@@ -13,7 +13,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.kpj.R;
-import com.example.kpj.SelectedCoursesFragmentAdapter;
 import com.example.kpj.fragments.SelectCoursesFragment;
 import com.example.kpj.fragments.SignUpFragment;
 import com.example.kpj.fragments.UniversityFragment;
@@ -54,7 +53,7 @@ public class SignupFlowActivity extends AppCompatActivity {
                 @Override
                 public void onSignUpUniversity(final String university) {
                     University.Query query = new University.Query();
-                    fetchUniversity(university, query);
+                    getUserUniversity(university, query);
                 }
             });
         }
@@ -70,7 +69,7 @@ public class SignupFlowActivity extends AppCompatActivity {
         }
     }
 
-    private void fetchUniversity(String university, University.Query query) {
+    private void getUserUniversity(String university, University.Query query) {
         query.whereEqualTo("name", university);
         query.findInBackground(new FindCallback<University>() {
             @Override

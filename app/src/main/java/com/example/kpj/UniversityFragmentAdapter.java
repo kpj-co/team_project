@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.example.kpj.model.University;
 import com.parse.ParseObject;
 
@@ -24,6 +25,8 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
 
     private University userUniversity;
     private UniversityFilter filter;
+
+    private boolean isChecked = false;
 
     public UniversityFragmentAdapter(Context context, ArrayList<University> universities) {
         this.universities = universities;
@@ -50,8 +53,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         // this method is to bind the components of the layout to the user in parse
         Log.d("Adapter", "On Bind is called");
         final University university = universityFilteredList.get(position);
-
-        if(university.isSelected()){
+        if(isSelected()){
             viewHolder.tvUniversity.setBackgroundColor(Color.GREEN);
         }
         else{
@@ -62,12 +64,13 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         viewHolder.tvUniversity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                university.setSelected(!university.isSelected());
-                if(university.isSelected()){
+                setSelected(!isChecked);
+                if(isSelected()){
                     viewHolder.tvUniversity.setBackgroundColor(Color.GREEN);
                     userUniversity = university;
                 }
                 else{
+                    setSelected(isChecked);
                     viewHolder.tvUniversity.setBackgroundColor(Color.TRANSPARENT);
                 }
             }
@@ -86,9 +89,13 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         filter.getFilter().filter(s);
     }
 
-    public ParseObject selectedUniversity(ParseObject university){
+    private Boolean isSelected(){ return isChecked;}
+
+    private void setSelected(boolean checked){isChecked = checked;}
+
+    public University selectedUniversity(ParseObject university){
         university = userUniversity;
-        return university;
+        return (University) university;
     }
 
     @Override
@@ -97,10 +104,10 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         return universityFilteredList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvUniversity;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             Log.d("Adapter", "Viewholder is called");
             tvUniversity = itemView.findViewById(R.id.tvUniversity);

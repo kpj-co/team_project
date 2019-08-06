@@ -1,7 +1,6 @@
 package com.example.kpj.utils;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -44,8 +43,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private OnPostClicked onPostClicked;
     private final static String KEY_SEND_POST_TO_CHAT = "A";
     private final static String KEY_SEND_COURSE_TO_CHAT = "B";
-    private final ParseUser currentUser;
-    private VoteSystemManager voteSystemManager;
 
     public PostAdapter(Context context, Course course, List<Post> posts, OnPostClicked onPostClicked) {
         this.context = context;
@@ -55,7 +52,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         fullPostsList.addAll(posts);
         filteredPosts = posts;
         filteredPosts.addAll(posts);
-        currentUser = ParseUser.getCurrentUser();
         filter = new PostFilter((ArrayList<Post>) fullPostsList, this);
     }
 
@@ -72,8 +68,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Post post = filteredPosts.get(position);
         bindPostContent(holder, post);
-        setUpUpVoteListener(holder, post);
-        setUpDownVoteListener(holder, post);
+        VoteSystemManager.setUpVoteClickFunctionality(context, post, ParseUser.getCurrentUser(),
+                holder.ibLike, holder.tvUpVotes, holder.ibDislike, holder.tvDownVotes);
+        VoteSystemManager.setDownVoteClickFunctionality(context, post, ParseUser.getCurrentUser(),
+                holder.ibLike, holder.tvUpVotes, holder.ibDislike, holder.tvDownVotes);
         setUpIbSendListener(holder, post);
         setUpIbCommentListener(holder, post);
     }
@@ -154,149 +152,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.tvHashtag1.setVisibility(View.GONE);
         }
 
-        voteSystemManager.bindVoteContent(post, ParseUser.getCurrentUser(), holder.ibLike,
+        VoteSystemManager.bindVoteContentOnLoad(context, post, ParseUser.getCurrentUser(), holder.ibLike,
                 holder.tvUpVotes, holder.ibDislike, holder.tvDownVotes);
 
         holder.ibComment.setImageResource(R.drawable.outline_comment_black_18dp);
         holder.tvCommentCount.setText(String.valueOf(post.getNumComments()));
-    }
-
-    /** Up Vote a post and update parse db
-     * @params: ViewHolder, Post
-     * @return: void
-     */
-    private void setUpUpVoteListener(final ViewHolder holder, final Post post) {
-        holder.ibLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // check if there is an existing userPostRelation
-                final UserPostRelation.Query userPostRelation = new UserPostRelation.Query();
-                userPostRelation.whereEqualTo("user", currentUser);
-                userPostRelation.whereEqualTo("post", post);
-                userPostRelation.findInBackground(new FindCallback<UserPostRelation>() {
-                    @Override
-                    public void done(List<UserPostRelation> relation, ParseException e) {
-                        if (e == null) {
-                            // if there is none the list is empty or of length 0
-                            if (relation.isEmpty() || relation.size() == 0) {
-                                // set like to drawable to baseline up vote
-                                holder.ibLike.setImageResource(R.drawable.baseline_thumb_up_black_18dp);
-                                // update vote manager
-                                VoteSystemManager.manageVote(VoteSystemManager.UPVOTE,
-                                        holder.tvUpVotes, holder.tvDownVotes, currentUser, post);
-                                Toast.makeText(context, "upvoted post", Toast.LENGTH_SHORT).show();
-                            } else { // there already exists a relation
-                                // TODO -- check the state of the relation
-                                UserPostRelation newUserPostRelation = relation.get(0);
-
-                                //If the user previously have liked the post
-                                if(newUserPostRelation.getVote() == UserPostRelation.UPVOTE) {
-                                    // set like to drawable neutral up vote
-                                    holder.ibLike.setImageResource(R.drawable.outline_thumb_up_black_18dp);
-                                    // update vote system manager
-                                    VoteSystemManager.manageVote(VoteSystemManager.UPVOTE,
-                                    VoteSystemManager.NOVOTE, holder.tvUpVotes, holder.tvDownVotes,
-                                    post, newUserPostRelation);
-                                }
-
-                                //If the user had previously disliked the post
-                                else if(newUserPostRelation.getVote() == UserPostRelation.DOWNVOTE) {
-                                    // set like to drawable to baseline up vote
-                                    holder.ibLike.setImageResource(R.drawable.baseline_thumb_up_black_18dp);
-                                    // set dislike to drawable neutral down vote
-                                    holder.ibDislike.setImageResource(R.drawable.outline_thumb_down_black_18dp);
-                                    // update vote system manager
-                                    VoteSystemManager.manageVote(VoteSystemManager.DOWNVOTE,
-                                    VoteSystemManager.UPVOTE, holder.tvUpVotes, holder.tvDownVotes,
-                                    post, newUserPostRelation);
-                                }
-
-                                //If the user was neutral
-                                else if(newUserPostRelation.getVote() == UserPostRelation.NOVOTE) {
-                                    // set like to drawable baseline up vote
-                                    holder.ibLike.setImageResource(R.drawable.baseline_thumb_up_black_18dp);
-                                    // update vote system manager
-                                    VoteSystemManager.manageVote(VoteSystemManager.NOVOTE,
-                                    VoteSystemManager.UPVOTE, holder.tvUpVotes, holder.tvDownVotes,
-                                    post, newUserPostRelation);
-                                }
-                            }
-                        } else {
-                            Toast.makeText(context, "could not vote", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    /** Down Vote a post and update parse db
-     * @params: ViewHolder, Post
-     * @return: void
-     */
-    private void setUpDownVoteListener(final ViewHolder holder, final Post post) {
-        holder.ibDislike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // check if there is an existing userPostRelation
-                final UserPostRelation.Query userPostRelation = new UserPostRelation.Query();
-                userPostRelation.whereEqualTo("user", currentUser);
-                userPostRelation.whereEqualTo("post", post);
-                userPostRelation.findInBackground(new FindCallback<UserPostRelation>() {
-                    @Override
-                    public void done(List<UserPostRelation> relation, ParseException e) {
-                        if (e == null) {
-                            // if there is none the list is empty or of length 0
-                            if (relation.isEmpty() || relation.size() == 0) {
-                                // set like to drawable to baseline up vote
-                                holder.ibDislike.setImageResource(R.drawable.baseline_thumb_down_black_18dp);
-                                // update vote manager
-                                VoteSystemManager.manageVote(VoteSystemManager.DOWNVOTE,
-                                holder.tvUpVotes, holder.tvDownVotes, currentUser, post);
-                                Toast.makeText(context, "downvoted post", Toast.LENGTH_SHORT).show();
-                            } else { // there already exists a relation
-                                // TODO -- check the state of the realtion
-                                UserPostRelation newUserPostRelation = relation.get(0);
-
-                                //If the user previously have liked the post
-                                if(newUserPostRelation.getVote() == UserPostRelation.UPVOTE) {
-                                    // set dislike to drawable baseline down vote
-                                    holder.ibDislike.setImageResource(R.drawable.baseline_thumb_down_black_18dp);
-                                    // set like to drawable neutral up vote
-                                    holder.ibLike.setImageResource(R.drawable.outline_thumb_up_black_18dp);
-                                    // update vote manager
-                                    VoteSystemManager.manageVote(VoteSystemManager.UPVOTE,
-                                    VoteSystemManager.DOWNVOTE, holder.tvUpVotes, holder.tvDownVotes,
-                                    post, newUserPostRelation);
-                                }
-
-                                //If the user had previously disliked the post
-                                else if(newUserPostRelation.getVote() == UserPostRelation.DOWNVOTE) {
-                                    // set dislike to drawable neutral down vote
-                                    holder.ibDislike.setImageResource(R.drawable.outline_thumb_down_black_18dp);
-                                    // update vote manager
-                                    VoteSystemManager.manageVote(VoteSystemManager.DOWNVOTE,
-                                    VoteSystemManager.NOVOTE, holder.tvUpVotes,
-                                    holder.tvDownVotes, post, newUserPostRelation);
-                                }
-
-                                //If the user was neutral
-                                else if(newUserPostRelation.getVote() == UserPostRelation.NOVOTE) {
-                                    // set dislike to drawable baseline down vote
-                                    holder.ibDislike.setImageResource(R.drawable.baseline_thumb_down_black_18dp);
-                                    // update vote manager
-                                    VoteSystemManager.manageVote(VoteSystemManager.NOVOTE,
-                                    VoteSystemManager.DOWNVOTE, holder.tvUpVotes,
-                                    holder.tvDownVotes, post, newUserPostRelation);
-                                }
-                            }
-                        } else {
-                            Toast.makeText(context, "could not vote", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        });
     }
 
     /** Bind the data base user info with user associated views of a post
