@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
+import com.example.kpj.VoteSystemManager;
 import com.example.kpj.fragments.SendToChatDialogFragment;
 import com.example.kpj.model.Comment;
 import com.example.kpj.model.ImagePreview;
@@ -25,8 +26,10 @@ import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
+import com.example.kpj.model.UserPostRelation;
 import com.example.kpj.utils.CommentAdapter;
 import com.example.kpj.utils.ImagePreviewAdapter;
+import com.example.kpj.utils.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -262,6 +265,11 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDetailCommentCount.setText(String.valueOf(post.getNumComments()));
         tvDetailUpVotes.setText(String.valueOf(post.getUpVotes()));
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
+
+        VoteSystemManager.bindVoteContent(post, ParseUser.getCurrentUser(), ibDetailLike, tvDetailUpVotes,
+                ibDetailDislike, tvDetailDownVotes);
     }
+
+
 
 }

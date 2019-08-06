@@ -109,7 +109,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
      * @params: ViewHolder, Post
      * @return: void
      */
-    private void bindPostContent(@NonNull final ViewHolder holder, Post post) {
+    private void bindPostContent(@NonNull final ViewHolder holder, final Post post) {
         //String that contains all the hashtags
         bindPostUserAssets(holder, post);
 
@@ -154,58 +154,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.tvHashtag1.setVisibility(View.GONE);
         }
 
-        bindButtonContents(holder, post);
-    }
-
-    private void bindButtonContents(final ViewHolder holder, final Post post) {
-        holder.tvUpVotes.setText(String.valueOf(post.getUpVotes()));
-        holder.tvDownVotes.setText(String.valueOf(post.getDownVotes()));
-
-        final UserPostRelation.Query userPostRelation = new UserPostRelation.Query();
-        userPostRelation.whereEqualTo("user", currentUser);
-        userPostRelation.whereEqualTo("post", post);
-        userPostRelation.findInBackground(new FindCallback<UserPostRelation>() {
-            @Override
-            public void done(List<UserPostRelation> relation, ParseException e) {
-                if (e == null) {
-                    // if there is none the list is empty or of length 0
-                    if (!relation.isEmpty() &&  relation.size() != 0) {
-                        // there already exists a relation
-                        UserPostRelation newUserPostRelation = relation.get(0);
-                        holder.ibLike.setVisibility(View.VISIBLE);
-                        holder.ibDislike.setVisibility(View.VISIBLE);
-                        if(newUserPostRelation.getVote() == UserPostRelation.UPVOTE) {
-                            // set like to drawable to baseline up vote
-                            holder.ibLike.setImageResource(R.drawable.baseline_thumb_up_black_18dp);
-                            // set dislike to drawable neutral down vote
-                            holder.ibDislike.setImageResource(R.drawable.outline_thumb_down_black_18dp);
-                        } else if(newUserPostRelation.getVote() == UserPostRelation.DOWNVOTE) {
-                            // set like to drawable to baseline up vote
-                            holder.ibLike.setImageResource(R.drawable.outline_thumb_up_black_18dp);
-                            // set dislike to drawable neutral down vote
-                            holder.ibDislike.setImageResource(R.drawable.baseline_thumb_down_black_18dp);
-                        } else if(newUserPostRelation.getVote() == UserPostRelation.NOVOTE) {
-                            // set like to drawable to baseline up vote
-                            holder.ibLike.setImageResource(R.drawable.outline_thumb_up_black_18dp);
-                            // set dislike to drawable neutral down vote
-                            holder.ibDislike.setImageResource(R.drawable.outline_thumb_down_black_18dp);
-                        }
-                    }
-                } else {
-                    holder.ibLike.setVisibility(View.VISIBLE);
-                    holder.ibDislike.setVisibility(View.VISIBLE);
-                    holder.ibLike.setImageResource(R.drawable.outline_thumb_up_black_18dp);
-                    holder.ibDislike.setImageResource(R.drawable.outline_thumb_down_black_18dp);
-                }
-            }
-        });
+        voteSystemManager.bindVoteContent(post, ParseUser.getCurrentUser(), holder.ibLike,
+                holder.tvUpVotes, holder.ibDislike, holder.tvDownVotes);
 
         holder.ibComment.setImageResource(R.drawable.outline_comment_black_18dp);
         holder.tvCommentCount.setText(String.valueOf(post.getNumComments()));
-
-        // TODO -- SET SEND ICON
     }
-
 
     /** Up Vote a post and update parse db
      * @params: ViewHolder, Post

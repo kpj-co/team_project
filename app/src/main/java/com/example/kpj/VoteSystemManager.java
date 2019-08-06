@@ -1,11 +1,17 @@
 package com.example.kpj;
 
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kpj.model.Post;
 import com.example.kpj.model.UserPostRelation;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 public class VoteSystemManager {
 
@@ -110,4 +116,61 @@ public class VoteSystemManager {
 
         }
     }
+
+
+    /** Load like and dislike icons based on user interaction in view holder
+     * @params: ViewHolder, Post
+     * @return: void
+     */
+    public static void bindVoteContent(final Post post, final ParseUser user,
+                                final ImageButton upVoteImageButton, TextView upVoteText,
+                                final ImageButton downVoteImageButton, TextView downVoteText) {
+
+        upVoteImageButton.setVisibility(View.VISIBLE);
+        downVoteImageButton.setVisibility(View.VISIBLE);
+        upVoteText.setText(String.valueOf(post.getUpVotes()));
+        downVoteText.setText(String.valueOf(post.getDownVotes()));
+
+        if (upVoteText.getText().toString().equals("0") && downVoteText.getText().toString().equals("0")) {
+            upVoteImageButton.setImageResource(R.drawable.outline_thumb_up_black_18dp);
+            downVoteImageButton.setImageResource(R.drawable.outline_thumb_down_black_18dp);
+        } else {
+            final UserPostRelation.Query userPostRelation = new UserPostRelation.Query();
+            userPostRelation.whereEqualTo("user", user);
+            userPostRelation.whereEqualTo("post", post);
+            userPostRelation.findInBackground(new FindCallback<UserPostRelation>() {
+                @Override
+                public void done(List<UserPostRelation> relation, ParseException e) {
+                    if (e == null) {
+                        // if there is none the list is empty or of length 0
+                        if (!relation.isEmpty() &&  relation.size() != 0) {
+                            // there already exists a relation
+                            UserPostRelation newUserPostRelation = relation.get(0);
+                            if(newUserPostRelation.getVote() == UserPostRelation.UPVOTE) {
+                                // set like to drawable to baseline up vote
+                                upVoteImageButton.setImageResource(R.drawable.baseline_thumb_up_black_18dp);
+                                // set dislike to drawable neutral down vote
+                                downVoteImageButton.setImageResource(R.drawable.outline_thumb_down_black_18dp);
+                            } else if(newUserPostRelation.getVote() == UserPostRelation.DOWNVOTE) {
+                                // set like to drawable to baseline up vote
+                                upVoteImageButton.setImageResource(R.drawable.outline_thumb_up_black_18dp);
+                                // set dislike to drawable neutral down vote
+                                downVoteImageButton.setImageResource(R.drawable.baseline_thumb_down_black_18dp);
+                            } else if(newUserPostRelation.getVote() == UserPostRelation.NOVOTE) {
+                                // set like to drawable to baseline up vote
+                                upVoteImageButton.setImageResource(R.drawable.outline_thumb_up_black_18dp);
+                                // set dislike to drawable neutral down vote
+                                downVoteImageButton.setImageResource(R.drawable.outline_thumb_down_black_18dp);
+                            }
+                        }
+                    } else {
+                        upVoteImageButton.setImageResource(R.drawable.outline_thumb_up_black_18dp);
+                        downVoteImageButton.setImageResource(R.drawable.outline_thumb_down_black_18dp);
+                    }
+                }
+            });
+        }
+
+    }
+
 }
