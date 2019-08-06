@@ -39,7 +39,11 @@ public class Course extends ParseObject {
         public Query getTop() {
             //get the first x courses
             setLimit(MAX_NUMBER);
+            return this;
+        }
 
+        public Query withUniversity() {
+            include(KEY_UNIVERSITY);
             return this;
         }
     }

@@ -24,6 +24,7 @@ import com.example.kpj.model.University;
 import com.example.kpj.utils.EndlessRecyclerViewScrollListener;
 import com.example.kpj.utils.MessageAdapter;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -51,7 +52,6 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private List<Message> messages = new ArrayList<>();
     private MessageAdapter messageAdapter;
     private Course course;
-    //TODO: Set this variable university dynamically
     private University university;
 
     public MessageFragment() {
@@ -81,12 +81,38 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         currentUserUsername = ParseUser.getCurrentUser().getUsername();
         findViews(view);
         setListeners(view);
-        //TODO: Remove this function when you can grab universities dynamically
-        hardcodedFunction();
         prepareRecyclerView();
         setEndlessRecyclerViewScrollListener();
-        populateRecyclerView(getCurrentCourseName(), true);
+        setSharedObjects();
         return view;
+    }
+
+    //Gets the course and university from sharedPreference. Once this is done the recycler view will be populated
+    private void setSharedObjects() {
+        String universityName = getUserUniveristy();
+        final String courseName = getCurrentCourseName();
+
+        //First find the university of the user
+        final University.Query universityQuery = new University.Query();
+        universityQuery.whereEqualTo("name", universityName);
+        universityQuery.getFirstInBackground(new GetCallback<University>() {
+            @Override
+            public void done(University object, ParseException e) {
+                university = object;
+                //Then find the course of that university
+                final Course.Query courseQuery = new Course.Query();
+                courseQuery.whereEqualTo("name", courseName);
+                courseQuery.whereEqualTo(Course.KEY_UNIVERSITY, university);
+                courseQuery.getFirstInBackground(new GetCallback<Course>() {
+                    @Override
+                    public void done(Course object, ParseException e) {
+                        course = object;
+                        //Just AFTER doing that for the first time, populate the recycler view
+                            populateRecyclerView(true);
+                    }
+                });
+            }
+        });
     }
 
     void findViews(View view) {
@@ -152,66 +178,40 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         newMessage.saveInBackground();
     }
 
-    void populateRecyclerView(String courseName, final boolean scrollingDown) {
-        //NOTE: THIS query will not be needed in the full version. We should know in which course are we
-        final Course.Query courseQuery = new Course.Query();
-        courseQuery.whereEqualTo("name", courseName);
-        courseQuery.findInBackground(new FindCallback<Course>() {
+    void populateRecyclerView(final boolean scrollingDown) {
+        final Message.Query messageQuery = new Message.Query();
+        messageQuery.setLimit(Message.MAX_NUMBER);
+        messageQuery.orderByDescending(Message.KEY_CREATED_AT);
+        messageQuery.withUser().withPost();
+        messageQuery.whereEqualTo("course", course);
+        messageQuery.setSkip(messages.size());
+        messageQuery.findInBackground(new FindCallback<Message>() {
             @Override
-            public void done(List<Course> objects, ParseException e) {
-                course = objects.get(0);
-                final Message.Query messageQuery = new Message.Query();
-                messageQuery.setLimit(Message.MAX_NUMBER);
-                messageQuery.orderByDescending(Message.KEY_CREATED_AT);
-                messageQuery.withUser().withPost();
-                messageQuery.whereEqualTo("course", course);
-                messageQuery.setSkip(messages.size());
-                messageQuery.findInBackground(new FindCallback<Message>() {
-                    @Override
-                    public void done(List<Message> objects, ParseException e) {
-                        if(e == null){
-                            for(int i = 0; i < objects.size(); i++){
-                                Message message = objects.get(i);
-                                message.setUsername(message.getUser().getUsername());
-                                message.setParseFileUserImage(message.getUser().getParseFile("photoImage"));
-                                ParseObject postParseObject = message.getPost();
-
-                                if(postParseObject != null) {
-                                    //Get the postParseObject as a Post object
-                                    Post post = (Post) postParseObject;
-                                    message.setPostReference(post);
-                                }
-
-                                messages.add(0, message);
-                                messageAdapter.notifyItemInserted(0);
-                                Log.d("MessageFragment", ": " +messages.size());
-                            }
-                            if(scrollingDown) {
-                                //scroll to the last message if you are not scrolling upwards
-                                recyclerView.scrollToPosition(messages.size() - 1);
-                            }
-                        }
-                        if(!isQueryLiveset) {
-                            //We need to set the ParseLiveQueryClient after finding the course
-                            setParseLiveQueryClient();
-                            isQueryLiveset = true;
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    //TODO: Remove this when you can set it dynamically
-    void hardcodedFunction() {
-        final University.Query universityQuery = new University.Query();
-        universityQuery.whereEqualTo("name", "Facebook University");
-        universityQuery.findInBackground(new FindCallback<University>() {
-            @Override
-            public void done(List<University> objects, ParseException e) {
+            public void done(List<Message> objects, ParseException e) {
                 if(e == null){
-                    University university = objects.get(0);
-                    Log.d("MessageFragment", university.getName());
+                    for(int i = 0; i < objects.size(); i++){
+                        Message message = objects.get(i);
+                        message.setUsername(message.getUser().getUsername());
+                        message.setParseFileUserImage(message.getUser().getParseFile("photoImage"));
+                        ParseObject postParseObject = message.getPost();
+                        if(postParseObject != null) {
+                            //Get the postParseObject as a Post object
+                            Post post = (Post) postParseObject;
+                            message.setPostReference(post);
+                        }
+                        messages.add(0, message);
+                        messageAdapter.notifyItemInserted(0);
+                        Log.d("MessageFragment", ": " +messages.size());
+                    }
+                    if(scrollingDown) {
+                        //scroll to the last message if you are not scrolling upwards
+                        recyclerView.scrollToPosition(messages.size() - 1);
+                    }
+                }
+                if(!isQueryLiveset) {
+                    //We need to set the ParseLiveQueryClient after finding the course
+                    setParseLiveQueryClient();
+                    isQueryLiveset = true;
                 }
             }
         });
@@ -220,6 +220,11 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private String getCurrentCourseName() {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         return settings.getString("courseName", "");
+    }
+
+    private String getUserUniveristy() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        return settings.getString("universityName", "");
     }
 
     private void setParseLiveQueryClient() {
@@ -267,7 +272,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.d("MessageFragment", "New pagination");
-                populateRecyclerView(getCurrentCourseName(), false);
+                populateRecyclerView(false);
             }
         };
         recyclerView.addOnScrollListener(endlessRecyclerViewScrollListener);
