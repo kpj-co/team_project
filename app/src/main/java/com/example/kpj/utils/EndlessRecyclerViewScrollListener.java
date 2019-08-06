@@ -35,6 +35,12 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
         this.isBottomListener = isBottomListener;
     }
 
+    public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager, boolean isBottomListener, int visibleThreshold) {
+        this.mLayoutManager = layoutManager;
+        this.isBottomListener = isBottomListener;
+        this.visibleThreshold = visibleThreshold;
+    }
+
     public EndlessRecyclerViewScrollListener(GridLayoutManager layoutManager) {
         this.mLayoutManager = layoutManager;
         visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
