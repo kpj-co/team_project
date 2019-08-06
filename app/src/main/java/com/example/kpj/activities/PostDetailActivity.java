@@ -26,10 +26,8 @@ import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
-import com.example.kpj.model.UserPostRelation;
 import com.example.kpj.utils.CommentAdapter;
 import com.example.kpj.utils.ImagePreviewAdapter;
-import com.example.kpj.utils.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -153,6 +151,11 @@ public class PostDetailActivity extends AppCompatActivity {
                 dialogBox.setArguments(bundle);
             }
         });
+
+        VoteSystemManager.setUpVoteClickFunctionality(context, post, ParseUser.getCurrentUser(),
+                ibDetailLike, tvDetailUpVotes, ibDetailDislike, tvDetailDownVotes);
+        VoteSystemManager.setDownVoteClickFunctionality(context, post, ParseUser.getCurrentUser(),
+                ibDetailLike, tvDetailUpVotes, ibDetailDislike, tvDetailDownVotes);
     }
 
     private void initializeVariables() {
@@ -266,7 +269,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDetailUpVotes.setText(String.valueOf(post.getUpVotes()));
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
 
-        VoteSystemManager.bindVoteContent(post, ParseUser.getCurrentUser(), ibDetailLike, tvDetailUpVotes,
+        VoteSystemManager.bindVoteContentOnLoad(context, post, ParseUser.getCurrentUser(), ibDetailLike, tvDetailUpVotes,
                 ibDetailDislike, tvDetailDownVotes);
     }
 
