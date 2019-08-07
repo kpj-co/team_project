@@ -168,7 +168,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * View Holder for a message with link to a post
      */
     public class linkMessageViewHolder extends RecyclerView.ViewHolder {
-//  public class linkMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView ivOtherUser, ivCurrentUser, ivPostImage;
         TextView tvCurrentUserName, tvOtherUserName, tvPostTitle, tvPostDescription, tvUserOpinion;
@@ -188,7 +187,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             postLinkContainer = itemView.findViewById(R.id.postLinkContainer);
             this.onMessageClicked = onMessageClicked;
             setPostLinkListener();
-//          itemView.setOnClickListener(this);
         }
 
         private void setPostLinkListener() {
@@ -274,11 +272,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         }
 
-//        @Override
-//        public void onClick(View v) {
-//            Toast.makeText(mContext, "link was clicked", Toast.LENGTH_SHORT).show();
-//            onMessageClicked.onMessageClicked(getAdapterPosition());
-//        }
     }
 
     public interface OnMessageClicked {
