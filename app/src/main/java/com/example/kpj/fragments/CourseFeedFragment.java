@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,16 +42,14 @@ public class CourseFeedFragment extends Fragment {
     private final static String PREF_NAME = "sharedData";
     private int mPage;
     private ImageButton ibCompose;
-    private TextView tvFeedTitle;
+    private SearchView svSearch;
     public RecyclerView rvCourseFeed;
     public ArrayList<Post> postArrayList;
     private PostAdapter postAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-    public FragmentActivity fragmentActivity;
     private Course course;
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private LinearLayoutManager linearLayoutManager;
-    private SearchView svSearch;
 
     public CourseFeedFragment() {
         // Required empty public constructor
@@ -79,33 +76,14 @@ public class CourseFeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_course_feed, container, false);
-        fragmentActivity = getActivity();
         initializeViews(view);
         initializeVariables();
         setComposeButtonListener();
         setSwipeRefreshLayout();
-        // Get course from main activity
-        String courseName = getCurrentCourseName();
         // Set feed title to match course
 //        tvFeedTitle.setText(courseName);
-        // Query for course by name
-        final Course.Query courseQuery = new Course.Query();
-        courseQuery.whereEqualTo("name", courseName);
-        courseQuery.findInBackground(new FindCallback<Course>() {
-            @Override
-            public void done(List<Course> selectedCourse, ParseException e) {
-                course = selectedCourse.get(0);
-                // tell user they are in selected course
-                String message = "You are in " + course.getName();
-                Toast.makeText(fragmentActivity, message, Toast.LENGTH_LONG).show();
-                // query for posts associated
-                setUpAdapter();
-                setEndlessRecyclerViewScrollListener();
-                queryPosts(true);
-            }
-        });
-        setUpSearchView(view);
-
+        queryForCourseByName(getCurrentCourseName());
+        setUpSearchView(svSearch);
         return view;
     }
 
@@ -129,6 +107,24 @@ public class CourseFeedFragment extends Fragment {
     private String getCurrentCourseName() {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         return settings.getString("courseName", "");
+    }
+
+    private void queryForCourseByName(String courseName) {
+        final Course.Query courseQuery = new Course.Query();
+        courseQuery.whereEqualTo("name", courseName);
+        courseQuery.findInBackground(new FindCallback<Course>() {
+            @Override
+            public void done(List<Course> selectedCourse, ParseException e) {
+                course = selectedCourse.get(0);
+                // tell user they are in selected course
+                String message = "You are in " + course.getName();
+                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                // query for posts associated with course
+                setUpAdapter();
+                setEndlessRecyclerViewScrollListener();
+                queryPosts(true);
+            }
+        });
     }
 
     private void queryPosts(final boolean clearPostAdapter) {
@@ -191,12 +187,10 @@ public class CourseFeedFragment extends Fragment {
 
     private void initializeViews(View view) {
         // Find views from xml
-        rvCourseFeed = view.findViewById(R.id.rvCourseFeed);
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        ibCompose = view.findViewById(R.id.ibCompose);
-//        tvFeedTitle = view.findViewById(R.id.tvFeedTitle);
-        // TODO -- Figure out how to set up a search view
-        svSearch = view.findViewById(R.id.svSearch);
+        this.rvCourseFeed = view.findViewById(R.id.rvCourseFeed);
+        this.swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        this.ibCompose = view.findViewById(R.id.ibCompose);
+        this.svSearch = view.findViewById(R.id.svSearch);
     }
 
     private void initializeVariables() {
@@ -214,10 +208,10 @@ public class CourseFeedFragment extends Fragment {
     }
 
     private void setUpAdapter() {
-        postAdapter = new PostAdapter(fragmentActivity, course, postArrayList, new PostAdapter.OnPostClicked() {
+        postAdapter = new PostAdapter(getActivity(), course, postArrayList, new PostAdapter.OnPostClicked() {
             @Override
             public void onPostClickListener(int position) {
-                Toast.makeText(fragmentActivity, "post clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "post clicked", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), PostDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("post", postArrayList.get(position));
@@ -227,14 +221,13 @@ public class CourseFeedFragment extends Fragment {
             }
         });
         //create linear layout manager for recycler view
-        linearLayoutManager = new LinearLayoutManager(fragmentActivity);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
         rvCourseFeed.setLayoutManager(linearLayoutManager);
         //attach adapter to recycler view
         rvCourseFeed.setAdapter(postAdapter);
     }
 
-    private void setUpSearchView(View view) {
-        SearchView searchView = view.findViewById(R.id.svSearch);
+    private void setUpSearchView(SearchView searchView) {
         searchView.setQueryHint("#YourHashtags #here");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

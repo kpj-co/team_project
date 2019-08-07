@@ -131,8 +131,7 @@
             android:src="@drawable/outline_thumb_up_black_18dp"
             app:layout_constraintBottom_toTopOf="@+id/rvComments"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDetailHashTags"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDetailHashTags" />
 
         <TextView
             android:id="@+id/tvDetailUpVotes"
@@ -184,8 +183,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/tvDetailUpVotes"
             app:layout_constraintStart_toEndOf="@+id/tvDetailUpVotes"
             app:layout_constraintTop_toTopOf="@+id/tvDetailUpVotes"
-            app:layout_constraintVertical_bias="0.444"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintVertical_bias="0.444" />
 
         <ImageView
             android:id="@+id/ivDetailComment"
@@ -200,8 +198,7 @@
             android:src="@drawable/outline_comment_black_18dp"
             app:layout_constraintBottom_toBottomOf="@+id/tvDetailDownVotes"
             app:layout_constraintStart_toEndOf="@+id/tvDetailDownVotes"
-            app:layout_constraintTop_toTopOf="@+id/tvDetailDownVotes"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="@+id/tvDetailDownVotes" />
 
 
         <android.support.v7.widget.RecyclerView
@@ -265,8 +262,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/tvDetailCommentCount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvDetailCommentCount"
-            app:layout_constraintTop_toTopOf="@+id/tvDetailCommentCount"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="@+id/tvDetailCommentCount" />
 
     </android.support.constraint.ConstraintLayout>
 
