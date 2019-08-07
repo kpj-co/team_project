@@ -2,12 +2,14 @@ package com.example.kpj.utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +57,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             view = inflater.inflate(R.layout.message_item, parent, false);
             return new normalMessageViewHolder(view);
         } else {
-            view = inflater.inflate(R.layout.messge_post_version_item, parent, false);
+            view = inflater.inflate(R.layout.messge_link_version_item, parent, false);
             return new linkMessageViewHolder(view, onMessageClicked);
         }
     }
@@ -165,9 +167,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     /***
      * View Holder for a message with link to a post
      */
-    public class linkMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class linkMessageViewHolder extends RecyclerView.ViewHolder {
+//  public class linkMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         ImageView ivOtherUser, ivCurrentUser, ivPostImage;
         TextView tvCurrentUserName, tvOtherUserName, tvPostTitle, tvPostDescription, tvUserOpinion;
+        LinearLayout postLinkContainer;
         MessageAdapter.OnMessageClicked onMessageClicked;
 
         public linkMessageViewHolder(@NonNull View itemView, MessageAdapter.OnMessageClicked onMessageClicked) {
@@ -180,8 +185,20 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ivPostImage = itemView.findViewById(R.id.ivPostImage);
             tvPostDescription = itemView.findViewById(R.id.tvPostDescription);
             tvUserOpinion = itemView.findViewById(R.id.tvUserOpinion);
+            postLinkContainer = itemView.findViewById(R.id.postLinkContainer);
             this.onMessageClicked = onMessageClicked;
-            itemView.setOnClickListener(this);
+            setPostLinkListener();
+//          itemView.setOnClickListener(this);
+        }
+
+        private void setPostLinkListener() {
+            postLinkContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "link was clicked", Toast.LENGTH_SHORT).show();
+                    onMessageClicked.onMessageClicked(getAdapterPosition());
+                }
+            });
         }
 
         private void setDetails(Message message) throws ParseException {
@@ -257,11 +274,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         }
 
-        @Override
-        public void onClick(View v) {
-            Toast.makeText(mContext, "link was clicked", Toast.LENGTH_SHORT).show();
-            onMessageClicked.onMessageClicked(getAdapterPosition());
-        }
+//        @Override
+//        public void onClick(View v) {
+//            Toast.makeText(mContext, "link was clicked", Toast.LENGTH_SHORT).show();
+//            onMessageClicked.onMessageClicked(getAdapterPosition());
+//        }
     }
 
     public interface OnMessageClicked {
