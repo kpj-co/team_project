@@ -80,9 +80,8 @@ public class PostByHashtagFilter extends Filter {
                 if(hashtagIsEligible(constraints, postHashtagRelation.getHashtag())) {
                     Post post = (Post) postHashtagRelation.getPost();
                     String id = post.getObjectId();
-                    int times = postCountById.getOrDefault(id, 0);
+                    int times = postCountById.containsKey(id) ? postCountById.get(id) : 0;
                     times++;
-
                     postCountById.put(id, times);
                 }
             }
