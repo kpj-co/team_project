@@ -245,18 +245,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if (post.getHasMedia()) {
                 ivPostImage.setVisibility(View.VISIBLE);
-                PostImageRelation.Query query = new PostImageRelation.Query();
-                query.whereEqualTo("post", post);
-                query.orderByDescending("createdAt");
-                query.findInBackground(new FindCallback<PostImageRelation>() {
-                    @Override
-                    public void done(List<PostImageRelation> relations, ParseException e) {
-                        if (e == null) {
-                            ImagePreview image = new ImagePreview((relations.get(0)).getImage());
-                            image.loadImage(mContext, ivPostImage);
-                        }
-                    }
-                });
+                ImagePreview image = new ImagePreview(post.getMedia());
+                image.loadImage(mContext, ivPostImage);;
             } else {
                 ivPostImage.setVisibility(View.GONE);
             }
