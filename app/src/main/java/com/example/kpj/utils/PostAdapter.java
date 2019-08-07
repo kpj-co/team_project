@@ -78,7 +78,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             public void onClick(View v) {
                 // go into detail activity of associated post
                 onPostClicked.onPostClickListener(holder.getAdapterPosition());
-
                 // TODO -- SCROLL TO THE COMMENT SECTION OF A POST
             }
         });
@@ -165,7 +164,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         if (profile != null) {
             Glide.with(context)
                     .load(profile.getUrl())
-                    .apply(new RequestOptions().centerCrop())
+                    .apply(new RequestOptions().circleCrop())
                     .into(holder.ivProfile);
         }
     }

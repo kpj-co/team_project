@@ -8,6 +8,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
+import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,7 +85,6 @@ public class CourseFeedFragment extends Fragment {
         // Set feed title to match course
 //        tvFeedTitle.setText(courseName);
         queryForCourseByName(getCurrentCourseName());
-        setUpSearchView(svSearch);
         return view;
     }
 
@@ -123,6 +124,7 @@ public class CourseFeedFragment extends Fragment {
                 setUpAdapter();
                 setEndlessRecyclerViewScrollListener();
                 queryPosts(true);
+                setUpSearchView(svSearch);
             }
         });
     }
@@ -228,7 +230,16 @@ public class CourseFeedFragment extends Fragment {
     }
 
     private void setUpSearchView(SearchView searchView) {
-        searchView.setQueryHint("#YourHashtags #here");
+        // change text size
+        AutoCompleteTextView autoCompleteTextViewSearch = (AutoCompleteTextView) searchView
+                .findViewById(searchView
+                .getContext()
+                .getResources()
+                .getIdentifier("app:id/search_src_text", null, null));
+        if (autoCompleteTextViewSearch != null) {
+            autoCompleteTextViewSearch.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        }
+        searchView.setQueryHint("search #tags in " + course.getName());
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -238,8 +249,12 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 try {
-                    postAdapter.filterList(s);
-                    postAdapter.notifyDataSetChanged();
+                    if (s.equals("")) {
+
+                    } else {
+                        postAdapter.filterList(s);
+                        postAdapter.notifyDataSetChanged();
+                    }
                     return true;
                 } catch (NullPointerException e) {
                     return false;
