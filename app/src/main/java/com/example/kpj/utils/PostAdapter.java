@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -174,12 +175,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return filteredPosts.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivProfile, ivPostImage;
         TextView tvUser, tvDate, tvTitle, tvDescription, tvHashtag1, tvUpVotes,
                 tvDownVotes, tvCommentCount;
         ImageButton ibLike, ibDislike, ibComment, ibSend;
         OnPostClicked onPostClicked;
+        LinearLayout postContainer;
 
         public ViewHolder(@NonNull View itemView, OnPostClicked onPostClicked) {
             super(itemView);
@@ -202,13 +204,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvUpVotes = itemView.findViewById(R.id.tvUpVotes);
             tvDownVotes = itemView.findViewById(R.id.tvDownVotes);
             tvCommentCount = itemView.findViewById(R.id.tvCommentCount);
-            itemView.setOnClickListener(this);
+            postContainer = itemView.findViewById(R.id.postContainer);
+            setPostClickListener();
         }
 
-        @Override
-        public void onClick(final View v) {
-            onPostClicked.onPostClickListener(getAdapterPosition());
+        private void setPostClickListener() {
+            postContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onPostClicked.onPostClickListener(getAdapterPosition());
+                }
+            });
         }
+
     }
 
     public interface OnPostClicked {
