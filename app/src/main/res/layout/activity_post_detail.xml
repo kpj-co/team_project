@@ -22,9 +22,11 @@
             android:scaleX="0.5"
             android:scaleY="0.5"
             app:layout_constraintBottom_toBottomOf="@+id/tvDetailHashTags"
+            app:layout_constraintEnd_toStartOf="@+id/tvDetailHashTags"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvDetailHashTags"
-            app:layout_constraintVertical_bias="0.6"
+            app:layout_constraintVertical_bias="0.588"
             app:srcCompat="@drawable/outline_label_black_18dp" />
 
         <TextView
@@ -122,8 +124,6 @@
             android:id="@+id/tvDetailHashTags"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
@@ -131,6 +131,7 @@
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/ibDetailLike"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/ivTagsIcon2"
             app:layout_constraintTop_toBottomOf="@+id/rvDetailImagePreview" />
 
