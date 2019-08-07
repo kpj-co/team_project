@@ -9,11 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kpj.R;
 import com.example.kpj.model.Course;
-import com.example.kpj.model.University;
 import com.example.kpj.model.UserCourseRelation;
 import com.example.kpj.utils.CourseAdapter;
 import com.parse.FindCallback;
@@ -78,7 +76,7 @@ public class CourseListActivity extends AppCompatActivity {
         tvToCreateNewCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, CreateNewCourse.class);
+                Intent intent = new Intent(context, registerNewCourse.class);
                 try {
                     intent.putExtra("uni", filterCourses.get(0).getUniversity());
                 } catch (NullPointerException e) {
