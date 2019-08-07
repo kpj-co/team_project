@@ -179,10 +179,12 @@ public class CourseFeedFragment extends Fragment {
         innerQuery.findInBackground(new FindCallback<PostHashtagRelation>() {
             @Override
             public void done(List<PostHashtagRelation> objects, ParseException e) {
+                List<String> hashtags = new ArrayList<>();
                 for (PostHashtagRelation relation : objects) {
-                    post.addHashtag(relation.getHashtag());
-                    postAdapter.notifyDataSetChanged();
+                    hashtags.add(relation.getHashtag());
                 }
+                post.setHashtags(hashtags);
+                postAdapter.notifyDataSetChanged();
             }
         });
     }

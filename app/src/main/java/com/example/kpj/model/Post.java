@@ -109,7 +109,7 @@ public class Post extends ParseObject {
         return hashtags;
     }
 
-    public void setHashtags(ArrayList hashtags) {
+    public void setHashtags(List<String> hashtags) {
         this.hashtags = hashtags;
     }
 
