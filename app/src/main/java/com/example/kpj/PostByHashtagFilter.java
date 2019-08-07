@@ -93,9 +93,8 @@ public class PostByHashtagFilter extends Filter {
                     String postID = (String)entries.getKey();
                     filteredPosts.add((Post)postByID.get(postID));
                 }
-                //Since the maps do not restart, you need to refresh the integer value
-                postCountById.put((String)entries.getKey(), 0);
             }
+            postCountById.clear();
             results.values = filteredPosts;
         }
         return results;
