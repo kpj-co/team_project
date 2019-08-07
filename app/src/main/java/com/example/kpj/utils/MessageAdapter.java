@@ -18,8 +18,6 @@ import com.example.kpj.RecyclerViewClickListener;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
-import com.example.kpj.model.PostImageRelation;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 
 import java.util.List;
@@ -58,7 +56,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return new normalMessageViewHolder(view);
         } else {
             view = inflater.inflate(R.layout.messge_post_version_item, parent, false);
-            return new postMessageViewHolder(view, onMessageClicked);
+            return new linkMessageViewHolder(view, onMessageClicked);
         }
     }
 
@@ -79,7 +77,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if(getItemViewType(position) == TYPE_NORMAL) {
                 ((normalMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
             } else {
-                ((postMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
+                ((linkMessageViewHolder) viewHolder).setDetails(mMessages.get(position));
             }
         } catch (ParseException e) {
             Toast.makeText(mContext, "can not load messages", Toast.LENGTH_SHORT).show();
@@ -92,11 +90,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class normalMessageViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
-        ImageView ivOtherUser;
-        ImageView ivCurrentUser;
-        TextView body;
-        TextView tvCurrentUserName;
-        TextView tvOtherUserName;
+        ImageView ivOtherUser, ivCurrentUser;
+        TextView body, tvCurrentUserName, tvOtherUserName;
 
         public normalMessageViewHolder(View itemView) {
             super(itemView);
@@ -167,20 +162,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-
-
-    public class postMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView ivOtherUser;
-        ImageView ivCurrentUser;
-        ImageView ivPostImage;
-        TextView tvCurrentUserName;
-        TextView tvOtherUserName;
-        TextView tvPostTitle;
-        TextView tvPostDescription;
-        TextView tvUserOpinion;
+    /***
+     * View Holder for a message with link to a post
+     */
+    public class linkMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView ivOtherUser, ivCurrentUser, ivPostImage;
+        TextView tvCurrentUserName, tvOtherUserName, tvPostTitle, tvPostDescription, tvUserOpinion;
         MessageAdapter.OnMessageClicked onMessageClicked;
 
-        public postMessageViewHolder(@NonNull View itemView, MessageAdapter.OnMessageClicked onMessageClicked) {
+        public linkMessageViewHolder(@NonNull View itemView, MessageAdapter.OnMessageClicked onMessageClicked) {
             super(itemView);
             ivOtherUser = itemView.findViewById(R.id.ivProfileOther);
             ivCurrentUser = itemView.findViewById(R.id.ivProfileMe);
