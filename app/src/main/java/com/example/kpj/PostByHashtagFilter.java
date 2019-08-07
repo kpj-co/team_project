@@ -1,7 +1,5 @@
 package com.example.kpj;
 import android.widget.Filter;
-import android.widget.Filterable;
-import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.utils.HashtagSanitizer;
@@ -31,7 +29,7 @@ public class PostByHashtagFilter extends Filter {
         updateFilter(posts);
     }
 
-    //Updates the postCountById to filter correctly
+    //Adds elements to the postHashtagRelations list and the postById map
     public void updateFilter(List<Post> posts) {
         for(final Post post : posts) {
             PostHashtagRelation.Query query = new PostHashtagRelation.Query();
@@ -75,6 +73,7 @@ public class PostByHashtagFilter extends Filter {
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
         filteredPosts.clear();
+        postCountById.clear();
         ArrayList<String> constraints = (ArrayList<String>) hashtagSanitizer.returnHashtags(constraint.toString());
         if(constraint != null && constraint.length() != 0) {
             for(PostHashtagRelation postHashtagRelation : postHashtagRelations) {
@@ -94,7 +93,6 @@ public class PostByHashtagFilter extends Filter {
                     filteredPosts.add((Post)postByID.get(postID));
                 }
             }
-            postCountById.clear();
             results.values = filteredPosts;
         }
         return results;
