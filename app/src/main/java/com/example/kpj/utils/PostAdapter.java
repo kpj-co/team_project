@@ -11,11 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.kpj.PostFilter;
+import com.example.kpj.PostByHashtagFilter;
 import com.example.kpj.R;
 import com.example.kpj.VoteSystemManager;
 import com.example.kpj.activities.MainActivity;
@@ -24,9 +23,6 @@ import com.example.kpj.model.Course;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
-import com.example.kpj.model.UserPostRelation;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -38,7 +34,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
     private List<Post> filteredPosts;
     private List<Post>fullPostsList;
-    private PostFilter filter;
+    private PostByHashtagFilter filter;
     private Course course;
     private OnPostClicked onPostClicked;
     private final static String KEY_SEND_POST_TO_CHAT = "A";
@@ -52,7 +48,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         fullPostsList.addAll(posts);
         filteredPosts = posts;
         filteredPosts.addAll(posts);
-        filter = new PostFilter((ArrayList<Post>) fullPostsList, this);
+        filter = new PostByHashtagFilter((ArrayList<Post>) fullPostsList, this);
     }
 
     @NonNull
@@ -221,7 +217,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     public void filterList(String s) {
-        filter.getFilter().filter(s);
+        filter.filter(s);
     }
 
     public void setList(List<Post> posts) {
