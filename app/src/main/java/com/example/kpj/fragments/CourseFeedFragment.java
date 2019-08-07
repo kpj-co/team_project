@@ -52,6 +52,7 @@ public class CourseFeedFragment extends Fragment {
     private Course course;
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private LinearLayoutManager linearLayoutManager;
+    private SearchView svSearch;
 
     public CourseFeedFragment() {
         // Required empty public constructor
@@ -86,7 +87,7 @@ public class CourseFeedFragment extends Fragment {
         // Get course from main activity
         String courseName = getCurrentCourseName();
         // Set feed title to match course
-        tvFeedTitle.setText(courseName);
+//        tvFeedTitle.setText(courseName);
         // Query for course by name
         final Course.Query courseQuery = new Course.Query();
         courseQuery.whereEqualTo("name", courseName);
@@ -191,9 +192,9 @@ public class CourseFeedFragment extends Fragment {
         rvCourseFeed = view.findViewById(R.id.rvCourseFeed);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         ibCompose = view.findViewById(R.id.ibCompose);
-        tvFeedTitle = view.findViewById(R.id.tvFeedTitle);
+//        tvFeedTitle = view.findViewById(R.id.tvFeedTitle);
         // TODO -- Figure out how to set up a search view
-        //svSearch = view.findViewById(R.id.svSearch);
+        svSearch = view.findViewById(R.id.svSearch);
     }
 
     private void initializeVariables() {
@@ -206,7 +207,6 @@ public class CourseFeedFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ComposePostActivity.class);
                 startActivity(intent);
-                getActivity().finish();
             }
         });
     }
