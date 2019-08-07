@@ -4,6 +4,7 @@ import android.widget.Filterable;
 import com.example.kpj.activities.ComposePostActivity;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
+import com.example.kpj.utils.HashtagSanitizer;
 import com.example.kpj.utils.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -21,14 +22,14 @@ public class PostByHashtagFilter extends Filter {
     //To retrieve posts by ID
     private Map<String, Post> postByID = new HashMap<>();
     private PostAdapter adapter;
+    private HashtagSanitizer hashtagSanitizer = new HashtagSanitizer();
+    FilterResults results = new FilterResults();
 
     public PostByHashtagFilter(ArrayList<Post> posts, final PostAdapter adapter) {
         postsList = posts;
         this.adapter =adapter;
         updateFilter(posts);
     }
-
-
 
     //Updates the postCountById to filter correctly
     public void updateFilter(List<Post> posts) {
@@ -74,8 +75,7 @@ public class PostByHashtagFilter extends Filter {
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
         filteredPosts.clear();
-        FilterResults results = new FilterResults();
-        ArrayList<String> constraints = ComposePostActivity.returnHashtags(constraint.toString());
+        ArrayList<String> constraints = (ArrayList<String>) hashtagSanitizer.returnHashtags(constraint.toString());
         if(constraint != null && constraint.length() != 0) {
             for(PostHashtagRelation postHashtagRelation : postHashtagRelations) {
                 if(hashtagIsEligible(constraints, postHashtagRelation.getHashtag())) {

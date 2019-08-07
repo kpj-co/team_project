@@ -26,6 +26,7 @@ import com.example.kpj.model.Post;
 import com.example.kpj.model.PostHashtagRelation;
 import com.example.kpj.model.PostImageRelation;
 import com.example.kpj.model.User;
+import com.example.kpj.utils.HashtagSanitizer;
 import com.example.kpj.utils.ImagePreviewAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -55,6 +56,7 @@ public class ComposePostActivity extends AppCompatActivity {
     private Context context;
     private Course course;
     private GalleryHelper galleryHelper;
+    private HashtagSanitizer hashtagSanitizer;
     private File photoFile;
     private String imagePath;
     private List<ImagePreview> mImages;
@@ -72,6 +74,7 @@ public class ComposePostActivity extends AppCompatActivity {
 
     private void initializeVariables() {
         context = ComposePostActivity.this;
+        hashtagSanitizer = new HashtagSanitizer();
         imagePath = "";
         String courseName = getCurrentCourseName();
         final Course.Query courseQuery = new Course.Query();
@@ -236,7 +239,7 @@ public class ComposePostActivity extends AppCompatActivity {
         // Grab text content from compose
         String newTitle = etComposePostTitle.getText().toString();
         String newBody = etComposeBody.getText().toString();
-        final ArrayList<String> hashtags = returnHashtags(etHashtags.getText().toString());
+        final ArrayList<String> hashtags = (ArrayList<String>) hashtagSanitizer.returnHashtags(etHashtags.getText().toString());
         // Set user of post
         newPost.setUser(ParseUser.getCurrentUser());
         // Set content of post
@@ -317,40 +320,5 @@ public class ComposePostActivity extends AppCompatActivity {
         if (message != null) {
             etComposeBody.setText(message.getDescription());
         }
-    }
-
-    //Returns an ArrayList of all the Hash Tags given by the user
-    public static ArrayList<String> returnHashtags(String hashtags) {
-        //Boolean to know if there is something in the current sequence of characters to be analyzed
-        boolean hasContent;
-        //Variable to store our "base point", or the # symbol that will start the hashtag
-        int basePoint;
-        //ArrayList that has the hashtags to be returned
-        ArrayList<String> hashtagsList;
-        //Initializing the boolean
-        hasContent = false;
-        //Initializing the basePoint
-        basePoint = 0;
-        //Initializing the list
-        hashtagsList = new ArrayList<>();
-        for(int i = 0; i < hashtags.length(); i++) {
-            //If it is a #, and we do not have a possible hashtag, change the base point
-            if(hashtags.charAt(i) == '#') {
-                basePoint = i;
-                hasContent = true;
-            }
-            //If there is a space, it could be a hashtag if it has content
-            else if(hashtags.charAt(i) == ' ' && hasContent) {
-                hashtagsList.add(hashtags.substring(basePoint + 1, i));
-                hasContent = false;
-            }
-            //The case is slightly different when we are dealing with the last character of the string
-            else if(i == hashtags.length() - 1 && hasContent) {
-                hashtagsList.add(hashtags.substring(basePoint + 1, i + 1));
-                hasContent = false;
-            }
-        }
-        //returning the object
-        return hashtagsList;
     }
 }
