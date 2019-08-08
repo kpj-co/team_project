@@ -10,6 +10,7 @@ public class PostImageRelation extends ParseObject {
 
     private static final String KEY_POST = "post";
     private static final String KEY_IMAGE = "image";
+    public  static final String KEY_IMAGE_ORDER = "arrayPlacement";
 
     public void setImage(ParseFile image) {
         put(KEY_IMAGE, image);
@@ -21,6 +22,10 @@ public class PostImageRelation extends ParseObject {
 
     public ParseFile getImage() {
         return getParseFile(KEY_IMAGE);
+    }
+
+    public void setImagePlacement(int i) {
+        put (KEY_IMAGE_ORDER, i);
     }
 
     public static class Query extends ParseQuery<PostImageRelation> {
