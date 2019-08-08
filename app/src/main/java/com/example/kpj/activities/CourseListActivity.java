@@ -37,7 +37,6 @@ public class CourseListActivity extends AppCompatActivity {
         this.context = CourseListActivity.this;
         this.tvToCreateNewCourse = findViewById(R.id.tvToCreateNewCourse);
         courses = new ArrayList<>();
-        queryCoursesByUserId(ParseUser.getCurrentUser());
         // set up recycler view
         recyclerView = findViewById(R.id.rvCourse);
         // set the adapter
@@ -46,28 +45,23 @@ public class CourseListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         // set the layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        queryCoursesByUserId();
     }
+    
 
-
-    private void queryCoursesByUserId(ParseUser user){
-        final UserCourseRelation.Query userCourseRelationQuery = new UserCourseRelation.Query();
-        userCourseRelationQuery.whereEqualTo("user", user);
+    private void queryCoursesByUserId(){
+        UserCourseRelation.Query userCourseRelationQuery = new UserCourseRelation.Query();
+        userCourseRelationQuery.whereEqualTo("user", ParseUser.getCurrentUser());
+        userCourseRelationQuery.include("course");
         userCourseRelationQuery.findInBackground(new FindCallback<UserCourseRelation>() {
             @Override
-            public void done(List<UserCourseRelation> objects, ParseException e) {
+            public void done(List<UserCourseRelation> relations, ParseException e) {
                 if(e == null){
-                    for(int i = 0; i < objects.size(); i++){
-                        Course course = (Course) objects.get(i).getCourse();
-                        courses.add(course);
-                        adapter.notifyItemInserted(courses.size() - 1);
-                        setCreateNewCourseListener();
-                        try {
-                            Log.d("UserCourseListFragment", "List of courses:" + course.fetchIfNeeded().getString("name"));
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
+                    for(UserCourseRelation relation : relations){
+                        insertCourseToList((Course) relation.getCourse());
                     }
                 }
+                setCreateNewCourseListener();
             }
         });
     }
@@ -86,7 +80,6 @@ public class CourseListActivity extends AppCompatActivity {
             }
         });
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -107,5 +100,6 @@ public class CourseListActivity extends AppCompatActivity {
     public void insertCourseToList(Course course) {
         courses.add(course);
         adapter.notifyItemInserted(courses.size() - 1);
+        Log.d("CourseListActivity", "" + courses.size());
     }
 }

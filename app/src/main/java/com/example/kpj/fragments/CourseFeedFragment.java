@@ -240,7 +240,7 @@ public class CourseFeedFragment extends Fragment {
     private void setUpSearchView(SearchView searchView) {
         // change text size
 //        AutoCompleteTextView autoCompleteTextViewSearch = (AutoCompleteTextView) searchView
-//                .findViewById(searchView
+//                .findViewById\(searchView
 //                .getContext()
 //                .getResources()
 //                .getIdentifier("app:id/search_src_text", null, null));
