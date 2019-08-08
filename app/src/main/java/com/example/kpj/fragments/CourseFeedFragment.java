@@ -253,11 +253,6 @@ public class CourseFeedFragment extends Fragment {
                     postAdapter.filterList(s);
                     postAdapter.notifyDataSetChanged();
                     lastConstraint = s;
-                    s = s.trim();
-                    if(postAdapter.getFullListSize() == 0 && (s.equals("") || s.equals("#"))) {
-                        postAdapter.clearFullList();
-                        postAdapter.updateFullList(postArrayList);
-                    }
                     return true;
                 } catch (NullPointerException e) {
                     return false;

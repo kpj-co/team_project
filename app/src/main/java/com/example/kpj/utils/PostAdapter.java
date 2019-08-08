@@ -34,7 +34,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private Context context;
     private List<Post> filteredPosts;
-    private List<Post>fullPostsList;
+    private List<Post> fullPostsList;
     private PostByHashtagFilter filter;
     private Course course;
     private OnPostClicked onPostClicked;
@@ -239,6 +239,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void clearFullList() {
         fullPostsList.clear();
         filter.clearFilter();
+    }
+
+    public void setOriginalList() {
+        filteredPosts = fullPostsList;
     }
 
     public int getFullListSize() { return fullPostsList.size();}
