@@ -151,12 +151,19 @@ public class SignUpFragment extends Fragment {
     }
 
     private void setUpSharedPref() {
+        if (photoFile != null) {
             photo = photoFile.toString();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("photo", photo);
-            editor.apply();
         }
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = prefs.edit();
+
+        if (photoFile != null) {
+            editor.putString("photo", photo);
+        }
+
+        editor.apply();
+    }
 
    private void checkIfUserExists(final String username){
         User.Query userQuery = new User.Query();
@@ -180,7 +187,6 @@ public class SignUpFragment extends Fragment {
                 }
                 }
         });
-
    }
 
     public void goToUniversityFragment() {
