@@ -232,14 +232,14 @@ public class CourseFeedFragment extends Fragment {
 
     private void setUpSearchView(SearchView searchView) {
         // change text size
-        AutoCompleteTextView autoCompleteTextViewSearch = (AutoCompleteTextView) searchView
-                .findViewById(searchView
-                .getContext()
-                .getResources()
-                .getIdentifier("app:id/search_src_text", null, null));
-        if (autoCompleteTextViewSearch != null) {
-            autoCompleteTextViewSearch.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-        }
+//        AutoCompleteTextView autoCompleteTextViewSearch = (AutoCompleteTextView) searchView
+//                .findViewById(searchView
+//                .getContext()
+//                .getResources()
+//                .getIdentifier("app:id/search_src_text", null, null));
+//        if (autoCompleteTextViewSearch != null) {
+//            autoCompleteTextViewSearch.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+//        }
         searchView.setQueryHint("search #tags in " + course.getName());
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -253,6 +253,11 @@ public class CourseFeedFragment extends Fragment {
                     postAdapter.filterList(s);
                     postAdapter.notifyDataSetChanged();
                     lastConstraint = s;
+                    s = s.trim();
+                    if(postAdapter.getFullListSize() == 0 && (s.equals("") || s.equals("#"))) {
+                        postAdapter.clearFullList();
+                        postAdapter.updateFullList(postArrayList);
+                    }
                     return true;
                 } catch (NullPointerException e) {
                     return false;
