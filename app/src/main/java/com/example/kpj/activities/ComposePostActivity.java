@@ -276,12 +276,15 @@ public class ComposePostActivity extends AppCompatActivity {
 
             // Save media via PostImage relation
             private void savePhotos() {
+                int i = 0;
                 if (mImages.size() != 0) {
                     for (ImagePreview image : mImages) {
                         PostImageRelation postImageRelation = new PostImageRelation();
                         postImageRelation.setPost(newPost);
                         postImageRelation.setImage(image.getParseFile());
+                        postImageRelation.setImagePlacement(i);
                         postImageRelation.saveInBackground();
+                        i++;
                     }
                     newPost.setHasMedia(true);
                     // save first photo of set
