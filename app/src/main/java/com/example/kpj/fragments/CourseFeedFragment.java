@@ -46,12 +46,13 @@ public class CourseFeedFragment extends Fragment {
     private ImageButton ibCompose;
     private SearchView svSearch;
     public RecyclerView rvCourseFeed;
-    public ArrayList<Post> postArrayList;
+    private ArrayList<Post> postArrayList;
     private PostAdapter postAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Course course;
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private LinearLayoutManager linearLayoutManager;
+    private String lastConstraint = "";
 
     public CourseFeedFragment() {
         // Required empty public constructor
@@ -249,12 +250,9 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 try {
-                    if (s.equals("")) {
-
-                    } else {
-                        postAdapter.filterList(s);
-                        postAdapter.notifyDataSetChanged();
-                    }
+                    postAdapter.filterList(s);
+                    postAdapter.notifyDataSetChanged();
+                    lastConstraint = s;
                     return true;
                 } catch (NullPointerException e) {
                     return false;
@@ -267,7 +265,9 @@ public class CourseFeedFragment extends Fragment {
         endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager, true) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                queryPosts(false);
+                if(lastConstraint.equals("")) {
+                    queryPosts(false);
+                }
             }
         };
         rvCourseFeed.addOnScrollListener(endlessRecyclerViewScrollListener);

@@ -75,6 +75,11 @@ public class PostByHashtagFilter extends Filter {
         filteredPosts.clear();
         postCountById.clear();
         ArrayList<String> constraints = (ArrayList<String>) hashtagSanitizer.returnHashtags(constraint.toString());
+
+        if(constraints.size() == 0 || constraint.toString().equals("#")) {
+            results.values = filteredPosts;
+            return results;
+        }
         if(constraint != null && constraint.length() != 0) {
             for(PostHashtagRelation postHashtagRelation : postHashtagRelations) {
                 if(hashtagIsEligible(constraints, postHashtagRelation.getHashtag())) {
