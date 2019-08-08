@@ -112,7 +112,6 @@ public class SignupFlowActivity extends AppCompatActivity {
         }
     }
 
-
     private void SignUp(final ParseUser user, final List<Course> selectedCourses){
         user.signUpInBackground(new SignUpCallback() {
             @Override
@@ -153,5 +152,4 @@ public class SignupFlowActivity extends AppCompatActivity {
         user.saveInBackground();
         Toast.makeText(getApplicationContext(), "Account created", Toast.LENGTH_LONG).show();
     }
-
 }

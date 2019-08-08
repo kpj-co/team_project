@@ -1,10 +1,7 @@
 package com.example.kpj;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -16,13 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kpj.model.Course;
-import com.example.kpj.model.University;
-import com.example.kpj.model.UserCourseRelation;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-
 
 import java.util.ArrayList;
 import java.util.List;

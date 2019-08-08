@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.kpj.R;
 import com.example.kpj.UniversityFragmentAdapter;
@@ -148,11 +147,3 @@ public class UniversityFragment extends Fragment {
         fragmentTransaction.commit();
     }
 }
-
-
-
-
-
-
-
-
