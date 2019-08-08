@@ -30,6 +30,7 @@ public class Post extends ParseObject {
     public static final String KEY_HASMEDIA = "hasMedia";
     public static final String KEY_IMAGEPREVIEW = "media";
     public static final String KEY_NUM_COMMENTS = "commentCount";
+    public static final String KEY_POST_LINK = "postLink";
 
     //Limit to get posts
     public static final int MAX_NUMBER = 7;
@@ -73,6 +74,8 @@ public class Post extends ParseObject {
 
     public int getNumComments() {return getInt(KEY_NUM_COMMENTS); }
 
+    public ParseObject getPostLink() {return getParseObject(KEY_POST_LINK);}
+
     public void setMedia( ParseFile photo) { put(KEY_IMAGEPREVIEW, photo); }
 
     public void setUser(ParseUser user) {
@@ -104,6 +107,8 @@ public class Post extends ParseObject {
     public void setCommentCount(int num) {
         put(KEY_NUM_COMMENTS, num);
     }
+
+    public void setPostLink(Post post) { put(KEY_POST_LINK, post);}
 
     public List<String> getHashtags() {
         return hashtags;
