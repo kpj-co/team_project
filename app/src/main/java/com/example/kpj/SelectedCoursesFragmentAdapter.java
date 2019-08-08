@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kpj.model.Course;
 import com.example.kpj.model.University;
@@ -35,10 +36,6 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
     private List<Course> courseFilteredList;
 
     private CourseFilter filter;
-
-    private String university;
-
-
 
     public SelectedCoursesFragmentAdapter(Context context, List<Course> courses) {
         this.context = context;
@@ -96,13 +93,10 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
         }
     }
 
-    public void setSelectedCourses(ParseUser user) {
-        for (int i = 0; i < selectedCourses.size(); i++) {
-            UserCourseRelation userCourseRelation = new UserCourseRelation();
-            userCourseRelation.setUser(user);
-            userCourseRelation.setCourse(selectedCourses.get(i));
-            userCourseRelation.saveInBackground();
-        }
+    public List<Course> getSelectedCoursesList(){
+        String msg = "SelectedCourseFragment list size = " + selectedCourses.size();
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        return selectedCourses;
     }
 
     public void filterList(String s) {

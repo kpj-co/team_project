@@ -110,9 +110,6 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/fragment_select_courses.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/fragment_select_courses.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/select_course_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/select_course_item.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/../.gradle/" />
     <ignored path="$PROJECT_DIR$/build/generated/not_namespaced_r_class_sources/" />
@@ -175,7 +172,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/UniversityFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
+            <state relative-caret-position="1725">
               <caret line="120" selection-start-line="120" selection-end-line="120" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -185,12 +182,58 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="988">
-              <caret line="69" selection-start-line="69" selection-end-line="69" />
+            <state relative-caret-position="66">
+              <caret line="114" column="37" selection-start-line="114" selection-start-column="22" selection-end-line="114" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#3206#3562#0" expanded="true" />
+                <element signature="e#3561#3562#0" expanded="true" />
+                <element signature="e#4716#5072#0" expanded="true" />
+                <element signature="e#5071#5072#0" expanded="true" />
+                <element signature="e#5368#5973#0" expanded="true" />
+                <element signature="e#5972#5973#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1017">
+              <caret line="95" column="62" selection-start-line="95" selection-start-column="62" selection-end-line="95" selection-end-column="62" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/model/UserCourseRelation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-6">
+              <caret line="12" column="54" selection-start-line="12" selection-start-column="54" selection-end-line="12" selection-end-column="54" />
+              <folding>
+                <element signature="e#605#606#0" expanded="true" />
+                <element signature="e#640#641#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="115">
+              <caret line="81" column="50" selection-start-line="81" selection-start-column="50" selection-end-line="81" selection-end-column="50" />
+              <folding>
+                <element signature="e#2530#3197#0" expanded="true" />
+                <element signature="e#3196#3197#0" expanded="true" />
+                <element signature="e#5037#5387#0" expanded="true" />
+                <element signature="e#5386#5387#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -199,58 +242,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="710">
-              <caret line="126" selection-start-line="126" selection-end-line="126" />
+            <state relative-caret-position="352">
+              <caret line="97" column="64" selection-start-line="97" selection-start-column="64" selection-end-line="97" selection-end-column="64" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3758#3759#0" expanded="true" />
                 <element signature="e#3802#3803#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/res/layout/fragment_select_courses.xml">
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="44" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
-            </state>
-          </provider>
-          <provider selected="true" editor-type-id="android-designer2" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-344">
-              <caret line="75" column="48" selection-start-line="75" selection-start-column="48" selection-end-line="75" selection-end-column="48" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#5887#6238#0" expanded="true" />
-                <element signature="e#6237#6238#0" expanded="true" />
-                <element signature="e#6474#6950#0" expanded="true" />
-                <element signature="e#6949#6950#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/res/layout/fragment_university.xml">
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" selection-start-line="17" selection-end-line="17" />
-            </state>
-          </provider>
-          <provider selected="true" editor-type-id="android-designer2" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="687">
-              <caret line="134" selection-start-line="134" selection-end-line="134" />
             </state>
           </provider>
         </entry>
@@ -287,6 +285,15 @@
       <find>COMPLETE</find>
       <find>photo</find>
       <find>glide</find>
+      <find>save</find>
+      <find>callback</find>
+      <find>call</find>
+      <find>interface</find>
+      <find>intent</find>
+      <find>selected</find>
+      <find>selectedCourses</find>
+      <find>userCourseRe</find>
+      <find>selectedCo</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/</dir>
@@ -330,10 +337,11 @@
         <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/UniversityFragment.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/select_course_item.xml" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/fragment_select_courses.xml" />
+        <option value="$PROJECT_DIR$/src/main/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java" />
-        <option value="$PROJECT_DIR$/src/main/res/layout/fragment_select_courses.xml" />
       </list>
     </option>
   </component>
@@ -391,6 +399,12 @@
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="res" type="d4f16f75:AndroidResFolderNode" />
               <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
+            </path>
+            <path>
+              <item name="team_project" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="values" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
           </expand>
           <select />
@@ -534,10 +548,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.21733822" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.21733822" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Build Variants" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
@@ -546,15 +559,15 @@
       <window_info id="Capture Tool" order="7" />
       <window_info id="Favorites" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Build" order="0" sideWeight="0.4981685" weight="0.63469386" />
-      <window_info anchor="bottom" id="Run" order="1" sideWeight="0.4981685" weight="0.41988304" />
+      <window_info active="true" anchor="bottom" id="Run" order="1" sideWeight="0.4981685" visible="true" weight="0.5653061" />
       <window_info anchor="bottom" id="Logcat" order="2" sideWeight="0.6965812" weight="0.35816327" />
       <window_info anchor="bottom" id="TODO" order="3" sideWeight="0.4981685" weight="0.32865497" />
       <window_info anchor="bottom" id="Android Profiler" order="4" sideWeight="0.4981685" weight="0.32865497" />
       <window_info anchor="bottom" id="Find" order="5" sideWeight="0.49876085" weight="0.32857144" />
-      <window_info anchor="bottom" id="Terminal" order="6" sideWeight="0.489011" weight="0.030612245" />
+      <window_info anchor="bottom" id="Terminal" order="6" sideWeight="0.489011" weight="0.47142857" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.510989" side_tool="true" weight="0.6336735" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.492674" weight="0.28469387" />
-      <window_info anchor="bottom" id="Debug" order="9" sideWeight="0.87728935" visible="true" weight="0.10204082" />
+      <window_info anchor="bottom" id="Debug" order="9" sideWeight="0.87728935" weight="0.3377551" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Theme Preview" order="2" />
@@ -640,105 +653,69 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java</url>
-          <line>72</line>
+          <line>70</line>
           <properties />
           <option name="timeStamp" value="64" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java</url>
-          <line>110</line>
+          <line>116</line>
           <properties />
           <option name="timeStamp" value="73" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java</url>
-          <line>114</line>
+          <line>120</line>
           <properties />
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
+          <line>105</line>
+          <properties />
+          <option name="timeStamp" value="122" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java</url>
-          <line>134</line>
+          <line>77</line>
           <properties />
-          <option name="timeStamp" value="75" />
+          <option name="timeStamp" value="132" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>124</line>
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java</url>
+          <line>78</line>
           <properties />
-          <option name="timeStamp" value="96" />
+          <option name="timeStamp" value="133" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java</url>
-          <line>46</line>
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java</url>
+          <line>80</line>
           <properties />
-          <option name="timeStamp" value="100" />
+          <option name="timeStamp" value="135" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>130</line>
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java</url>
+          <line>81</line>
           <properties />
-          <option name="timeStamp" value="107" />
+          <option name="timeStamp" value="136" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>122</line>
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java</url>
+          <line>82</line>
           <properties />
-          <option name="timeStamp" value="108" />
+          <option name="timeStamp" value="137" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>138</line>
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java</url>
+          <line>79</line>
           <properties />
-          <option name="timeStamp" value="110" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>140</line>
-          <properties />
-          <option name="timeStamp" value="111" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>147</line>
-          <properties />
-          <option name="timeStamp" value="112" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>113</line>
-          <properties />
-          <option name="timeStamp" value="113" />
+          <option name="timeStamp" value="138" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java</url>
-          <line>45</line>
+          <line>98</line>
           <properties />
-          <option name="timeStamp" value="114" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>152</line>
-          <properties />
-          <option name="timeStamp" value="118" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>153</line>
-          <properties />
-          <option name="timeStamp" value="119" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>154</line>
-          <properties />
-          <option name="timeStamp" value="120" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java</url>
-          <line>85</line>
-          <properties />
-          <option name="timeStamp" value="121" />
+          <option name="timeStamp" value="139" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -749,9 +726,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../settings.gradle">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="449">
@@ -835,13 +809,6 @@
             <element signature="e#1224#1225#0" expanded="true" />
             <element signature="e#1252#1253#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.parse-community.Parse-SDK-Android/parse/1.18.5/e9c8ddceb873d7b401b60f5ebd12f708d0a50ae7/parse-1.18.5-sources.jar!/com/parse/ParseObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="3013" selection-start-line="3013" selection-end-line="3013" />
         </state>
       </provider>
     </entry>
@@ -1083,47 +1050,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/model/UserCourseRelation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#640#641#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFilter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="464">
           <caret line="31" selection-start-line="31" selection-end-line="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="687">
-          <caret line="134" selection-start-line="134" selection-end-line="134" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="988">
-          <caret line="69" selection-start-line="69" selection-end-line="69" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/UniversityFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="120" selection-start-line="120" selection-end-line="120" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1140,36 +1070,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="710">
-          <caret line="126" selection-start-line="126" selection-end-line="126" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3758#3759#0" expanded="true" />
-            <element signature="e#3802#3803#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/85a33c440ab87ac7b31530e5d01ebb20/jars/classes.jar!/android/support/v7/widget/SearchView.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
           <caret line="1367" column="64" selection-start-line="1367" selection-start-column="64" selection-end-line="1367" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-344">
-          <caret line="75" column="48" selection-start-line="75" selection-start-column="48" selection-end-line="75" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#5887#6238#0" expanded="true" />
-            <element signature="e#6237#6238#0" expanded="true" />
-            <element signature="e#6474#6950#0" expanded="true" />
-            <element signature="e#6949#6950#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1188,6 +1092,92 @@
         </state>
       </provider>
       <provider selected="true" editor-type-id="android-designer2" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.parse-community.Parse-SDK-Android/parse/1.18.5/e9c8ddceb873d7b401b60f5ebd12f708d0a50ae7/parse-1.18.5-sources.jar!/com/parse/ParseObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="3021" selection-start-line="3021" selection-end-line="3021" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/UniversityFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1725">
+          <caret line="120" selection-start-line="120" selection-end-line="120" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/model/UserCourseRelation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-6">
+          <caret line="12" column="54" selection-start-line="12" selection-start-column="54" selection-end-line="12" selection-end-column="54" />
+          <folding>
+            <element signature="e#605#606#0" expanded="true" />
+            <element signature="e#640#641#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="114" column="37" selection-start-line="114" selection-start-column="22" selection-end-line="114" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3206#3562#0" expanded="true" />
+            <element signature="e#3561#3562#0" expanded="true" />
+            <element signature="e#4716#5072#0" expanded="true" />
+            <element signature="e#5071#5072#0" expanded="true" />
+            <element signature="e#5368#5973#0" expanded="true" />
+            <element signature="e#5972#5973#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/UniversityFragmentAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1017">
+          <caret line="95" column="62" selection-start-line="95" selection-start-column="62" selection-end-line="95" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="97" column="64" selection-start-line="97" selection-start-column="64" selection-end-line="97" selection-end-column="64" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3758#3759#0" expanded="true" />
+            <element signature="e#3802#3803#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="81" column="50" selection-start-line="81" selection-start-column="50" selection-end-line="81" selection-end-column="50" />
+          <folding>
+            <element signature="e#2530#3197#0" expanded="true" />
+            <element signature="e#3196#3197#0" expanded="true" />
+            <element signature="e#5037#5387#0" expanded="true" />
+            <element signature="e#5386#5387#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>

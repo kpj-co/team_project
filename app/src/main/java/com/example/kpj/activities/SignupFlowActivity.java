@@ -1,5 +1,6 @@
 package com.example.kpj.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -23,12 +24,10 @@ import com.example.kpj.model.UserCourseRelation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SignupFlowActivity extends AppCompatActivity {
@@ -37,10 +36,9 @@ public class SignupFlowActivity extends AppCompatActivity {
 
     private File photoFile;
 
-    private List<Course> filterCourses;
-
     private University selectedUniversity;
 
+    private String photo;
 
     public void onAttachFragment(final Fragment fragment){
         if(fragment instanceof SignUpFragment) {
@@ -69,11 +67,19 @@ public class SignupFlowActivity extends AppCompatActivity {
             final SelectCoursesFragment selectCoursesFragment = (SelectCoursesFragment) fragment;
             selectCoursesFragment.setUserSelectedCoursesListener(new SelectCoursesFragment.SelectedCoursesListener() {
                 @Override
-                public void onSelectCourses() {
-                    SignUp(user);
-                    finish();
+                public void onSelectCourses(List<Course> selectedCourses) {
+                    SignUp(user, selectedCourses);
                 }
             });
+        }
+    }
+
+    private void saveUserCourseRelations(List<Course> selectedCourses) {
+        for (Course course : selectedCourses) {
+            UserCourseRelation userCourseRelation = new UserCourseRelation();
+            userCourseRelation.setUser(user);
+            userCourseRelation.setCourse(course);
+            userCourseRelation.saveInBackground();
         }
     }
 
@@ -107,27 +113,36 @@ public class SignupFlowActivity extends AppCompatActivity {
     }
 
 
-    private void SignUp(final ParseUser user){
+    private void SignUp(final ParseUser user, final List<Course> selectedCourses){
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    saveNewProfileAssetsToParse();
+                    saveProfilePic();
+                    saveUserCourseRelations(selectedCourses);
+                    goToCourseListActivity();
                 } else {
                     Log.e("SignUpActivity", "Login Failed" + e);
                     e.printStackTrace();
                 }
             }
         });
+
     }
 
-        private void getSharedPrefs(){
+    private void goToCourseListActivity() {
+        Intent intent = new Intent(SignupFlowActivity.this, CourseListActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void getSharedPrefs(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String photo = prefs.getString("photo", "");
+        photo = prefs.getString("photo", "");
         photoFile = new File(photo);
     }
 
-    private void saveNewProfileAssetsToParse() {
+    private void saveProfilePic() {
         getSharedPrefs();
         if (photoFile != null) {
             ParseFile parseFile = new ParseFile(photoFile);
@@ -138,4 +153,5 @@ public class SignupFlowActivity extends AppCompatActivity {
         user.saveInBackground();
         Toast.makeText(getApplicationContext(), "Account created", Toast.LENGTH_LONG).show();
     }
+
 }

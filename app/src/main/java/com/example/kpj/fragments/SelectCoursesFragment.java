@@ -20,6 +20,7 @@ import com.example.kpj.SelectedCoursesFragmentAdapter;
 import com.example.kpj.activities.CourseListActivity;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.University;
+import com.example.kpj.model.UserCourseRelation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -49,7 +50,8 @@ public class SelectCoursesFragment extends Fragment {
     }
 
     public interface SelectedCoursesListener{
-        void onSelectCourses();
+        void onSelectCourses(List<Course> selectedCourses);
+
     }
 
     public static SelectCoursesFragment newInstance(int page) {
@@ -101,13 +103,12 @@ public class SelectCoursesFragment extends Fragment {
         bToUserCourseList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.onSelectCourses();
-                adapter.setSelectedCourses(ParseUser.getCurrentUser());
-                Intent intent = new Intent(getActivity(), CourseListActivity.class);
-                startActivity(intent);
+                callback.onSelectCourses(adapter.getSelectedCoursesList());
             }
         });
     }
+
+
 
     private void setUpRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.rvSelectCourse);
@@ -118,7 +119,7 @@ public class SelectCoursesFragment extends Fragment {
         adapter.filterList("");
     }
 
-    public void getSharedPrefs(final View view){
+    private void getSharedPrefs(final View view){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         university = prefs.getString("university", "");
         University.Query query = new University.Query();
@@ -149,7 +150,6 @@ public class SelectCoursesFragment extends Fragment {
                         Log.d("SelectCourseFragment", "List" + filterCourses);
                     }
                 }
-
                 setUpRecyclerView(view);
                 setUpSearchView(view);
                 setUpToUserCourseListListener();
@@ -157,7 +157,6 @@ public class SelectCoursesFragment extends Fragment {
         });
 
     }
-
 }
 
 
