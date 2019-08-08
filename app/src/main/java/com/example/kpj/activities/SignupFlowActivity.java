@@ -16,15 +16,19 @@ import com.example.kpj.R;
 import com.example.kpj.fragments.SelectCoursesFragment;
 import com.example.kpj.fragments.SignUpFragment;
 import com.example.kpj.fragments.UniversityFragment;
+import com.example.kpj.model.Course;
 import com.example.kpj.model.University;
 import com.example.kpj.model.User;
+import com.example.kpj.model.UserCourseRelation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SignupFlowActivity extends AppCompatActivity {
@@ -32,7 +36,11 @@ public class SignupFlowActivity extends AppCompatActivity {
     ParseUser user = new ParseUser();
 
     private File photoFile;
-    private Boolean completed = true;
+
+    private List<Course> filterCourses;
+
+    private University selectedUniversity;
+
 
     public void onAttachFragment(final Fragment fragment){
         if(fragment instanceof SignUpFragment) {
@@ -61,7 +69,7 @@ public class SignupFlowActivity extends AppCompatActivity {
             final SelectCoursesFragment selectCoursesFragment = (SelectCoursesFragment) fragment;
             selectCoursesFragment.setUserSelectedCoursesListener(new SelectCoursesFragment.SelectedCoursesListener() {
                 @Override
-                public void onSelectCourse() {
+                public void onSelectCourses() {
                     SignUp(user);
                     finish();
                 }
@@ -76,7 +84,7 @@ public class SignupFlowActivity extends AppCompatActivity {
             public void done(List<University> objects, ParseException e) {
                 if(e == null){
                     for(int i = 0; i < objects.size(); i++){
-                        University selectedUniversity = (University) objects.get(i);
+                        selectedUniversity = (University) objects.get(i);
                         user.put("University", selectedUniversity);
                     }
                 }
@@ -99,7 +107,7 @@ public class SignupFlowActivity extends AppCompatActivity {
     }
 
 
-    private void SignUp(ParseUser user){
+    private void SignUp(final ParseUser user){
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
@@ -113,11 +121,12 @@ public class SignupFlowActivity extends AppCompatActivity {
         });
     }
 
-    private void getSharedPrefs(){
+        private void getSharedPrefs(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String photo = prefs.getString("photo", "");
         photoFile = new File(photo);
     }
+
     private void saveNewProfileAssetsToParse() {
         getSharedPrefs();
         if (photoFile != null) {
@@ -130,5 +139,3 @@ public class SignupFlowActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Account created", Toast.LENGTH_LONG).show();
     }
 }
-
-
