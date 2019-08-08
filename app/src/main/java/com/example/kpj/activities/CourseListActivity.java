@@ -47,7 +47,7 @@ public class CourseListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         queryCoursesByUserId();
     }
-    
+
 
     private void queryCoursesByUserId(){
         UserCourseRelation.Query userCourseRelationQuery = new UserCourseRelation.Query();

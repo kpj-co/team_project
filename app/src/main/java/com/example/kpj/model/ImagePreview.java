@@ -1,6 +1,9 @@
 package com.example.kpj.model;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -31,15 +34,22 @@ public class ImagePreview {
         if (photoFile != null) {
             Glide.with(context)
                     .load(photoFile)
+                    .apply(new RequestOptions().placeholder(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().fallback(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().error(new ColorDrawable(Color.LTGRAY)))
                     .into(imageView);
         } else if (imagePath != null){
             Glide.with(context)
                     .load(imagePath)
-                    .into(imageView);
+                    .apply(new RequestOptions().placeholder(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().fallback(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().error(new ColorDrawable(Color.LTGRAY)))                    .into(imageView);
         } else if (parseFile != null) {
             Glide.with(context)
                     .load(parseFile.getUrl())
-                    .into(imageView);
+                    .apply(new RequestOptions().placeholder(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().fallback(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().error(new ColorDrawable(Color.LTGRAY)))                    .into(imageView);
         } else {
             Toast.makeText(context, "can not load images", Toast.LENGTH_SHORT).show();
         }
@@ -49,20 +59,29 @@ public class ImagePreview {
         if (photoFile != null) {
             Glide.with(context)
                     .load(photoFile)
+                    .apply(new RequestOptions().placeholder(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().fallback(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().error(new ColorDrawable(Color.LTGRAY)))
                     .apply(requestOptions)
                     .into(imageView);
         } else if (imagePath != null){
             Glide.with(context)
                     .load(imagePath)
+                    .apply(new RequestOptions().placeholder(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().fallback(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().error(new ColorDrawable(Color.LTGRAY)))
                     .apply(requestOptions)
                     .into(imageView);
         } else if (parseFile != null) {
             Glide.with(context)
                     .load(parseFile.getUrl())
+                    .apply(new RequestOptions().placeholder(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().fallback(new ColorDrawable(Color.LTGRAY)))
+                    .apply(new RequestOptions().error(new ColorDrawable(Color.LTGRAY)))
                     .apply(requestOptions)
                     .into(imageView);
         } else {
-            Toast.makeText(context, "can not load images", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "error loading images", Toast.LENGTH_SHORT).show();
         }
     }
 
