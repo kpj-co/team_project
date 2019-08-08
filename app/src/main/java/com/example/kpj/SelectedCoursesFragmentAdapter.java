@@ -1,8 +1,12 @@
 package com.example.kpj;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,8 +15,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kpj.model.Course;
+import com.example.kpj.model.University;
 import com.example.kpj.model.UserCourseRelation;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +36,15 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
 
     private CourseFilter filter;
 
-    private Boolean isChecked = false;
+    private String university;
 
-    public SelectedCoursesFragmentAdapter(Context context, ArrayList<Course> courses) {
+
+
+    public SelectedCoursesFragmentAdapter(Context context, List<Course> courses) {
         this.context = context;
-        this.universityCourses = courses;
         this.selectedCourses = new ArrayList<>();
         this.courseFilteredList = new ArrayList<>();
+        this.universityCourses = courses;
         this.filter = new CourseFilter(universityCourses, this);
     }
 
@@ -52,39 +63,40 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
-        Log.d("SelectedCourse", "On Bind Called");
+        Log.d("SelectedCourses", "On Bind Called");
         final Course course = courseFilteredList.get(position);
-        if(isChecked())
-            viewHolder.tvSelectCourses.setBackgroundColor(Color.GREEN);
-        else
-            viewHolder.tvSelectCourses.setBackgroundColor(Color.TRANSPARENT);
+        if(selectedCourses.contains(course)){
+            viewHolder.cdCourse.setBackgroundColor(Color.GREEN);
+        }else{
+            viewHolder.cdCourse.setBackgroundColor(Color.TRANSPARENT);
+        }
         String courseName = course.getName();
         viewHolder.tvSelectCourses.setText(courseName);
-        viewHolder.tvSelectCourses.setOnClickListener(new View.OnClickListener() {
+        viewHolder.cdCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               setChecked(!isChecked());
-                if(isChecked()){
-                    viewHolder.tvSelectCourses.setBackgroundColor(Color.GREEN);
+                boolean isChecked = selectedCourses.contains(course);
+                if(!isChecked){
+                    viewHolder.cdCourse.setBackgroundColor(Color.GREEN);
                     selectedCourses.add(course);
                 }
                 else{
-                    setChecked(isChecked);
-                    viewHolder.tvSelectCourses.setBackgroundColor(Color.TRANSPARENT);
+                    viewHolder.cdCourse.setBackgroundColor(Color.TRANSPARENT);
                     selectedCourses.remove(course);
                 }
             }
         });
     }
 
-    void setSearchList(List<Course> list) {
+    public void setSearchList(List<Course> list) {
         if (list == null) {
             courseFilteredList = universityCourses;
         } else {
             courseFilteredList = list;
         }
     }
-    public void addSelectedCourses(ParseUser user) {
+
+    public void setSelectedCourses(ParseUser user) {
         for (int i = 0; i < selectedCourses.size(); i++) {
             UserCourseRelation userCourseRelation = new UserCourseRelation();
             userCourseRelation.setUser(user);
@@ -97,10 +109,6 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
         filter.getFilter().filter(s);
     }
 
-    private Boolean isChecked(){ return isChecked;}
-
-    private void setChecked(boolean checked){isChecked = checked;}
-
     @Override
     public int getItemCount() {
         Log.d("SelectedCourse", "Item Count");
@@ -110,10 +118,12 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvSelectCourses;
+        private CardView cdCourse;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSelectCourses = itemView.findViewById(R.id.tvSelectCourse);
+            cdCourse = itemView.findViewById(R.id.cdCourse);
         }
     }
 }

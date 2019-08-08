@@ -13,13 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.kpj.R;
 import com.example.kpj.SelectedCoursesFragmentAdapter;
 import com.example.kpj.activities.CourseListActivity;
 import com.example.kpj.model.Course;
 import com.example.kpj.model.University;
-import com.example.kpj.model.UserCourseRelation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -33,20 +33,23 @@ public class SelectCoursesFragment extends Fragment {
     private static final String ARG_PAGE = "ARG_PAGE";
 
     private ArrayList<Course> filterCourses;
-    private ArrayList<Course> userSelectedCourses;
 
     private Button bToUserCourseList;
+
+    private TextView tvUserUniversity;
 
     private SelectedCoursesFragmentAdapter adapter;
 
     private SelectedCoursesListener callback;
+
+    private String university;
 
     public void setUserSelectedCoursesListener(SelectedCoursesListener selectedCoursesListener){
         this.callback = selectedCoursesListener;
     }
 
     public interface SelectedCoursesListener{
-        void onSelectCourse();
+        void onSelectCourses();
     }
 
     public static SelectCoursesFragment newInstance(int page) {
@@ -70,12 +73,9 @@ public class SelectCoursesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_select_courses, container, false);
         bToUserCourseList = view.findViewById(R.id.bToUserCourseList);
-
-        getSharedPrefs();
-        setUpRecyclerView(view);
-        setUpSearchView(view);
-        setUpToUserCourseListListener();
-
+        tvUserUniversity = view.findViewById(R.id.tvUserUniversity);
+        getSharedPrefs(view);
+        tvUserUniversity.setText(university);
         return view;
     }
 
@@ -101,8 +101,8 @@ public class SelectCoursesFragment extends Fragment {
         bToUserCourseList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.onSelectCourse();
-                adapter.addSelectedCourses(ParseUser.getCurrentUser());
+                callback.onSelectCourses();
+                adapter.setSelectedCourses(ParseUser.getCurrentUser());
                 Intent intent = new Intent(getActivity(), CourseListActivity.class);
                 startActivity(intent);
             }
@@ -111,7 +111,6 @@ public class SelectCoursesFragment extends Fragment {
 
     private void setUpRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.rvSelectCourse);
-        filterCourses = new ArrayList<>();
         adapter = new SelectedCoursesFragmentAdapter(getContext(), filterCourses);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -119,9 +118,9 @@ public class SelectCoursesFragment extends Fragment {
         adapter.filterList("");
     }
 
-    private void getSharedPrefs(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String university = prefs.getString("university", "");
+    public void getSharedPrefs(final View view){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        university = prefs.getString("university", "");
         University.Query query = new University.Query();
         query.whereEqualTo("name", university);
         query.findInBackground(new FindCallback<University>() {
@@ -129,14 +128,15 @@ public class SelectCoursesFragment extends Fragment {
             public void done(List<University> objects, ParseException e) {
                 if(e == null){
                     for(int i = 0; i < objects.size(); i++){
-                        fetchCourseByUniversity(objects.get(i));
+                        fetchCoursesByUniversity(objects.get(i),view);
                     }
                 }
             }
         });
     }
 
-    private void fetchCourseByUniversity(ParseObject university) {
+    private void fetchCoursesByUniversity(ParseObject university, final View view) {
+        filterCourses = new ArrayList<>();
         final Course.Query courseQuery = new Course.Query();
         courseQuery.whereEqualTo("University", university);
         courseQuery.findInBackground(new FindCallback<Course>() {
@@ -146,13 +146,18 @@ public class SelectCoursesFragment extends Fragment {
                     for (int i = 0; i < objects.size(); i++) {
                         Course course = (Course) objects.get(i);
                         filterCourses.add(course);
-                        adapter.notifyItemInserted(filterCourses.size() - 1);
                         Log.d("SelectCourseFragment", "List" + filterCourses);
                     }
                 }
+
+                setUpRecyclerView(view);
+                setUpSearchView(view);
+                setUpToUserCourseListListener();
             }
         });
+
     }
+
 }
 
 

@@ -4,5 +4,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_manager_signup_cycle">ManagerSignupCycleActivity</string>
+
+    <string name="next">next</string>
+
     <string name="title_activity_modify_user_courses">ModifyUserCourses</string>
+
 </resources>
