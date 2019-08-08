@@ -53,6 +53,7 @@ public class CourseFeedFragment extends Fragment {
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private LinearLayoutManager linearLayoutManager;
     private String lastConstraint = "";
+    private boolean userIsFiltering;
 
     public CourseFeedFragment() {
         // Required empty public constructor
@@ -93,9 +94,14 @@ public class CourseFeedFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                postAdapter.clearFullList();
-                endlessRecyclerViewScrollListener.resetState();
-                queryPosts(true);
+                if (!userIsFiltering) {
+                    Toast.makeText(getContext(), "REFRESHING . . .", Toast.LENGTH_SHORT).show();
+                    postAdapter.clearFullList();
+                    endlessRecyclerViewScrollListener.resetState();
+                    queryPosts(true);
+                } else {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
 
@@ -198,6 +204,7 @@ public class CourseFeedFragment extends Fragment {
 
     private void initializeVariables() {
         postArrayList = new ArrayList<>();
+        userIsFiltering = false;
     }
 
     private void setComposeButtonListener() {
@@ -240,6 +247,7 @@ public class CourseFeedFragment extends Fragment {
 //        if (autoCompleteTextViewSearch != null) {
 //            autoCompleteTextViewSearch.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 //        }
+        
         searchView.setQueryHint("search #tags in " + course.getName());
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -249,6 +257,13 @@ public class CourseFeedFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if (s != null) {
+                    userIsFiltering = true;
+
+                } else {
+                    userIsFiltering = false;
+                }
+
                 try {
                     postAdapter.filterList(s);
                     postAdapter.notifyDataSetChanged();
