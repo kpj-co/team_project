@@ -69,7 +69,7 @@ public class ComposePostActivity extends AppCompatActivity {
         initializeVariables();
         initializeViews();
         //if a user wants to post a message as a post, this method will do the job
-        preparePostFromComment();
+        preparePostFromMessage();
     }
 
     private void initializeVariables() {
@@ -318,7 +318,7 @@ public class ComposePostActivity extends AppCompatActivity {
     }
 
     //if a user wants to post a message as a post, this method will do the job
-    public void preparePostFromComment() {
+    public void preparePostFromMessage() {
         Message message = getIntent().getParcelableExtra("message");
         if (message != null) {
             etComposeBody.setText(message.getDescription());
