@@ -23,7 +23,7 @@ import java.util.List;
 
 public class CourseListActivity extends AppCompatActivity {
 
-    private ArrayList<Course> filterCourses;
+    private ArrayList<Course> courses;
     private RecyclerView recyclerView;
     private CourseAdapter adapter;
     private TextView tvToCreateNewCourse;
@@ -36,12 +36,12 @@ public class CourseListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_list);
         this.context = CourseListActivity.this;
         this.tvToCreateNewCourse = findViewById(R.id.tvToCreateNewCourse);
-        filterCourses = new ArrayList<>();
-        findCoursesByUserId(ParseUser.getCurrentUser());
+        courses = new ArrayList<>();
+        queryCoursesByUserId(ParseUser.getCurrentUser());
         // set up recycler view
         recyclerView = findViewById(R.id.rvCourse);
         // set the adapter
-        adapter = new CourseAdapter(context, filterCourses);
+        adapter = new CourseAdapter(context, courses);
         // attach adapter to recycler view
         recyclerView.setAdapter(adapter);
         // set the layout manager
@@ -49,7 +49,7 @@ public class CourseListActivity extends AppCompatActivity {
     }
 
 
-    private void findCoursesByUserId(ParseUser user){
+    private void queryCoursesByUserId(ParseUser user){
         final UserCourseRelation.Query userCourseRelationQuery = new UserCourseRelation.Query();
         userCourseRelationQuery.whereEqualTo("user", user);
         userCourseRelationQuery.findInBackground(new FindCallback<UserCourseRelation>() {
@@ -58,8 +58,8 @@ public class CourseListActivity extends AppCompatActivity {
                 if(e == null){
                     for(int i = 0; i < objects.size(); i++){
                         Course course = (Course) objects.get(i).getCourse();
-                        filterCourses.add(course);
-                        adapter.notifyItemInserted(filterCourses.size() - 1);
+                        courses.add(course);
+                        adapter.notifyItemInserted(courses.size() - 1);
                         setCreateNewCourseListener();
                         try {
                             Log.d("UserCourseListFragment", "List of courses:" + course.fetchIfNeeded().getString("name"));
@@ -78,7 +78,7 @@ public class CourseListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(context, registerNewCourse.class);
                 try {
-                    intent.putExtra("uni", filterCourses.get(0).getUniversity());
+                    intent.putExtra("uni", courses.get(0).getUniversity());
                 } catch (NullPointerException e) {
                     // do nothing
                 }
@@ -105,7 +105,7 @@ public class CourseListActivity extends AppCompatActivity {
     }
 
     public void insertCourseToList(Course course) {
-        filterCourses.add(course);
-        adapter.notifyItemInserted(filterCourses.size() - 1);
+        courses.add(course);
+        adapter.notifyItemInserted(courses.size() - 1);
     }
 }
