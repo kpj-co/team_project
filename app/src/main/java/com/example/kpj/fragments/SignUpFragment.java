@@ -161,8 +161,6 @@ public class SignUpFragment extends Fragment {
         if (photoFile != null) {
             editor.putString("photo", photo);
         }
-    }
-
         editor.apply();
     }
 

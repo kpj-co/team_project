@@ -102,7 +102,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvCurrentUserName = itemView.findViewById(R.id.tvMyUsername);
             tvOtherUserName = itemView.findViewById(R.id.tvAnotherUsername);
             body = itemView.findViewById(R.id.tvBody);
-            itemView.setOnLongClickListener(this);
+            body.setOnLongClickListener(this);
+
         }
 
         private void setDetails(Message message) {
