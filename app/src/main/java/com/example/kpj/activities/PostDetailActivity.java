@@ -75,7 +75,7 @@ public class PostDetailActivity extends AppCompatActivity {
         if (post.getHasMedia()) {
             PostImageRelation.Query query = new PostImageRelation.Query();
             query.whereEqualTo("post", post);
-            query.orderByDescending("createdAt");
+            query.orderByAscending(PostImageRelation.KEY_IMAGE_ORDER);
             query.findInBackground(new FindCallback<PostImageRelation>() {
                 @Override
                 public void done(List<PostImageRelation> relations, ParseException e) {
