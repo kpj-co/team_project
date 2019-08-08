@@ -1,4 +1,5 @@
 package com.example.kpj.activities;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -63,7 +64,6 @@ public class ComposePostActivity extends AppCompatActivity {
     private String imagePath;
     private List<ImagePreview> mImages;
     private ImagePreviewAdapter imagePreviewAdapter;
-    private boolean hasLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,6 @@ public class ComposePostActivity extends AppCompatActivity {
         context = ComposePostActivity.this;
         hashtagSanitizer = new HashtagSanitizer();
         imagePath = "";
-        hasLink = false;
         String courseName = getCurrentCourseName();
         final Course.Query courseQuery = new Course.Query();
         courseQuery.whereEqualTo("name", courseName);
@@ -123,12 +122,16 @@ public class ComposePostActivity extends AppCompatActivity {
 
     // this method makes the views assocaited with a link invisible unless post has a link ref
     private void hideLinkViews(boolean makeHidden) {
+        int viewState;
         if (makeHidden) {
-            ivLinkIcon.setVisibility(View.GONE);
-            linkContainter.setVisibility(View.GONE);
-            tvLinkUserName.setVisibility(View.GONE);
-            tvLinkContent.setVisibility(View.GONE);
+            viewState = View.GONE;
+        } else {
+            viewState = View.VISIBLE;
         }
+        ivLinkIcon.setVisibility(viewState);
+        linkContainter.setVisibility(viewState);
+        tvLinkUserName.setVisibility(viewState);
+        tvLinkContent.setVisibility(viewState);
     }
 
     private void setUpImagePreview() {
@@ -343,8 +346,37 @@ public class ComposePostActivity extends AppCompatActivity {
         if (message != null) {
             etComposeBody.setText(message.getDescription());
             if (message.getPost() != null) {
-                hasLink = true;
+                hideLinkViews(false);
+                bindLinkContent((Post) message.getPost());
             }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void bindLinkContent(Post link) {
+        try {
+            String linkUserName = "You are referencing post from " +
+                    ((Post) link.fetchIfNeeded()).getUser().fetchIfNeeded().getUsername();
+            tvLinkUserName.setText(linkUserName);
+        } catch (ParseException e) {
+            tvLinkUserName.setText("USER NOT FOUND");
+            e.printStackTrace();
+        }
+
+        try {
+            if (((Post) link.fetchIfNeeded()).getTitle() != null) {
+                tvLinkContent.setText(((Post) link.fetchIfNeeded()).getTitle());
+            } else if (((Post) link.fetchIfNeeded()).getDescription() != null) {
+                tvLinkContent.setText(((Post) link.fetchIfNeeded()).getDescription());
+            } else if (((Post) link.fetchIfNeeded()).getMedia() != null &&
+                    ((Post) link.fetchIfNeeded()).getHasMedia()) {
+                tvLinkContent.setText("Post is an Image");
+            } else {
+                tvLinkContent.setText(". . .");
+            }
+        } catch (ParseException e) {
+            tvLinkUserName.setText("CONTENT LOADING ERROR");
+            e.printStackTrace();
         }
     }
 }
