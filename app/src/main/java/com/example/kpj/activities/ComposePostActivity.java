@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.kpj.CameraLauncher;
@@ -43,11 +44,12 @@ import java.util.List;
 public class ComposePostActivity extends AppCompatActivity {
 
     EditText etComposePostTitle, etComposeBody, etHashtags;
-    TextView tvComposeTitleLabel, tvComposeUsername, tvComposeBodyLabel;
-    ImageView ivComposeProfile;
+    TextView tvComposeTitleLabel, tvComposeUsername, tvComposeBodyLabel, tvLinkUserName, tvLinkContent;
+    ImageView ivComposeProfile, ivLinkIcon;
     ImageButton ibAddPdf, ibCamera, ibExitCompose, ibAddImage;
     RecyclerView rvImagePreview;
     Button bLaunch;
+    LinearLayout linkContainter;
 
     public final static String APP_TAG = "compose post activity";
     private final static int GALLERY_REQUEST_CODE = 100;
@@ -61,11 +63,12 @@ public class ComposePostActivity extends AppCompatActivity {
     private String imagePath;
     private List<ImagePreview> mImages;
     private ImagePreviewAdapter imagePreviewAdapter;
+    private boolean hasLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose_post);
+        setContentView(R.layout.activity_compose_post2);
         initializeVariables();
         initializeViews();
         //if a user wants to post a message as a post, this method will do the job
@@ -76,6 +79,7 @@ public class ComposePostActivity extends AppCompatActivity {
         context = ComposePostActivity.this;
         hashtagSanitizer = new HashtagSanitizer();
         imagePath = "";
+        hasLink = false;
         String courseName = getCurrentCourseName();
         final Course.Query courseQuery = new Course.Query();
         courseQuery.whereEqualTo("name", courseName);
@@ -109,6 +113,22 @@ public class ComposePostActivity extends AppCompatActivity {
         this.mImages = new ArrayList<>();
         setUpImagePreview();
         rvImagePreview.setVisibility(View.GONE);
+        // views for a post link
+        ivLinkIcon = findViewById(R.id.ivLinkIcon);
+        linkContainter = findViewById(R.id.linkContainer);
+        tvLinkUserName = findViewById(R.id.tvLinkUserName);
+        tvLinkContent = findViewById(R.id.tvLinkContent);
+        hideLinkViews(true);
+    }
+
+    // this method makes the views assocaited with a link invisible unless post has a link ref
+    private void hideLinkViews(boolean makeHidden) {
+        if (makeHidden) {
+            ivLinkIcon.setVisibility(View.GONE);
+            linkContainter.setVisibility(View.GONE);
+            tvLinkUserName.setVisibility(View.GONE);
+            tvLinkContent.setVisibility(View.GONE);
+        }
     }
 
     private void setUpImagePreview() {
@@ -322,6 +342,9 @@ public class ComposePostActivity extends AppCompatActivity {
         Message message = getIntent().getParcelableExtra("message");
         if (message != null) {
             etComposeBody.setText(message.getDescription());
+            if (message.getPost() != null) {
+                hasLink = true;
+            }
         }
     }
 }
