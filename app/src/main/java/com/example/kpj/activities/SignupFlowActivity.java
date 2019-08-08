@@ -2,6 +2,7 @@ package com.example.kpj.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 
@@ -24,10 +25,12 @@ import com.example.kpj.model.UserCourseRelation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SignupFlowActivity extends AppCompatActivity {
@@ -39,6 +42,8 @@ public class SignupFlowActivity extends AppCompatActivity {
     private University selectedUniversity;
 
     private String photo;
+
+    private List<Course> selectedCourses;
 
     public void onAttachFragment(final Fragment fragment){
         if(fragment instanceof SignUpFragment) {
@@ -68,6 +73,7 @@ public class SignupFlowActivity extends AppCompatActivity {
             selectCoursesFragment.setUserSelectedCoursesListener(new SelectCoursesFragment.SelectedCoursesListener() {
                 @Override
                 public void onSelectCourses(List<Course> selectedCourses) {
+                    selectedCourses = selectedCourses;
                     SignUp(user, selectedCourses);
                 }
             });
@@ -81,6 +87,7 @@ public class SignupFlowActivity extends AppCompatActivity {
             userCourseRelation.setCourse(course);
             userCourseRelation.saveInBackground();
         }
+        goToCourseListActivity();
     }
 
     private void getUserUniversity(String university, University.Query query) {
@@ -119,7 +126,6 @@ public class SignupFlowActivity extends AppCompatActivity {
                 if (e == null) {
                     saveProfilePic();
                     saveUserCourseRelations(selectedCourses);
-                    goToCourseListActivity();
                 } else {
                     Log.e("SignUpActivity", "Login Failed" + e);
                     e.printStackTrace();
