@@ -230,10 +230,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
         ParseFile profile = post.getUser().getParseFile(User.KEY_PROFILE);
         if (profile != null) {
-            Glide.with(context)
-                    .load(profile.getUrl())
-                    .apply(new RequestOptions().centerCrop())
-                    .into(ivDetailProfilePic);
+            ImagePreview profilePreview = new ImagePreview(profile);
+            profilePreview.loadImage(context, ivDetailProfilePic, new RequestOptions().circleCrop());
         } else {
             ivDetailProfilePic.setColorFilter(Color.DKGRAY);
         }
