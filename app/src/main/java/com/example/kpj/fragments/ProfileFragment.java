@@ -47,21 +47,26 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        findViewsById(view);
+        setBtnLogOut();
+        ParseUser user = ParseUser.getCurrentUser();
+        setUserProfileImage(user);
+        return view;
+
+    }
+
+    private void setUserProfileImage(ParseUser user) {
+        tvUsername.setText(user.getUsername());
+        Glide.with(getContext())
+                .load(user.getParseFile(User.KEY_PROFILE).getUrl())
+                .into(imageView);
+    }
+
+    private void findViewsById(View view) {
         imageView = view.findViewById(R.id.ivProfilePic);
         tvUsername = view.findViewById(R.id.tvProfileUsername);
         btnLogOut = view.findViewById(R.id.bLogout);
-        setBtnLogOut();
-
-        ParseUser user = ParseUser.getCurrentUser();
-        tvUsername.setText(user.getUsername());
-//        Glide.with(getContext())
-//                .load(user.getParseFile(User.KEY_PROFILE).getUrl())
-//                .into(imageView);
-        return view;
-
     }
 
     public void setBtnLogOut() {
