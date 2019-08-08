@@ -105,7 +105,7 @@ public class PostByHashtagFilter extends Filter {
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
         filteredPosts = (ArrayList<Post>) results.values;
-        if(filteredPosts == null || constraint.equals("")) {
+        if(filteredPosts == null || constraint.equals("") || constraint.equals("#")) {
             //filteredPosts = postsList;
             adapter.setOriginalList();
             return;
