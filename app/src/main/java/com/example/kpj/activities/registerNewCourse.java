@@ -1,13 +1,8 @@
 package com.example.kpj.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.method.KeyListener;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,15 +15,11 @@ import com.example.kpj.model.University;
 import com.example.kpj.model.UserCourseRelation;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.nio.channels.InterruptedByTimeoutException;
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 
-public class CreateNewCourse extends AppCompatActivity {
+public class registerNewCourse extends AppCompatActivity {
 
     TextView tvLandingText, tvValidCourse;
     Button btnCourseRegister;
@@ -135,7 +126,7 @@ public class CreateNewCourse extends AppCompatActivity {
     }
 
     private void sendToCourseListActivity(Course newCourse) {
-        Intent intent = new Intent( CreateNewCourse.this, CourseListActivity.class);
+        Intent intent = new Intent( registerNewCourse.this, CourseListActivity.class);
         intent.putExtra("new course", newCourse);
         startActivity(intent);
         finish();

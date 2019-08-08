@@ -4,27 +4,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activities.PostDetailActivity">
 
+        <ImageView
+            android:id="@+id/ivTagsIcon2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:padding="0dp"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDetailHashTags"
+            app:layout_constraintEnd_toStartOf="@+id/tvDetailHashTags"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvDetailHashTags"
+            app:layout_constraintVertical_bias="0.588"
+            app:srcCompat="@drawable/outline_label_black_18dp" />
+
         <TextView
             android:id="@+id/tvDetailDescription"
-            android:layout_width="371dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="10dp"
             android:text="body"
-            android:textSize="16sp"
+            android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/rvDetailImagePreview"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvDetailTitle" />
 
@@ -32,16 +51,16 @@
             android:id="@+id/tvDetailTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
             android:text="post title"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/tvDetailDescription"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivDetailProfilePic" />
 
@@ -51,7 +70,7 @@
             android:layout_height="50dp"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintBottom_toTopOf="@+id/tvDetailTitle"
             app:layout_constraintEnd_toStartOf="@+id/tvDetailUsername"
             app:layout_constraintHorizontal_bias="0.5"
@@ -86,17 +105,18 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvDetailImagePreview"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_width="0dp"
+            android:layout_height="460dp"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="5dp"
+            android:background="#FFFFFF"
+            android:padding="0dp"
             app:layout_constraintBottom_toTopOf="@+id/tvDetailHashTags"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvDetailDescription" />
 
@@ -104,9 +124,7 @@
             android:id="@+id/tvDetailHashTags"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:text="TextView"
@@ -114,25 +132,24 @@
             app:layout_constraintBottom_toTopOf="@+id/ibDetailLike"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivTagsIcon2"
             app:layout_constraintTop_toBottomOf="@+id/rvDetailImagePreview" />
 
         <ImageButton
             android:id="@+id/ibDetailLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="44dp"
-            android:layout_marginLeft="44dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/colorPrimaryLight"
-            android:padding="0dp"
+            android:padding="10dp"
             android:scaleX="0.7"
             android:scaleY="0.7"
             android:src="@drawable/outline_thumb_up_black_18dp"
             app:layout_constraintBottom_toTopOf="@+id/rvComments"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDetailHashTags"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDetailHashTags" />
 
         <TextView
             android:id="@+id/tvDetailUpVotes"
@@ -177,15 +194,14 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:backgroundTint="@color/colorPrimaryLight"
-            android:padding="0dp"
+            android:padding="10dp"
             android:scaleX="0.7"
             android:scaleY="0.7"
             android:src="@drawable/outline_thumb_down_black_18dp"
             app:layout_constraintBottom_toBottomOf="@+id/tvDetailUpVotes"
             app:layout_constraintStart_toEndOf="@+id/tvDetailUpVotes"
             app:layout_constraintTop_toTopOf="@+id/tvDetailUpVotes"
-            app:layout_constraintVertical_bias="0.444"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintVertical_bias="0.444" />
 
         <ImageView
             android:id="@+id/ivDetailComment"
@@ -200,8 +216,7 @@
             android:src="@drawable/outline_comment_black_18dp"
             app:layout_constraintBottom_toBottomOf="@+id/tvDetailDownVotes"
             app:layout_constraintStart_toEndOf="@+id/tvDetailDownVotes"
-            app:layout_constraintTop_toTopOf="@+id/tvDetailDownVotes"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="@+id/tvDetailDownVotes" />
 
 
         <android.support.v7.widget.RecyclerView
@@ -210,7 +225,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -222,10 +237,15 @@
             android:id="@+id/ibAddComment"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            app:layout_constraintBottom_toBottomOf="@+id/etWriteComment"
+            android:layout_marginBottom="20dp"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etWriteComment"
+            app:layout_constraintVertical_bias="1.0"
             tools:srcCompat="@tools:sample/avatars" />
 
         <EditText
@@ -235,33 +255,35 @@
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
             android:ems="10"
             android:gravity="bottom|left"
             android:hint="comment here "
             android:inputType="textMultiLine"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ibAddComment"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rvComments" />
 
         <ImageButton
             android:id="@+id/ibDetailSend"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:backgroundTint="@color/colorPrimaryLight"
+            android:padding="10dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:src="@drawable/outline_send_black_18dp"
             app:layout_constraintBottom_toBottomOf="@+id/tvDetailCommentCount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvDetailCommentCount"
-            app:layout_constraintTop_toTopOf="@+id/tvDetailCommentCount"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="@+id/tvDetailCommentCount" />
 
     </android.support.constraint.ConstraintLayout>
 

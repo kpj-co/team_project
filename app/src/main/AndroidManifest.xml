@@ -21,7 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.CreateNewCourse"></activity>
+        <activity
+            android:name=".activities.ModifyUserCourses"
+            android:label="@string/title_activity_modify_user_courses"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activities.registerNewCourse" />
         <activity android:name=".activities.PostDetailActivity" />
         <activity android:name=".activities.CourseListActivity" />
         <activity android:name=".activities.LoginActivity">

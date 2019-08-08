@@ -45,6 +45,7 @@ public class GalleryHelper {
                 ActivityCompat.requestPermissions((Activity) context, new String[]
                                 {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         PICK_FROM_GALLERY);
+                requestGalleryPermission();
             } else {
                 hasAccess = true;
             }

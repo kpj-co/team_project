@@ -34,9 +34,6 @@ public class Post extends ParseObject {
     //Limit to get posts
     public static final int MAX_NUMBER = 7;
 
-    public boolean isLiked = false;
-    public boolean isDisliked = false;
-
     //Tradeoff space to be faster and deliver a better user experience in the chat
     private String title;
     private String description;
@@ -112,7 +109,7 @@ public class Post extends ParseObject {
         return hashtags;
     }
 
-    public void setHashtags(ArrayList hashtags) {
+    public void setHashtags(List<String> hashtags) {
         this.hashtags = hashtags;
     }
 

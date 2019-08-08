@@ -77,6 +77,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             final Intent intent = new Intent(context, MainActivity.class);
             final Course.Query courseQuery = new Course.Query();
             courseQuery.whereEqualTo("name", tvCourse.getText().toString());
+            courseQuery.withUniversity();
             courseQuery.findInBackground(new FindCallback<Course>() {
                 @Override
                 public void done(List<Course> selectedCourse, ParseException e) {

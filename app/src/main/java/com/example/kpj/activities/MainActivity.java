@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.example.kpj.R;
 import com.example.kpj.FragmentMainActivityAdapter;
 import com.example.kpj.model.Course;
+import com.example.kpj.model.University;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences settings = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("courseName", course.getName());
+            editor.putString("universityName", ((University)course.getUniversity()).getName());
             editor.apply();
         }
     }

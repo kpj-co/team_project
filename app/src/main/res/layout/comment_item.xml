@@ -10,21 +10,22 @@
         android:id="@+id/ivCommentProfilePic"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
-        android:layout_width="329dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivCommentProfilePic"
         app:layout_constraintTop_toTopOf="@+id/ivCommentProfilePic">
 
@@ -34,15 +35,17 @@
             android:layout_height="wrap_content"
             android:gravity="bottom|start"
             android:hint="username"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tvCommentBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:background="@drawable/comment_container"
             android:hint="comment"
             android:textSize="14sp" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

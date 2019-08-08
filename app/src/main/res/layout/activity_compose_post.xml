@@ -3,41 +3,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollView2"
     android:layout_width="match_parent"
+    android:background="@color/colorPrimaryLight"
     android:layout_height="match_parent">
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.ComposePostActivity">
 
     <ImageButton
         android:id="@+id/ibAddPdf"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="70dp"
         android:layout_marginRight="70dp"
+        android:padding="10dp"
+        android:src="@drawable/outline_insert_drive_file_black_18dp"
+        android:backgroundTint="@color/colorPrimaryLight"
         app:layout_constraintBottom_toBottomOf="@+id/ibAddImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ibAddImage"
         app:layout_constraintTop_toTopOf="@+id/ibAddImage"
-        app:layout_constraintVertical_bias="1.0"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageButton
         android:id="@+id/ibCamera"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:layout_marginLeft="70dp"
+        android:padding="10dp"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:src="@drawable/outline_camera_alt_black_18dp"
         app:layout_constraintBottom_toBottomOf="@+id/ibAddImage"
         app:layout_constraintEnd_toStartOf="@+id/ibAddImage"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ibAddImage"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="@+id/ibAddImage" />
 
     <EditText
         android:id="@+id/etComposePostTitle"
@@ -98,14 +101,15 @@
 
     <ImageButton
         android:id="@+id/ibExitCompose"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:padding="10dp"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/outline_close_black_18dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvComposeBodyLabel"
@@ -143,14 +147,18 @@
 
     <ImageButton
         android:id="@+id/ibAddImage"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:padding="10dp"
+        android:src="@drawable/outline_insert_photo_black_18dp"
         app:layout_constraintBottom_toTopOf="@+id/etTags"
         app:layout_constraintEnd_toStartOf="@+id/ibAddPdf"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ibCamera"
-        app:layout_constraintTop_toBottomOf="@+id/rvDetailImagePreview"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/rvDetailImagePreview" />
 
     <Button
         android:id="@+id/bLaunch"
@@ -171,9 +179,7 @@
         android:id="@+id/etTags"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:ems="10"
@@ -181,24 +187,42 @@
         android:inputType="textPersonName"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ivTagsIcon"
         app:layout_constraintTop_toBottomOf="@+id/ibAddImage" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvDetailImagePreview"
         android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_height="460dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
+        android:background="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/ibAddImage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etComposeBody"
         app:reverseLayout="false" />
+
+    <ImageView
+        android:id="@+id/ivTagsIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:padding="0dp"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        app:layout_constraintBottom_toBottomOf="@+id/etTags"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etTags"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/outline_label_black_18dp" />
 
 </android.support.constraint.ConstraintLayout>
 

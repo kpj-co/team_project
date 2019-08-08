@@ -6,63 +6,74 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="393dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvFeedTitle">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvCourseFeed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <!--<TextView-->
+        <!--android:id="@+id/tvFeedTitle"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:paddingTop="5dp"-->
+        <!--android:paddingBottom="5dp"-->
+        <!--android:textColor="#FFE3B5"-->
+        <!--android:textIsSelectable="false"-->
+        <!--android:textSize="14sp"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/svSearch"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.5"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
     <SearchView
         android:id="@+id/svSearch"
-        android:layout_width="350dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="3dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="8dp"
+        android:padding="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/swipeRefreshLayout"
         app:layout_constraintEnd_toStartOf="@+id/ibCompose"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvFeedTitle" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/ibCompose"
-        android:layout_width="30dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:adjustViewBounds="false"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:cropToPadding="true"
+        android:padding="14dp"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/outline_create_black_18dp"
         app:layout_constraintBottom_toBottomOf="@+id/svSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/svSearch"
-        app:layout_constraintTop_toTopOf="@+id/svSearch"
-        app:layout_constraintVertical_bias="1.0"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="@+id/svSearch" />
 
-    <TextView
-        android:id="@+id/tvFeedTitle"
-        android:layout_width="393dp"
-        android:layout_height="25dp"
-        android:layout_marginBottom="5dp"
-        android:gravity="center_horizontal"
-        android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        android:textColor="#E58A04"
-        android:textIsSelectable="false"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/svSearch"
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/svSearch">
+
+        <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvCourseFeed"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="1dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </android.support.constraint.ConstraintLayout>
