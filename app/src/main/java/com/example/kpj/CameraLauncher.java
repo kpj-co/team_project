@@ -71,6 +71,7 @@ public class CameraLauncher {
                 ActivityCompat.requestPermissions((Activity) context, new String[]
                                 {Manifest.permission.CAMERA, Manifest.permission.CAMERA},
                         CAMERA_PERMISSION_CODE);
+                requestCameraPermission();
             } else {
                 hasAccess = true;
             }
