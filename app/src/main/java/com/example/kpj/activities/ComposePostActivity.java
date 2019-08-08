@@ -64,6 +64,8 @@ public class ComposePostActivity extends AppCompatActivity {
     private String imagePath;
     private List<ImagePreview> mImages;
     private ImagePreviewAdapter imagePreviewAdapter;
+    private boolean hasLink;
+    private Post postLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,8 @@ public class ComposePostActivity extends AppCompatActivity {
         context = ComposePostActivity.this;
         hashtagSanitizer = new HashtagSanitizer();
         imagePath = "";
+        hasLink = false;
+        postLink = null;
         String courseName = getCurrentCourseName();
         final Course.Query courseQuery = new Course.Query();
         courseQuery.whereEqualTo("name", courseName);
@@ -282,6 +286,11 @@ public class ComposePostActivity extends AppCompatActivity {
         // Setup comment count
         newPost.setCommentCount(0);
 
+        // save post link if it has
+        if (hasLink) {
+            newPost.setPostLink(postLink);
+        }
+
         // Save post in background thread
         newPost.saveInBackground(new SaveCallback() {
             @Override
@@ -346,6 +355,8 @@ public class ComposePostActivity extends AppCompatActivity {
         if (message != null) {
             etComposeBody.setText(message.getDescription());
             if (message.getPost() != null) {
+                hasLink = true;
+                postLink = (Post) message.getPost();
                 hideLinkViews(false);
                 bindLinkContent((Post) message.getPost());
             }
