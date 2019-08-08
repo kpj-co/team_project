@@ -163,10 +163,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvUser.setText(post.getUser().getUsername());
         ParseFile profile = post.getUser().getParseFile(User.KEY_PROFILE);
         if (profile != null) {
-            Glide.with(context)
-                    .load(profile.getUrl())
-                    .apply(new RequestOptions().circleCrop())
-                    .into(holder.ivProfile);
+            ImagePreview profilePreview = new ImagePreview(profile);
+            profilePreview.loadImage(context, holder.ivProfile, new RequestOptions().circleCrop());
         }
     }
 
