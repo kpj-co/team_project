@@ -47,7 +47,7 @@ public class SignUpFragment extends Fragment {
     private String username;
     private String password;
     private String photo;
-    private Boolean completed;
+    private Boolean taken;
 
     public void setSignUpData(SignUpFragmentListener callback) {
         this.callback = callback;
@@ -78,7 +78,6 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
         initializeViews(view);
-        this.completed = false;
         setSignUpButtonListener();
         setCameraListener();
         return view;
@@ -103,16 +102,11 @@ public class SignUpFragment extends Fragment {
         btnNewSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                taken = false;
                 getStringsFromEditTexts();
                 setUpSharedPref();
                 checkIfUserExists(username);
-                if(completed){
-                    callback.onSignUpSet(username, email, password);
-                    goToUniversityFragment();
                 }
-                else
-                    return;
-            }
         });
     }
 
@@ -164,23 +158,29 @@ public class SignUpFragment extends Fragment {
             editor.apply();
         }
 
-   private Boolean checkIfUserExists(String username){
+   private void checkIfUserExists(final String username){
         User.Query userQuery = new User.Query();
         userQuery.whereEqualTo("username", username);
         userQuery.findInBackground(new FindCallback<User>() {
             @Override
             public void done(List<User> objects, ParseException e) {
                 if(e == null){
-                    if(objects.size() == 0)
-                        completed = true;
-                    else{
+                    if(objects.size() != 0){
+                         taken = true;
                         Toast.makeText(getContext(), "Username is taken", Toast.LENGTH_LONG).show();
-                        completed = false;
                     }
+                    }
+                boolean isTaken = taken;
+                if(isTaken){
+                    return;
                 }
-            }
+                else{
+                    callback.onSignUpSet(username, email, password);
+                    goToUniversityFragment();
+                }
+                }
         });
-        return completed;
+
    }
 
     public void goToUniversityFragment() {
