@@ -173,7 +173,7 @@ public class SignUpFragment extends Fragment {
                          taken = true;
                         Toast.makeText(getContext(), "Username is taken", Toast.LENGTH_LONG).show();
                     }
-                    }
+                }
                 boolean isTaken = taken;
                 if(isTaken){
                     return;

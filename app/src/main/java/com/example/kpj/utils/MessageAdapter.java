@@ -1,9 +1,7 @@
 package com.example.kpj.utils;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.RecyclerViewClickListener;
@@ -22,7 +19,6 @@ import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -37,16 +33,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private List<Message> mMessages;
     private Context mContext;
-    private String username;
     private OnMessageClicked onMessageClicked;
 
     private static RecyclerViewClickListener itemListener;
 
-    public MessageAdapter(Context context, String username, List<Message> messages,
+    public MessageAdapter(Context context, List<Message> messages,
                           RecyclerViewClickListener itemListener,
                           MessageAdapter.OnMessageClicked onMessageClicked) {
         mMessages = messages;
-        this.username = username;
         mContext = context;
         this.onMessageClicked = onMessageClicked;
         this.itemListener = itemListener;
@@ -114,25 +108,26 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             String senderName;
             ParseFile profilePic = null;
             try {
-                senderName = message.getUsername();
+                senderName = message.getUser().fetchIfNeeded().getUsername();
                 profilePic = message.getUser().fetchIfNeeded().getParseFile(User.KEY_PROFILE);
             } catch (ParseException e) {
                 senderName = "USER NOT FOUND";
             }
 
-            boolean isCurrentUser = senderName != null &&
-                    senderName.equals(ParseUser.getCurrentUser().getUsername());
+            boolean isCurrentUser = senderName.equals(ParseUser.getCurrentUser().getUsername());
             if (isCurrentUser) {
                 ivOtherUser.setVisibility(View.INVISIBLE);
                 tvOtherUserName.setVisibility(View.INVISIBLE);
-                // set sender name to current user
+                // set sender assets as current user
                 ivCurrentUser.setVisibility(View.VISIBLE);
+                tvCurrentUserName.setVisibility(View.VISIBLE);
                 tvCurrentUserName.setText(senderName);
             } else {
                 ivCurrentUser.setVisibility(View.INVISIBLE);
                 tvCurrentUserName.setVisibility(View.INVISIBLE);
                 // set username of other
                 ivOtherUser.setVisibility(View.VISIBLE);
+                tvOtherUserName.setVisibility(View.VISIBLE);
                 tvOtherUserName.setText(senderName);
             }
 
@@ -174,7 +169,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvCurrentUserName = itemView.findViewById(R.id.tvMyUsername);
             tvOtherUserName =  itemView.findViewById(R.id.tvAnotherUsername);
             tvPostTitle = itemView.findViewById(R.id.tvPostTitle);
-            ivPostImage = itemView.findViewById(R.id.ivPostImage);
+            ivPostImage = itemView.findViewById(R.id.ivLinkImage);
             tvPostDescription = itemView.findViewById(R.id.tvPostDescription);
             tvUserOpinion = itemView.findViewById(R.id.tvUserOpinion);
             postLinkContainer = itemView.findViewById(R.id.postLinkContainer);
@@ -202,26 +197,27 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Post post = (Post) message.getPost();
             ParseFile profilePic = null;
             try {
-                senderName = message.getUsername();
+                senderName = message.getUser().fetchIfNeeded().getUsername();
                 profilePic = message.getUser().fetchIfNeeded().getParseFile(User.KEY_PROFILE);
             } catch (ParseException e) {
                 senderName = "USER NOT FOUND";
             }
 
-            boolean isCurrentUser = senderName != null &&
-                    senderName.equals(ParseUser.getCurrentUser().getUsername());
+            boolean isCurrentUser = senderName.equals(ParseUser.getCurrentUser().getUsername());
             if (isCurrentUser) {
                 ivOtherUser.setVisibility(View.INVISIBLE);
                 tvOtherUserName.setVisibility(View.INVISIBLE);
-                // set sender name to current user
+                // set sender assets as current user
                 ivCurrentUser.setVisibility(View.VISIBLE);
-                tvCurrentUserName.setText(senderName);
+                tvCurrentUserName.setVisibility(View.VISIBLE);
+                tvCurrentUserName.setText(senderName.trim());
             } else {
                 ivCurrentUser.setVisibility(View.INVISIBLE);
                 tvCurrentUserName.setVisibility(View.INVISIBLE);
                 // set username of other
                 ivOtherUser.setVisibility(View.VISIBLE);
-                tvOtherUserName.setText(senderName);
+                tvOtherUserName.setVisibility(View.VISIBLE);
+                tvOtherUserName.setText(senderName.trim());
             }
 
             ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
@@ -236,11 +232,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             bindPostLinkText(tvUserOpinion, ((Message)message.fetchIfNeeded()).getDescription());
 
             if (post.getHasMedia()) {
+                Toast.makeText(mContext, "post link has pic", Toast.LENGTH_SHORT).show();
                 ivPostImage.setVisibility(View.VISIBLE);
                 ImagePreview image = new ImagePreview(post.getMedia());
-                image.loadImage(mContext, ivPostImage);
+                image.loadImage(mContext, ivPostImage, new RequestOptions().centerCrop());
             } else {
-                ivPostImage.setVisibility(View.GONE);
+                ivPostImage.setVisibility(View.INVISIBLE);
             }
         }
 
