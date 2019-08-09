@@ -120,9 +120,9 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     }
 
     void findViews(View view) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.rvMessages);
-        sendButton = (Button) view.findViewById(R.id.bSend);
-        etMessage = (EditText) view.findViewById(R.id.etMessage);
+        recyclerView = view.findViewById(R.id.rvMessages);
+        sendButton = view.findViewById(R.id.bSend);
+        etMessage = view.findViewById(R.id.etMessage);
     }
 
     void prepareRecyclerView() {
