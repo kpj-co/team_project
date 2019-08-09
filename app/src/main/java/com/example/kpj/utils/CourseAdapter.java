@@ -3,6 +3,7 @@ package com.example.kpj.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,13 +62,13 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView tvCourse;
-        private View myRectangleView;
+        private CardView myCardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             Log.d("Adapter", "Viewholder is called");
             tvCourse = (TextView) itemView.findViewById(R.id.tvCourse);
-            myRectangleView = (View) itemView.findViewById(R.id.myRectangleView);
+            myCardView = (CardView) itemView.findViewById(R.id.card_view);
             // set on click listener
             itemView.setOnClickListener(this);
         }
