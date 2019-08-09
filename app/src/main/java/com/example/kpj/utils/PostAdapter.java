@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.PostByHashtagFilter;
 import com.example.kpj.R;
@@ -57,7 +56,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View postView = inflater.inflate(R.layout.post_item, viewGroup, false);
+        View postView = inflater.inflate(R.layout.post_item2, viewGroup, false);
         return new ViewHolder(postView, onPostClicked);
     }
 
@@ -174,12 +173,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivProfile, ivPostImage;
+        ImageView ivProfile, ivPostImage, ivLinkIcon;
         TextView tvUser, tvDate, tvTitle, tvDescription, tvHashtag1, tvUpVotes,
-                tvDownVotes, tvCommentCount;
+                tvDownVotes, tvCommentCount, tvLinkUserName, tvLinkContent;
         ImageButton ibLike, ibDislike, ibComment, ibSend;
         OnPostClicked onPostClicked;
-        LinearLayout postContainer;
+        LinearLayout postContainer, linkContainer;
 
         public ViewHolder(@NonNull View itemView, OnPostClicked onPostClicked) {
             super(itemView);
@@ -204,6 +203,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvCommentCount = itemView.findViewById(R.id.tvCommentCount);
             postContainer = itemView.findViewById(R.id.postContainer);
             setPostClickListener();
+            // views for a post link
+            ivLinkIcon = itemView.findViewById(R.id.ivLinkIcon);
+            linkContainer = itemView.findViewById(R.id.linkContainer);
+            tvLinkUserName = itemView.findViewById(R.id.tvLinkUserName);
+            tvLinkContent = itemView.findViewById(R.id.tvLinkContent);
+            hideLinkViews(true);
+        }
+
+        public void hideLinkViews(boolean makeHidden) {
+            int viewState;
+            if (makeHidden) {
+                viewState = View.GONE;
+            } else {
+                viewState = View.VISIBLE;
+            }
+            ivLinkIcon.setVisibility(viewState);
+            linkContainer.setVisibility(viewState);
+            tvLinkUserName.setVisibility(viewState);
+            tvLinkContent.setVisibility(viewState);
         }
 
         private void setPostClickListener() {
@@ -244,5 +262,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     public int getFullListSize() { return fullPostsList.size();}
+
 
 }
