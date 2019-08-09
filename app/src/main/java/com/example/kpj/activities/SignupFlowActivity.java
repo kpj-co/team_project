@@ -49,6 +49,7 @@ public class SignupFlowActivity extends AppCompatActivity {
                     user.setUsername(username);
                     user.setPassword(password);
                     user.setEmail(email);
+
                 }
             });
         }
@@ -68,7 +69,9 @@ public class SignupFlowActivity extends AppCompatActivity {
             selectCoursesFragment.setUserSelectedCoursesListener(new SelectCoursesFragment.SelectedCoursesListener() {
                 @Override
                 public void onSelectCourses(List<Course> selectedCourses) {
-                    SignUp(user, selectedCourses);
+                    SignUp(user);
+                    saveUserCourseRelations(selectedCourses);
+
                 }
             });
         }
@@ -95,6 +98,7 @@ public class SignupFlowActivity extends AppCompatActivity {
                         user.put("University", selectedUniversity);
                     }
                 }
+                user.saveInBackground();
             }
         });
     }
@@ -113,17 +117,16 @@ public class SignupFlowActivity extends AppCompatActivity {
         }
     }
 
-    private void SignUp(final ParseUser user, final List<Course> selectedCourses){
+    private void SignUp(final ParseUser user){
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    user.saveInBackground();
-                    saveUserCourseRelations(selectedCourses);
                     saveProfilePic();
                 } else {
                     Log.e("SignUpActivity", "Login Failed" + e);
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),"Sign Up failed. Username or email in use", Toast.LENGTH_LONG).show();
                 }
             }
         });
