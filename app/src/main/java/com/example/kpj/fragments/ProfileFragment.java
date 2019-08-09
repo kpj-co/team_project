@@ -13,23 +13,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-<<<<<<< HEAD
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.kpj.R.drawable;
-=======
-import com.bumptech.glide.request.RequestOptions;
->>>>>>> 7236c1a2f049f39c458a721fcf0787cc24c75d60
 import com.example.kpj.activities.LoginActivity;
 import com.example.kpj.R;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.User;
 import com.parse.ParseUser;
 
-import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 
