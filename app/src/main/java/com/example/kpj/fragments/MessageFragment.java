@@ -126,8 +126,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     }
 
     void prepareRecyclerView() {
-        messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(),
-                messages, this, new MessageAdapter.OnMessageClicked() {
+        messageAdapter = new MessageAdapter(getContext(), messages, this, new MessageAdapter.OnMessageClicked() {
             @Override
             public void onMessageClicked(int position) {
                 Post post = (Post) messages.get(position).getPost();

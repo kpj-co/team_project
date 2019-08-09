@@ -37,16 +37,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private List<Message> mMessages;
     private Context mContext;
-    private String username;
     private OnMessageClicked onMessageClicked;
 
     private static RecyclerViewClickListener itemListener;
 
-    public MessageAdapter(Context context, String username, List<Message> messages,
+    public MessageAdapter(Context context, List<Message> messages,
                           RecyclerViewClickListener itemListener,
                           MessageAdapter.OnMessageClicked onMessageClicked) {
         mMessages = messages;
-        this.username = username;
         mContext = context;
         this.onMessageClicked = onMessageClicked;
         this.itemListener = itemListener;
@@ -114,25 +112,26 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             String senderName;
             ParseFile profilePic = null;
             try {
-                senderName = message.getUsername();
+                senderName = message.getUser().fetchIfNeeded().getUsername();
                 profilePic = message.getUser().fetchIfNeeded().getParseFile(User.KEY_PROFILE);
             } catch (ParseException e) {
                 senderName = "USER NOT FOUND";
             }
 
-            boolean isCurrentUser = senderName != null &&
-                    senderName.equals(ParseUser.getCurrentUser().getUsername());
+            boolean isCurrentUser = senderName.equals(ParseUser.getCurrentUser().getUsername());
             if (isCurrentUser) {
                 ivOtherUser.setVisibility(View.INVISIBLE);
                 tvOtherUserName.setVisibility(View.INVISIBLE);
-                // set sender name to current user
+                // set sender assets as current user
                 ivCurrentUser.setVisibility(View.VISIBLE);
+                tvCurrentUserName.setVisibility(View.VISIBLE);
                 tvCurrentUserName.setText(senderName);
             } else {
                 ivCurrentUser.setVisibility(View.INVISIBLE);
                 tvCurrentUserName.setVisibility(View.INVISIBLE);
                 // set username of other
                 ivOtherUser.setVisibility(View.VISIBLE);
+                tvOtherUserName.setVisibility(View.VISIBLE);
                 tvOtherUserName.setText(senderName);
             }
 
@@ -202,25 +201,26 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Post post = (Post) message.getPost();
             ParseFile profilePic = null;
             try {
-                senderName = message.getUsername();
+                senderName = message.getUser().fetchIfNeeded().getUsername();
                 profilePic = message.getUser().fetchIfNeeded().getParseFile(User.KEY_PROFILE);
             } catch (ParseException e) {
                 senderName = "USER NOT FOUND";
             }
 
-            boolean isCurrentUser = senderName != null &&
-                    senderName.equals(ParseUser.getCurrentUser().getUsername());
+            boolean isCurrentUser = senderName.equals(ParseUser.getCurrentUser().getUsername());
             if (isCurrentUser) {
                 ivOtherUser.setVisibility(View.INVISIBLE);
                 tvOtherUserName.setVisibility(View.INVISIBLE);
-                // set sender name to current user
+                // set sender assets as current user
                 ivCurrentUser.setVisibility(View.VISIBLE);
-                tvCurrentUserName.setText(ParseUser.getCurrentUser().getUsername());
+                tvCurrentUserName.setVisibility(View.VISIBLE);
+                tvCurrentUserName.setText(senderName);
             } else {
                 ivCurrentUser.setVisibility(View.INVISIBLE);
                 tvCurrentUserName.setVisibility(View.INVISIBLE);
                 // set username of other
                 ivOtherUser.setVisibility(View.VISIBLE);
+                tvOtherUserName.setVisibility(View.VISIBLE);
                 tvOtherUserName.setText(senderName);
             }
 
@@ -242,7 +242,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Toast.makeText(mContext, post.getMedia().getUrl(), Toast.LENGTH_SHORT).show();
                 image.loadImage(mContext, ivPostImage);
             } else {
-                ivPostImage.setVisibility(View.GONE);
+                ivPostImage.setVisibility(View.INVISIBLE);
             }
         }
 
