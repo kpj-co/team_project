@@ -40,8 +40,6 @@ public class SignupFlowActivity extends AppCompatActivity {
 
     private String photo;
 
-    private List<Course> selectedUserCourses;
-
     public void onAttachFragment(final Fragment fragment){
         if(fragment instanceof SignUpFragment) {
             SignUpFragment signUpFragment = (SignUpFragment) fragment;

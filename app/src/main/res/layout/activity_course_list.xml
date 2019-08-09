@@ -8,7 +8,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvCourse"
-            android:layout_width="0dp"
+            android:layout_width="354dp"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="30dp"
@@ -17,10 +17,10 @@
             android:layout_marginBottom="15dp"
             app:layout_constraintBottom_toTopOf="@+id/tvToCreateNewCourse"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.486"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_height="0dp" />
+            android:layout_height="494dp" />
 
     <TextView
         android:id="@+id/tvToCreateNewCourse"
@@ -42,7 +42,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvCourse" />
 
-    </android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/tvSelectedUniversity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="19dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/rvCourse"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
 
 
 

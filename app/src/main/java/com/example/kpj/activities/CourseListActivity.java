@@ -2,6 +2,8 @@ package com.example.kpj.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,10 +26,15 @@ import java.util.List;
 public class CourseListActivity extends AppCompatActivity {
 
     private ArrayList<Course> courses;
-    private RecyclerView recyclerView;
+
     private CourseAdapter adapter;
+
     private TextView tvToCreateNewCourse;
+
+    private String university;
+
     public Context context;
+
     private int REGISTER_COURSE_REQUEST = 1997;
 
     @Override
@@ -36,9 +43,12 @@ public class CourseListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_list);
         this.context = CourseListActivity.this;
         this.tvToCreateNewCourse = findViewById(R.id.tvToCreateNewCourse);
+        TextView userUniversity = findViewById(R.id.tvSelectedUniversity);
+        getSharedPrefs();
+        userUniversity.setText(university);
         courses = new ArrayList<>();
         // set up recycler view
-        recyclerView = findViewById(R.id.rvCourse);
+        RecyclerView recyclerView = findViewById(R.id.rvCourse);
         // set the adapter
         adapter = new CourseAdapter(context, courses);
         // attach adapter to recycler view
@@ -47,7 +57,6 @@ public class CourseListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         queryCoursesByUserId();
     }
-
 
     private void queryCoursesByUserId(){
         UserCourseRelation.Query userCourseRelationQuery = new UserCourseRelation.Query();
@@ -101,5 +110,11 @@ public class CourseListActivity extends AppCompatActivity {
         courses.add(course);
         adapter.notifyItemInserted(courses.size() - 1);
         Log.d("CourseListActivity", "" + courses.size());
+    }
+
+    private void getSharedPrefs(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        university = prefs.getString("university", "");
+
     }
 }

@@ -63,6 +63,7 @@ public class ProfileFragment extends Fragment {
             ImagePreview profilepic = new ImagePreview(user.getParseFile(User.KEY_PROFILE));
             profilepic.loadImage(getContext(), imageView, new RequestOptions().centerCrop());
         }
+
     }
 
     private void findViewsById(View view) {
