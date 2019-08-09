@@ -215,7 +215,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 tvOtherUserName.setVisibility(View.INVISIBLE);
                 // set sender name to current user
                 ivCurrentUser.setVisibility(View.VISIBLE);
-                tvCurrentUserName.setText(senderName);
+                tvCurrentUserName.setText(ParseUser.getCurrentUser().getUsername());
             } else {
                 ivCurrentUser.setVisibility(View.INVISIBLE);
                 tvCurrentUserName.setVisibility(View.INVISIBLE);
@@ -236,8 +236,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             bindPostLinkText(tvUserOpinion, ((Message)message.fetchIfNeeded()).getDescription());
 
             if (post.getHasMedia()) {
+                Toast.makeText(mContext, "post link has pic", Toast.LENGTH_SHORT).show();
                 ivPostImage.setVisibility(View.VISIBLE);
                 ImagePreview image = new ImagePreview(post.getMedia());
+                Toast.makeText(mContext, post.getMedia().getUrl(), Toast.LENGTH_SHORT).show();
                 image.loadImage(mContext, ivPostImage);
             } else {
                 ivPostImage.setVisibility(View.GONE);

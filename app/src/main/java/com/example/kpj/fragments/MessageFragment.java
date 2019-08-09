@@ -56,10 +56,9 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private MessageAdapter messageAdapter;
     private Course course;
     private University university;
-    private ParseUser userMessage;
-    private ParseUser currentUser;
 
     public MessageFragment() {
+
     }
 
     public static MessageFragment newInstance(int page) {
@@ -83,18 +82,12 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_message, container, false);
-        initializeVariables();
         findViews(view);
         setListeners(view);
         prepareRecyclerView();
         setEndlessRecyclerViewScrollListener();
         setSharedObjects();
         return view;
-    }
-
-    private void initializeVariables() {
-        this.currentUser = ParseUser.getCurrentUser();
-        this.userMessage = null;
     }
 
     //Gets the course and university from sharedPreference. Once this is done the recycler view will be populated
@@ -132,7 +125,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     }
 
     void prepareRecyclerView() {
-        messageAdapter = new MessageAdapter(getContext(), currentUser.getUsername(),
+        messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(),
                 messages, this, new MessageAdapter.OnMessageClicked() {
             @Override
             public void onMessageClicked(int position) {
@@ -160,8 +153,6 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                 if(!message.equals("")) {
                     //Send it to the database
                     pushMessageToDatabase(message);
-//                    //refresh messages
-//                    messageAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -180,7 +171,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
             newMessage.setCourse(course);
         }
         //Put the current user as the author of the message
-        newMessage.setUser(currentUser);
+        newMessage.setUser(ParseUser.getCurrentUser());
         //Clean the EditText
         etMessage.setText("");
         //Save the message in background
@@ -248,20 +239,22 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                     //Add the element in the beginning of the recycler view and go to that position
                     @Override
                     public void onEvent(ParseQuery<Message> query, final Message message) {
-                        message.getUser().fetchIfNeededInBackground(new GetCallback<ParseObject>() {
-                            @Override
-                            public void done(ParseObject object, ParseException e) {
-                                message.setUsername(((ParseUser) object).getUsername());
-                                messages.add(message);
-                                ((Activity)getContext()).runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        messageAdapter.notifyDataSetChanged();
-                                        recyclerView.scrollToPosition(messages.size() - 1);
-                                    }
-                                });
-                            }
-                        });
+                        if (message.getUser() != null) {
+                            message.getUser().fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                                @Override
+                                public void done(ParseObject object, ParseException e) {
+                                    message.setUsername(((ParseUser) object).getUsername());
+                                    messages.add(message);
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            messageAdapter.notifyDataSetChanged();
+                                            recyclerView.scrollToPosition(messages.size() - 1);
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     } // end of onEvent function
                 }); // end of subscription.handleEvent
     }
