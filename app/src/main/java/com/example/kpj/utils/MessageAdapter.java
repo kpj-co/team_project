@@ -210,14 +210,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 // set sender assets as current user
                 ivCurrentUser.setVisibility(View.VISIBLE);
                 tvCurrentUserName.setVisibility(View.VISIBLE);
-                tvCurrentUserName.setText(senderName);
+                tvCurrentUserName.setText(senderName.trim());
             } else {
                 ivCurrentUser.setVisibility(View.INVISIBLE);
                 tvCurrentUserName.setVisibility(View.INVISIBLE);
                 // set username of other
                 ivOtherUser.setVisibility(View.VISIBLE);
                 tvOtherUserName.setVisibility(View.VISIBLE);
-                tvOtherUserName.setText(senderName);
+                tvOtherUserName.setText(senderName.trim());
             }
 
             ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
