@@ -150,7 +150,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         if(post.getPostLink() != null) {
             holder.hideLinkViews(false);
-            holder.bindPostLinkAssets(post);
+            holder.bindPostLinkAssets((Post) post.getPostLink());
         } else {
             holder.hideLinkViews(true);
         }
