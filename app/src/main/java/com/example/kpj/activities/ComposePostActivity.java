@@ -1,4 +1,5 @@
 package com.example.kpj.activities;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.kpj.CameraLauncher;
@@ -43,11 +45,12 @@ import java.util.List;
 public class ComposePostActivity extends AppCompatActivity {
 
     EditText etComposePostTitle, etComposeBody, etHashtags;
-    TextView tvComposeTitleLabel, tvComposeUsername, tvComposeBodyLabel;
-    ImageView ivComposeProfile;
+    TextView tvComposeTitleLabel, tvComposeUsername, tvComposeBodyLabel, tvLinkUserName, tvLinkContent;
+    ImageView ivComposeProfile, ivLinkIcon;
     ImageButton ibAddPdf, ibCamera, ibExitCompose, ibAddImage;
     RecyclerView rvImagePreview;
     Button bLaunch;
+    LinearLayout linkContainter;
 
     public final static String APP_TAG = "compose post activity";
     private final static int GALLERY_REQUEST_CODE = 100;
@@ -61,21 +64,25 @@ public class ComposePostActivity extends AppCompatActivity {
     private String imagePath;
     private List<ImagePreview> mImages;
     private ImagePreviewAdapter imagePreviewAdapter;
+    private boolean hasLink;
+    private Post postLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose_post);
+        setContentView(R.layout.activity_compose_post2);
         initializeVariables();
         initializeViews();
         //if a user wants to post a message as a post, this method will do the job
-        preparePostFromComment();
+        preparePostFromMessage();
     }
 
     private void initializeVariables() {
         context = ComposePostActivity.this;
         hashtagSanitizer = new HashtagSanitizer();
         imagePath = "";
+        hasLink = false;
+        postLink = null;
         String courseName = getCurrentCourseName();
         final Course.Query courseQuery = new Course.Query();
         courseQuery.whereEqualTo("name", courseName);
@@ -109,6 +116,26 @@ public class ComposePostActivity extends AppCompatActivity {
         this.mImages = new ArrayList<>();
         setUpImagePreview();
         rvImagePreview.setVisibility(View.GONE);
+        // views for a post link
+        ivLinkIcon = findViewById(R.id.ivLinkIcon);
+        linkContainter = findViewById(R.id.linkContainer);
+        tvLinkUserName = findViewById(R.id.tvLinkUserName);
+        tvLinkContent = findViewById(R.id.tvLinkContent);
+        hideLinkViews(true);
+    }
+
+    // this method makes the views assocaited with a link invisible unless post has a link ref
+    private void hideLinkViews(boolean makeHidden) {
+        int viewState;
+        if (makeHidden) {
+            viewState = View.GONE;
+        } else {
+            viewState = View.VISIBLE;
+        }
+        ivLinkIcon.setVisibility(viewState);
+        linkContainter.setVisibility(viewState);
+        tvLinkUserName.setVisibility(viewState);
+        tvLinkContent.setVisibility(viewState);
     }
 
     private void setUpImagePreview() {
@@ -259,6 +286,11 @@ public class ComposePostActivity extends AppCompatActivity {
         // Setup comment count
         newPost.setCommentCount(0);
 
+        // save post link if it has
+        if (hasLink) {
+            newPost.setPostLink(postLink);
+        }
+
         // Save post in background thread
         newPost.saveInBackground(new SaveCallback() {
             @Override
@@ -318,10 +350,44 @@ public class ComposePostActivity extends AppCompatActivity {
     }
 
     //if a user wants to post a message as a post, this method will do the job
-    public void preparePostFromComment() {
+    public void preparePostFromMessage() {
         Message message = getIntent().getParcelableExtra("message");
         if (message != null) {
             etComposeBody.setText(message.getDescription());
+            if (message.getPost() != null) {
+                hasLink = true;
+                postLink = (Post) message.getPost();
+                hideLinkViews(false);
+                bindLinkContent((Post) message.getPost());
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void bindLinkContent(Post link) {
+        try {
+            String linkUserName = "You are referencing post from " +
+                    ((Post) link.fetchIfNeeded()).getUser().fetchIfNeeded().getUsername();
+            tvLinkUserName.setText(linkUserName);
+        } catch (ParseException e) {
+            tvLinkUserName.setText("USER NOT FOUND");
+            e.printStackTrace();
+        }
+
+        try {
+            if (((Post) link.fetchIfNeeded()).getTitle() != null) {
+                tvLinkContent.setText(((Post) link.fetchIfNeeded()).getTitle());
+            } else if (((Post) link.fetchIfNeeded()).getDescription() != null) {
+                tvLinkContent.setText(((Post) link.fetchIfNeeded()).getDescription());
+            } else if (((Post) link.fetchIfNeeded()).getMedia() != null &&
+                    ((Post) link.fetchIfNeeded()).getHasMedia()) {
+                tvLinkContent.setText("Post is an Image");
+            } else {
+                tvLinkContent.setText(". . .");
+            }
+        } catch (ParseException e) {
+            tvLinkUserName.setText("CONTENT LOADING ERROR");
+            e.printStackTrace();
         }
     }
 }

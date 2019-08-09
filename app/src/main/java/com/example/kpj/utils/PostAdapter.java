@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.PostByHashtagFilter;
 import com.example.kpj.R;
@@ -24,6 +23,7 @@ import com.example.kpj.model.Course;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -57,7 +57,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View postView = inflater.inflate(R.layout.post_item, viewGroup, false);
+        View postView = inflater.inflate(R.layout.post_item2, viewGroup, false);
         return new ViewHolder(postView, onPostClicked);
     }
 
@@ -148,6 +148,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.tvHashtag1.setVisibility(View.GONE);
         }
 
+        if(post.getPostLink() != null) {
+            holder.hideLinkViews(false);
+            holder.bindPostLinkAssets((Post) post.getPostLink());
+        } else {
+            holder.hideLinkViews(true);
+        }
+
         VoteSystemManager.bindVoteContentOnLoad(context, post, ParseUser.getCurrentUser(), holder.ibLike,
                 holder.tvUpVotes, holder.ibDislike, holder.tvDownVotes);
 
@@ -174,12 +181,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivProfile, ivPostImage;
+        ImageView ivProfile, ivPostImage, ivLinkIcon;
         TextView tvUser, tvDate, tvTitle, tvDescription, tvHashtag1, tvUpVotes,
-                tvDownVotes, tvCommentCount;
+                tvDownVotes, tvCommentCount, tvLinkUserName, tvLinkContent;
         ImageButton ibLike, ibDislike, ibComment, ibSend;
         OnPostClicked onPostClicked;
-        LinearLayout postContainer;
+        LinearLayout postContainer, linkContainer;
 
         public ViewHolder(@NonNull View itemView, OnPostClicked onPostClicked) {
             super(itemView);
@@ -204,6 +211,52 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvCommentCount = itemView.findViewById(R.id.tvCommentCount);
             postContainer = itemView.findViewById(R.id.postContainer);
             setPostClickListener();
+            // views for a post link
+            ivLinkIcon = itemView.findViewById(R.id.ivItemLinkIcon);
+            linkContainer = itemView.findViewById(R.id.linkContainer);
+            tvLinkUserName = itemView.findViewById(R.id.tvLinkUserName);
+            tvLinkContent = itemView.findViewById(R.id.tvLinkContent);
+            hideLinkViews(true);
+        }
+
+        public void hideLinkViews(boolean makeHidden) {
+            int viewState;
+            if (makeHidden) {
+                viewState = View.GONE;
+            } else {
+                viewState = View.VISIBLE;
+            }
+            ivLinkIcon.setVisibility(viewState);
+            linkContainer.setVisibility(viewState);
+            tvLinkUserName.setVisibility(viewState);
+            tvLinkContent.setVisibility(viewState);
+        }
+
+        public void bindPostLinkAssets(Post link) {
+            try {
+                String linkUserName = "You are referencing post from " +
+                        ((Post) link.fetchIfNeeded()).getUser().fetchIfNeeded().getUsername();
+                tvLinkUserName.setText(linkUserName);
+            } catch (ParseException e) {
+                tvLinkUserName.setText("USER NOT FOUND");
+                e.printStackTrace();
+            }
+
+            try {
+                if (((Post) link.fetchIfNeeded()).getTitle() != null) {
+                    tvLinkContent.setText(((Post) link.fetchIfNeeded()).getTitle());
+                } else if (((Post) link.fetchIfNeeded()).getDescription() != null) {
+                    tvLinkContent.setText(((Post) link.fetchIfNeeded()).getDescription());
+                } else if (((Post) link.fetchIfNeeded()).getMedia() != null &&
+                        ((Post) link.fetchIfNeeded()).getHasMedia()) {
+                    tvLinkContent.setText("Post is an Image");
+                } else {
+                    tvLinkContent.setText(". . .");
+                }
+            } catch (ParseException e) {
+                tvLinkUserName.setText("CONTENT LOADING ERROR");
+                e.printStackTrace();
+            }
         }
 
         private void setPostClickListener() {
@@ -244,5 +297,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     public int getFullListSize() { return fullPostsList.size();}
+
 
 }

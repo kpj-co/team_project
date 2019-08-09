@@ -1,0 +1,268 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView2"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimaryLight"
+    android:layout_height="match_parent">
+
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ComposePostActivity">
+
+    <ImageButton
+        android:id="@+id/ibAddPdf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="70dp"
+        android:layout_marginRight="70dp"
+        android:padding="10dp"
+        android:src="@drawable/outline_insert_drive_file_black_18dp"
+        android:backgroundTint="@color/colorPrimaryLight"
+        app:layout_constraintBottom_toBottomOf="@+id/ibAddImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ibAddImage"
+        app:layout_constraintTop_toTopOf="@+id/ibAddImage"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageButton
+        android:id="@+id/ibCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:padding="10dp"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:src="@drawable/outline_camera_alt_black_18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ibAddImage"
+        app:layout_constraintEnd_toStartOf="@+id/ibAddImage"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ibAddImage" />
+
+    <EditText
+        android:id="@+id/etComposePostTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:ems="10"
+        android:hint="Post Title"
+        android:inputType="textPersonName"
+        android:singleLine="true"
+        android:textSize="14sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/tvComposeBodyLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvComposeTitleLabel" />
+
+    <TextView
+        android:id="@+id/tvComposeTitleLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="1dp"
+        android:text="Post Title"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/etComposePostTitle"
+        app:layout_constraintStart_toStartOf="@+id/etComposePostTitle"
+        app:layout_constraintTop_toBottomOf="@+id/linkContainer" />
+
+    <ImageView
+        android:id="@+id/ivComposeProfile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvComposeUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:text="TextView"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivComposeProfile"
+        app:layout_constraintStart_toEndOf="@+id/ivComposeProfile"
+        app:layout_constraintTop_toTopOf="@+id/ivComposeProfile" />
+
+    <ImageButton
+        android:id="@+id/ibExitCompose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:padding="10dp"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/outline_close_black_18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvComposeBodyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="1dp"
+        android:text="Body"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/etComposeBody"
+        app:layout_constraintStart_toStartOf="@+id/etComposeBody"
+        app:layout_constraintTop_toBottomOf="@+id/etComposePostTitle" />
+
+    <EditText
+        android:id="@+id/etComposeBody"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Discription"
+        android:inputType="textMultiLine|textPersonName"
+        android:textSize="14sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/rvDetailImagePreview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvComposeBodyLabel" />
+
+    <ImageButton
+        android:id="@+id/ibAddImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:padding="10dp"
+        android:src="@drawable/outline_insert_photo_black_18dp"
+        app:layout_constraintBottom_toTopOf="@+id/etTags"
+        app:layout_constraintEnd_toStartOf="@+id/ibAddPdf"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ibCamera"
+        app:layout_constraintTop_toBottomOf="@+id/rvDetailImagePreview" />
+
+    <Button
+        android:id="@+id/bLaunch"
+        android:layout_width="82dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="10dp"
+        android:text="Launch"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etTags" />
+
+    <!-- TODO - implement tags -->
+
+    <EditText
+        android:id="@+id/etTags"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:ems="10"
+        android:hint="tags"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ivTagsIcon"
+        app:layout_constraintTop_toBottomOf="@+id/ibAddImage" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvDetailImagePreview"
+        android:layout_width="0dp"
+        android:layout_height="460dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/ibAddImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etComposeBody"
+        app:reverseLayout="false" />
+
+    <ImageView
+        android:id="@+id/ivTagsIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:padding="0dp"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        app:layout_constraintBottom_toBottomOf="@+id/etTags"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etTags"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/outline_label_black_18dp" />
+
+    <ImageView
+        android:id="@+id/ivLinkIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linkContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linkContainer"
+        app:srcCompat="@drawable/baseline_link_black_18dp" />
+
+    <LinearLayout
+        android:id="@+id/linkContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivLinkIcon"
+        app:layout_constraintTop_toBottomOf="@+id/ivComposeProfile">
+
+        <TextView
+            android:id="@+id/tvLinkUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/tvLinkContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
+
+</ScrollView>

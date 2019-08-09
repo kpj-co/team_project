@@ -102,7 +102,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvCurrentUserName = itemView.findViewById(R.id.tvMyUsername);
             tvOtherUserName = itemView.findViewById(R.id.tvAnotherUsername);
             body = itemView.findViewById(R.id.tvBody);
-            itemView.setOnLongClickListener(this);
+            body.setOnLongClickListener(this);
+
         }
 
         private void setDetails(Message message) {
@@ -113,11 +114,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ivOtherUser.setVisibility(View.GONE);
                 tvOtherUserName.setVisibility(View.GONE);
                 // set username of current
-                if (message.getUsername() == null || message.getUsername().length() == 0) {
-                    tvCurrentUserName.setText("USER NOT FOUND");
-                } else {
-                    tvCurrentUserName.setText(message.getUsername());
-                }
+                tvCurrentUserName.setText(username);
+//                if (message.getUsername() == ull || message.getUsername().length() == 0) {
+//                    tvCurrentUserName.setText("USER NOT FOUND");
+//                } else {
+//                    tvCurrentUserName.setText(message.getUsername());
+//                }
                 Log.d("ME", username + " is current, the message  " + message.getUsername());
             } else {
                 ivOtherUser.setVisibility(View.VISIBLE);
@@ -167,7 +169,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     /***
      * View Holder for a message with link to a post
      */
-    public class linkMessageViewHolder extends RecyclerView.ViewHolder {
+    public class linkMessageViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
         ImageView ivOtherUser, ivCurrentUser, ivPostImage;
         TextView tvCurrentUserName, tvOtherUserName, tvPostTitle, tvPostDescription, tvUserOpinion;
@@ -190,13 +192,18 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         private void setPostLinkListener() {
-            postLinkContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(mContext, "link was clicked", Toast.LENGTH_SHORT).show();
-                    onMessageClicked.onMessageClicked(getAdapterPosition());
-                }
-            });
+            tvUserOpinion.setOnLongClickListener(this);
+            postLinkContainer.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            Toast.makeText(mContext, "Long click", Toast.LENGTH_LONG).show();
+            Log.d("MessageAdapter", "Executed long click");
+            itemListener.recyclerViewListClicked(v, this.getLayoutPosition());
+
+            //indicate that the click has handled
+            return true;
         }
 
         private void setDetails(Message message) throws ParseException {
