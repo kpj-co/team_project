@@ -237,8 +237,16 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                     @Override
                     //Add the element in the beginning of the recycler view and go to that position
                     public void onEvent(ParseQuery<Message> query, Message message) {
-                        message.setUsername(currentUserUsername);
-                        message.setParseFileUserImage(ParseUser.getCurrentUser().getParseFile("photoImage"));
+                        ParseUser userMessage = null;
+                        try {
+                            userMessage = ((Message)message.fetchIfNeeded()).getUser();
+                            message.setUsername(userMessage.fetchIfNeeded().getUsername());
+                            message.setParseFileUserImage(userMessage.fetchIfNeeded().getParseFile("photoImage"));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+
                         ParseObject postParseObject = message.getPost();
                         if(postParseObject != null) {
                             message.setPostReference((Post) postParseObject);
