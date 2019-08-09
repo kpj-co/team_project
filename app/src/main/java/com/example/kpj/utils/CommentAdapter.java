@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.model.Comment;
+import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
 import com.parse.ParseFile;

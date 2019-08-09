@@ -28,6 +28,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class SelectCoursesFragment extends Fragment {
 
@@ -50,7 +51,7 @@ public class SelectCoursesFragment extends Fragment {
     }
 
     public interface SelectedCoursesListener{
-        void onSelectCourses(List<Course> selectedCourses);
+        void onSelectCourses(Set<Course> selectedCourses);
 
     }
 
