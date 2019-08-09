@@ -1,9 +1,7 @@
 package com.example.kpj.utils;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.R;
 import com.example.kpj.RecyclerViewClickListener;
@@ -22,7 +19,6 @@ import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.User;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -173,7 +169,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvCurrentUserName = itemView.findViewById(R.id.tvMyUsername);
             tvOtherUserName =  itemView.findViewById(R.id.tvAnotherUsername);
             tvPostTitle = itemView.findViewById(R.id.tvPostTitle);
-            ivPostImage = itemView.findViewById(R.id.ivPostImage);
+            ivPostImage = itemView.findViewById(R.id.ivLinkImage);
             tvPostDescription = itemView.findViewById(R.id.tvPostDescription);
             tvUserOpinion = itemView.findViewById(R.id.tvUserOpinion);
             postLinkContainer = itemView.findViewById(R.id.postLinkContainer);
@@ -239,8 +235,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Toast.makeText(mContext, "post link has pic", Toast.LENGTH_SHORT).show();
                 ivPostImage.setVisibility(View.VISIBLE);
                 ImagePreview image = new ImagePreview(post.getMedia());
-                Toast.makeText(mContext, post.getMedia().getUrl(), Toast.LENGTH_SHORT).show();
-                image.loadImage(mContext, ivPostImage);
+                image.loadImage(mContext, ivPostImage, new RequestOptions().centerCrop());
             } else {
                 ivPostImage.setVisibility(View.INVISIBLE);
             }

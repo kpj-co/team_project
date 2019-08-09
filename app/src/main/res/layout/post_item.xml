@@ -39,7 +39,7 @@
             android:text="TextView" />
 
         <ImageView
-            android:id="@+id/ivPostImage"
+            android:id="@+id/ivLinkImage"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginTop="10dp"

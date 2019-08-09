@@ -200,7 +200,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvDate = itemView.findViewById(R.id.tvDate);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDescription = itemView.findViewById(R.id.tvDescription);
-            ivPostImage = itemView.findViewById(R.id.ivPostImage);
+            ivPostImage = itemView.findViewById(R.id.ivLinkImage);
             tvHashtag1 = itemView.findViewById(R.id.tvHashtag);
             ibLike = itemView.findViewById(R.id.ibLike);
             ibDislike = itemView.findViewById(R.id.ibDislike);
