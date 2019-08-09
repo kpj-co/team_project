@@ -79,12 +79,6 @@ public class Message extends ParseObject {
         return (University)getParseObject(KEY_UNIVERSITY);
     }
 
-    public ParseFile getParseFileUserImage() {
-        return parseFileUserImage;
-    }
-
-    public Post getPostReference() {return postReference;}
-
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
     }

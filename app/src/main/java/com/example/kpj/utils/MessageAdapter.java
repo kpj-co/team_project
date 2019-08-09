@@ -25,6 +25,7 @@ import com.example.kpj.model.User;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -107,36 +108,32 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvOtherUserName = itemView.findViewById(R.id.tvAnotherUsername);
             body = itemView.findViewById(R.id.tvBody);
             body.setOnLongClickListener(this);
-
         }
 
         private void setDetails(Message message) {
-            String sender;
+            String senderName;
             ParseFile profilePic = null;
             try {
-                sender = message.getUser().fetchIfNeeded().getString(User.KEY_USERNAME);
+                senderName = message.getUsername();
                 profilePic = message.getUser().fetchIfNeeded().getParseFile(User.KEY_PROFILE);
             } catch (ParseException e) {
-                sender = "USER NOT FOUND";
+                senderName = "USER NOT FOUND";
             }
 
-            boolean isCurrentUser = sender != null && sender.equals(username);
-            Post post = (Post) message.getPost();
+            boolean isCurrentUser = senderName != null &&
+                    senderName.equals(ParseUser.getCurrentUser().getUsername());
             if (isCurrentUser) {
-                ivCurrentUser.setVisibility(View.VISIBLE);
-                ivOtherUser.setVisibility(View.GONE);
-                tvOtherUserName.setVisibility(View.GONE);
+                ivOtherUser.setVisibility(View.INVISIBLE);
+                tvOtherUserName.setVisibility(View.INVISIBLE);
                 // set sender name to current user
-                tvCurrentUserName.setText(sender);
-                Toast.makeText(mContext, "Sendr: " + sender, Toast.LENGTH_SHORT).show();
-//              Log.d("ME", username + " is current, the message  " + message.getUsername());
+                ivCurrentUser.setVisibility(View.VISIBLE);
+                tvCurrentUserName.setText(senderName);
             } else {
-                ivOtherUser.setVisibility(View.VISIBLE);
-                ivCurrentUser.setVisibility(View.GONE);
-                tvCurrentUserName.setVisibility(View.GONE);
+                ivCurrentUser.setVisibility(View.INVISIBLE);
+                tvCurrentUserName.setVisibility(View.INVISIBLE);
                 // set username of other
-                tvOtherUserName.setText(sender);
-//              Log.d("OTHER", username + " is current, the message  " + message.getUsername());
+                ivOtherUser.setVisibility(View.VISIBLE);
+                tvOtherUserName.setText(senderName);
             }
 
             ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
@@ -145,6 +142,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ImagePreview profileImg = new ImagePreview(profilePic);
                 profileImg.loadImage(mContext, profileView, new RequestOptions().circleCrop());
             }
+
             body.setText(message.getDescription());
         }
 
@@ -200,49 +198,37 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         private void setDetails(Message message) throws ParseException {
-            final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
+            String senderName;
             Post post = (Post) message.getPost();
+            ParseFile profilePic = null;
+            try {
+                senderName = message.getUsername();
+                profilePic = message.getUser().fetchIfNeeded().getParseFile(User.KEY_PROFILE);
+            } catch (ParseException e) {
+                senderName = "USER NOT FOUND";
+            }
+
+            boolean isCurrentUser = senderName != null &&
+                    senderName.equals(ParseUser.getCurrentUser().getUsername());
             if (isCurrentUser) {
+                ivOtherUser.setVisibility(View.INVISIBLE);
+                tvOtherUserName.setVisibility(View.INVISIBLE);
+                // set sender name to current user
                 ivCurrentUser.setVisibility(View.VISIBLE);
-                ivOtherUser.setVisibility(View.GONE);
-                tvOtherUserName.setVisibility(View.GONE);
-                // set username of current
-                if (message.getUsername() == null || message.getUsername().length() == 0) {
-                    tvCurrentUserName.setText("USER NOT FOUND");
-                } else {
-                    tvCurrentUserName.setText(message.getUsername());
-                }
-                Log.d("ME", username + " is current, the message  " + message.getUsername());
+                tvCurrentUserName.setText(senderName);
             } else {
-                ivOtherUser.setVisibility(View.VISIBLE);
-                ivCurrentUser.setVisibility(View.GONE);
-                tvCurrentUserName.setVisibility(View.GONE);
+                ivCurrentUser.setVisibility(View.INVISIBLE);
+                tvCurrentUserName.setVisibility(View.INVISIBLE);
                 // set username of other
-                if (message.getUser().fetchIfNeeded().getUsername() == null ||
-                        (message.getUser().fetchIfNeeded().getUsername().length() == 0)) {
-                    tvOtherUserName.setText("USER NOT FOUND");
-                } else {
-                    tvOtherUserName.setText(message.getUser().fetchIfNeeded().getUsername());
-                }
-                Log.d("OTHER", username + " is current, the message  " + message.getUsername());
+                ivOtherUser.setVisibility(View.VISIBLE);
+                tvOtherUserName.setText(senderName);
             }
 
-            final ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
+            ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
 
-            if(message.getParseFileUserImage() != null) {
-                Glide.with(mContext)
-                        .load(message.getParseFileUserImage().getUrl())
-                        .apply(new RequestOptions().circleCrop())
-                        .into(profileView);
-            }
-
-            else {
-                try {
-                    message.setUserPhoto();
-                    message.setUserUsername();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+            if(profilePic != null) {
+                ImagePreview profileImg = new ImagePreview(profilePic);
+                profileImg.loadImage(mContext, profileView, new RequestOptions().circleCrop());
             }
 
             bindPostLinkText(tvPostTitle, ((Post) post.fetchIfNeeded()).getTitle());
@@ -252,11 +238,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (post.getHasMedia()) {
                 ivPostImage.setVisibility(View.VISIBLE);
                 ImagePreview image = new ImagePreview(post.getMedia());
-                image.loadImage(mContext, ivPostImage);;
+                image.loadImage(mContext, ivPostImage);
             } else {
                 ivPostImage.setVisibility(View.GONE);
             }
-
         }
 
         private void bindPostLinkText(TextView textView, String text) {

@@ -23,10 +23,12 @@ import com.example.kpj.model.Course;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.University;
+import com.example.kpj.model.User;
 import com.example.kpj.utils.EndlessRecyclerViewScrollListener;
 import com.example.kpj.utils.MessageAdapter;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -239,18 +241,25 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
         parseQuery.whereEqualTo("course", course);
         parseQuery.include("user");
+        parseQuery.include("post");
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     //Add the element in the beginning of the recycler view and go to that position
                     @Override
-                    public void onEvent(ParseQuery<Message> query, Message message) {
-                        messages.add(message);
-                        ((Activity)getContext()).runOnUiThread(new Runnable() {
+                    public void onEvent(ParseQuery<Message> query, final Message message) {
+                        message.getUser().fetchIfNeededInBackground(new GetCallback<ParseObject>() {
                             @Override
-                            public void run() {
-                                messageAdapter.notifyDataSetChanged();
-                                recyclerView.scrollToPosition(messages.size() - 1);
+                            public void done(ParseObject object, ParseException e) {
+                                message.setUsername(((ParseUser) object).getUsername());
+                                messages.add(message);
+                                ((Activity)getContext()).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        messageAdapter.notifyDataSetChanged();
+                                        recyclerView.scrollToPosition(messages.size() - 1);
+                                    }
+                                });
                             }
                         });
                     } // end of onEvent function
