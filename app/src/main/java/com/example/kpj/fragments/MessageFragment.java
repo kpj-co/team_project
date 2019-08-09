@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import com.example.kpj.R;
 import com.example.kpj.RecyclerViewClickListener;
 import com.example.kpj.activities.ComposePostActivity;
@@ -44,7 +46,6 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private RecyclerView recyclerView;
     private Button sendButton;
     private EditText etMessage;
-    private String currentUserUsername;
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private LinearLayoutManager linearLayoutManager;
     //boolean that indicates if the liveQuery has been set
@@ -53,6 +54,8 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private MessageAdapter messageAdapter;
     private Course course;
     private University university;
+    private ParseUser userMessage;
+    private ParseUser currentUser;
 
     public MessageFragment() {
     }
@@ -78,7 +81,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_message, container, false);
-        currentUserUsername = ParseUser.getCurrentUser().getUsername();
+        currentUser = ParseUser.getCurrentUser();
         findViews(view);
         setListeners(view);
         prepareRecyclerView();
@@ -122,7 +125,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     }
 
     void prepareRecyclerView() {
-        messageAdapter = new MessageAdapter(getContext(), ParseUser.getCurrentUser().getUsername(),
+        messageAdapter = new MessageAdapter(getContext(), currentUser.getUsername(),
                 messages, this, new MessageAdapter.OnMessageClicked() {
             @Override
             public void onMessageClicked(int position) {
@@ -171,7 +174,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
             newMessage.setCourse(course);
         }
         //Put the current user as the author of the message
-        newMessage.setUser(ParseUser.getCurrentUser());
+        newMessage.setUser(currentUser);
         //Clean the EditText
         etMessage.setText("");
         //Save the message in background
@@ -231,20 +234,51 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
         parseQuery.whereEqualTo("course", course);
+        parseQuery.include("user");
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     @Override
                     //Add the element in the beginning of the recycler view and go to that position
-                    public void onEvent(ParseQuery<Message> query, Message message) {
-                        ParseUser userMessage = null;
-                        try {
-                            userMessage = ((Message)message.fetchIfNeeded()).getUser();
-                            message.setUsername(userMessage.fetchIfNeeded().getUsername());
-                            message.setParseFileUserImage(userMessage.fetchIfNeeded().getParseFile("photoImage"));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                    public void onEvent(ParseQuery<Message> query, final Message message) {
+                        userMessage = null;
+                        message.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject object, ParseException e) {
+                                userMessage = ((Message)object).getUser();
+
+                                userMessage.fetchInBackground(new GetCallback<ParseObject>() {
+                                    @Override
+                                    public void done(ParseObject object, ParseException e) {
+                                        if(userMessage.getUsername().equals(currentUser.getUsername())) {
+                                            Toast.makeText(getContext(), "IS USEEEER", Toast.LENGTH_LONG).show();
+                                        }
+                                        message.setUsername(userMessage.getUsername());
+                                        message.setParseFileUserImage(userMessage.getParseFile("photoImage"));
+                                        //messageAdapter.notifyDataSetChanged();
+                                    }
+                                });
+
+//                                try {
+//                                    message.setUsername(userMessage.fetchIfNeeded().getUsername());
+//                                } catch (ParseException e1) {
+//                                    e1.printStackTrace();
+//                                }
+//                                try {
+//                                    message.setParseFileUserImage(userMessage.fetchIfNeeded().getParseFile("photoImage"));
+//                                } catch (ParseException e1) {
+//                                    e1.printStackTrace();
+//                                }
+                            }
+                        });
+//                        try {
+//                            userMessage = ((Message)message.fetchIfNeeded()).getUser();
+//                            message.setUsername(userMessage.fetchIfNeeded().getUsername());
+//                            message.setParseFileUserImage(userMessage.fetchIfNeeded().getParseFile("photoImage"));
+//                        } catch (ParseException e) {
+//                            e.printStackTrace();
+//                        }
+
 
 
                         ParseObject postParseObject = message.getPost();

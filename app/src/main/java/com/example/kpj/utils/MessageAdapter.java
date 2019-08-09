@@ -114,11 +114,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ivOtherUser.setVisibility(View.GONE);
                 tvOtherUserName.setVisibility(View.GONE);
                 // set username of current
-                if (message.getUsername() == null || message.getUsername().length() == 0) {
-                    tvCurrentUserName.setText("USER NOT FOUND");
-                } else {
-                    tvCurrentUserName.setText(message.getUsername());
-                }
+                tvCurrentUserName.setText(username);
+//                if (message.getUsername() == ull || message.getUsername().length() == 0) {
+//                    tvCurrentUserName.setText("USER NOT FOUND");
+//                } else {
+//                    tvCurrentUserName.setText(message.getUsername());
+//                }
                 Log.d("ME", username + " is current, the message  " + message.getUsername());
             } else {
                 ivOtherUser.setVisibility(View.VISIBLE);
