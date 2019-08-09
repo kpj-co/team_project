@@ -23,6 +23,7 @@ import com.example.kpj.model.Course;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
 import com.example.kpj.model.University;
+import com.example.kpj.model.User;
 import com.example.kpj.utils.EndlessRecyclerViewScrollListener;
 import com.example.kpj.utils.MessageAdapter;
 import com.parse.FindCallback;
@@ -83,13 +84,18 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_message, container, false);
-        currentUser = ParseUser.getCurrentUser();
+        initializeVariables();
         findViews(view);
         setListeners(view);
         prepareRecyclerView();
         setEndlessRecyclerViewScrollListener();
         setSharedObjects();
         return view;
+    }
+
+    private void initializeVariables() {
+        this.currentUser = ParseUser.getCurrentUser();
+        this.userMessage = null;
     }
 
     //Gets the course and university from sharedPreference. Once this is done the recycler view will be populated
@@ -151,13 +157,12 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
             public void onClick(View v) {
                 //Get the text of the message EditText
                 String message = etMessage.getText().toString();
-
                 //If there is something in the message edittext
                 if(!message.equals("")) {
                     //Send it to the database
                     pushMessageToDatabase(message);
-                    //refresh messages
-                    messageAdapter.notifyDataSetChanged();
+//                    //refresh messages
+//                    messageAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -238,75 +243,30 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
         parseQuery.whereEqualTo("course", course);
         parseQuery.include("user");
+        parseQuery.include("post");
         SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
-                    @Override
                     //Add the element in the beginning of the recycler view and go to that position
+                    @Override
                     public void onEvent(ParseQuery<Message> query, final Message message) {
-                        userMessage = null;
-                        message.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                        message.getUser().fetchIfNeededInBackground(new GetCallback<ParseObject>() {
                             @Override
                             public void done(ParseObject object, ParseException e) {
-                                userMessage = ((Message)object).getUser();
-                                try {
-                                    username = ((ParseUser) userMessage.fetchIfNeeded()).getUsername();
-                                }catch(ParseException e1) {
 
-                                }
-
-                                userMessage.fetchInBackground(new GetCallback<ParseObject>() {
+                                message.setUsername(((ParseUser) object).getUsername());
+                                messages.add(message);
+                                ((Activity)getContext()).runOnUiThread(new Runnable() {
                                     @Override
-                                    public void done(ParseObject object, ParseException e) {
-                                        if(userMessage.getUsername().equals(currentUser.getUsername())) {
-                                            Toast.makeText(getContext(), "IS USEEEER", Toast.LENGTH_LONG).show();
-                                        }
-                                        message.setUsername(username);
-                                        message.setParseFileUserImage(userMessage.getParseFile("photoImage"));
-                                        messages.add(messages.size(), message);
+                                    public void run() {
                                         messageAdapter.notifyDataSetChanged();
+                                        recyclerView.scrollToPosition(messages.size() - 1);
                                     }
                                 });
-
-//                                try {
-//                                    message.setUsername(userMessage.fetchIfNeeded().getUsername());
-//                                } catch (ParseException e1) {
-//                                    e1.printStackTrace();
-//                                }
-//                                try {
-//                                    message.setParseFileUserImage(userMessage.fetchIfNeeded().getParseFile("photoImage"));
-//                                } catch (ParseException e1) {
-//                                    e1.printStackTrace();
-//                                }
                             }
                         });
-//                        try {
-//                            userMessage = ((Message)message.fetchIfNeeded()).getUser();
-//                            message.setUsername(userMessage.fetchIfNeeded().getUsername());
-//                            message.setParseFileUserImage(userMessage.fetchIfNeeded().getParseFile("photoImage"));
-//                        } catch (ParseException e) {
-//                            e.printStackTrace();
-//                        }
-
-
-
-                        ParseObject postParseObject = message.getPost();
-                        if(postParseObject != null) {
-                            message.setPostReference((Post) postParseObject);
-                        }
-
-
-                        // RecyclerView updates need to be run on the UI thread
-                        ((Activity)getContext()).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                messageAdapter.notifyDataSetChanged();
-                                recyclerView.scrollToPosition(messages.size() - 1);
-                            }
-                        });
-                    }
-                });
-        messageAdapter.notifyDataSetChanged();
+                    } // end of onEvent function
+                }); // end of subscription.handleEvent
     }
 
     @Override

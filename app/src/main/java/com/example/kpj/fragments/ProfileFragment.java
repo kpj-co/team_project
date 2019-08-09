@@ -11,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.activities.LoginActivity;
 import com.example.kpj.R;
+import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.User;
 import com.parse.ParseUser;
 
@@ -57,10 +59,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setUserProfileImage(ParseUser user) {
-//        tvUsername.setText(user.getUsername());
-//        Glide.with(getContext())
-//                .load(user.getParseFile(User.KEY_PROFILE).getUrl())
-//                .into(imageView);
+        if (user.getParseFile(User.KEY_PROFILE) != null) {
+            ImagePreview profilepic = new ImagePreview(user.getParseFile(User.KEY_PROFILE));
+            profilepic.loadImage(getContext(), imageView, new RequestOptions().centerCrop());
+        }
     }
 
     private void findViewsById(View view) {
