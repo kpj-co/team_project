@@ -29,6 +29,7 @@ import com.parse.SignUpCallback;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 public class SignupFlowActivity extends AppCompatActivity {
 
@@ -68,7 +69,7 @@ public class SignupFlowActivity extends AppCompatActivity {
             final SelectCoursesFragment selectCoursesFragment = (SelectCoursesFragment) fragment;
             selectCoursesFragment.setUserSelectedCoursesListener(new SelectCoursesFragment.SelectedCoursesListener() {
                 @Override
-                public void onSelectCourses(List<Course> selectedCourses) {
+                public void onSelectCourses(Set<Course> selectedCourses) {
                     SignUp(user);
                     saveUserCourseRelations(selectedCourses);
 
@@ -77,7 +78,7 @@ public class SignupFlowActivity extends AppCompatActivity {
         }
     }
 
-    private void saveUserCourseRelations(List<Course> selectedCourses) {
+    private void saveUserCourseRelations(Set<Course> selectedCourses) {
         for (Course course : selectedCourses) {
             UserCourseRelation userCourseRelation = new UserCourseRelation();
             userCourseRelation.setUser(user);

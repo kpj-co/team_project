@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.activities.LoginActivity;
 import com.example.kpj.R;
