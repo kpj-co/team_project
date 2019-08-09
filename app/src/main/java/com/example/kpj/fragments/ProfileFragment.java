@@ -1,7 +1,10 @@
 package com.example.kpj.fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.kpj.activities.LoginActivity;
 import com.example.kpj.R;
@@ -18,10 +20,10 @@ import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.User;
 import com.parse.ParseUser;
 
+
 public class ProfileFragment extends Fragment {
 
     private static final String ARG_PAGE = "ARG_PAGE";
-    private int mPage;
 
     private ImageView imageView;
     private TextView tvUsername;
@@ -42,7 +44,7 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mPage = getArguments().getInt(ARG_PAGE);
+            int mPage = getArguments().getInt(ARG_PAGE);
         }
     }
 
@@ -63,7 +65,6 @@ public class ProfileFragment extends Fragment {
             ImagePreview profilepic = new ImagePreview(user.getParseFile(User.KEY_PROFILE));
             profilepic.loadImage(getContext(), imageView, new RequestOptions().centerCrop());
         }
-
     }
 
     private void findViewsById(View view) {

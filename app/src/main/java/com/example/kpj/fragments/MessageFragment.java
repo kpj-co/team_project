@@ -57,6 +57,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private Course course;
     private University university;
 
+
     public MessageFragment() {
 
     }
@@ -228,6 +229,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     }
 
     private void setParseLiveQueryClient() {
+
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
         parseQuery.whereEqualTo("course", course);
