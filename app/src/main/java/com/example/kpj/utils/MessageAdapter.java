@@ -1,6 +1,7 @@
 package com.example.kpj.utils;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +21,11 @@ import com.example.kpj.RecyclerViewClickListener;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.Message;
 import com.example.kpj.model.Post;
+import com.example.kpj.model.User;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -103,53 +108,39 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvOtherUserName = itemView.findViewById(R.id.tvAnotherUsername);
             body = itemView.findViewById(R.id.tvBody);
             body.setOnLongClickListener(this);
-
         }
 
         private void setDetails(Message message) {
-            final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
-            Post post = (Post) message.getPost();
+            String senderName;
+            ParseFile profilePic = null;
+            try {
+                senderName = message.getUsername();
+                profilePic = message.getUser().fetchIfNeeded().getParseFile(User.KEY_PROFILE);
+            } catch (ParseException e) {
+                senderName = "USER NOT FOUND";
+            }
+
+            boolean isCurrentUser = senderName != null &&
+                    senderName.equals(ParseUser.getCurrentUser().getUsername());
             if (isCurrentUser) {
+                ivOtherUser.setVisibility(View.INVISIBLE);
+                tvOtherUserName.setVisibility(View.INVISIBLE);
+                // set sender name to current user
                 ivCurrentUser.setVisibility(View.VISIBLE);
-                ivOtherUser.setVisibility(View.GONE);
-                tvOtherUserName.setVisibility(View.GONE);
-                // set username of current
-                tvCurrentUserName.setText(username);
-//                if (message.getUsername() == ull || message.getUsername().length() == 0) {
-//                    tvCurrentUserName.setText("USER NOT FOUND");
-//                } else {
-//                    tvCurrentUserName.setText(message.getUsername());
-//                }
-                Log.d("ME", username + " is current, the message  " + message.getUsername());
+                tvCurrentUserName.setText(senderName);
             } else {
-                ivOtherUser.setVisibility(View.VISIBLE);
-                ivCurrentUser.setVisibility(View.GONE);
-                tvCurrentUserName.setVisibility(View.GONE);
+                ivCurrentUser.setVisibility(View.INVISIBLE);
+                tvCurrentUserName.setVisibility(View.INVISIBLE);
                 // set username of other
-                if (message.getUsername() == null || message.getUsername().length() == 0) {
-                    tvOtherUserName.setText("USER NOT FOUND");
-                } else {
-                    tvOtherUserName.setText(message.getUsername());
-                }
-                Log.d("OTHER", username + " is current, the message  " + message.getUsername());
+                ivOtherUser.setVisibility(View.VISIBLE);
+                tvOtherUserName.setText(senderName);
             }
 
-            final ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
+            ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
 
-            if(message.getParseFileUserImage() != null) {
-                Glide.with(mContext)
-                        .load(message.getParseFileUserImage().getUrl())
-                        .apply(new RequestOptions().circleCrop())
-                        .into(profileView);
-            }
-
-            else {
-                try {
-                    message.setUserPhoto();
-                    message.setUserUsername();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+            if(profilePic != null) {
+                ImagePreview profileImg = new ImagePreview(profilePic);
+                profileImg.loadImage(mContext, profileView, new RequestOptions().circleCrop());
             }
 
             body.setText(message.getDescription());
@@ -207,48 +198,37 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         private void setDetails(Message message) throws ParseException {
-            final boolean isCurrentUser = message.getUsername() != null && message.getUsername().equals(username);
+            String senderName;
             Post post = (Post) message.getPost();
+            ParseFile profilePic = null;
+            try {
+                senderName = message.getUsername();
+                profilePic = message.getUser().fetchIfNeeded().getParseFile(User.KEY_PROFILE);
+            } catch (ParseException e) {
+                senderName = "USER NOT FOUND";
+            }
+
+            boolean isCurrentUser = senderName != null &&
+                    senderName.equals(ParseUser.getCurrentUser().getUsername());
             if (isCurrentUser) {
+                ivOtherUser.setVisibility(View.INVISIBLE);
+                tvOtherUserName.setVisibility(View.INVISIBLE);
+                // set sender name to current user
                 ivCurrentUser.setVisibility(View.VISIBLE);
-                ivOtherUser.setVisibility(View.GONE);
-                tvOtherUserName.setVisibility(View.GONE);
-                // set username of current
-                if (message.getUsername() == null || message.getUsername().length() == 0) {
-                    tvCurrentUserName.setText("USER NOT FOUND");
-                } else {
-                    tvCurrentUserName.setText(message.getUsername());
-                }
-                Log.d("ME", username + " is current, the message  " + message.getUsername());
+                tvCurrentUserName.setText(senderName);
             } else {
-                ivOtherUser.setVisibility(View.VISIBLE);
-                ivCurrentUser.setVisibility(View.GONE);
-                tvCurrentUserName.setVisibility(View.GONE);
+                ivCurrentUser.setVisibility(View.INVISIBLE);
+                tvCurrentUserName.setVisibility(View.INVISIBLE);
                 // set username of other
-                if (message.getUsername() == null || message.getUsername().length() == 0) {
-                    tvOtherUserName.setText("USER NOT FOUND");
-                } else {
-                    tvOtherUserName.setText(message.getUsername());
-                }
-                Log.d("OTHER", username + " is current, the message  " + message.getUsername());
+                ivOtherUser.setVisibility(View.VISIBLE);
+                tvOtherUserName.setText(senderName);
             }
 
-            final ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
+            ImageView profileView = isCurrentUser ? ivCurrentUser : ivOtherUser;
 
-            if(message.getParseFileUserImage() != null) {
-                Glide.with(mContext)
-                        .load(message.getParseFileUserImage().getUrl())
-                        .apply(new RequestOptions().circleCrop())
-                        .into(profileView);
-            }
-
-            else {
-                try {
-                    message.setUserPhoto();
-                    message.setUserUsername();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+            if(profilePic != null) {
+                ImagePreview profileImg = new ImagePreview(profilePic);
+                profileImg.loadImage(mContext, profileView, new RequestOptions().circleCrop());
             }
 
             bindPostLinkText(tvPostTitle, ((Post) post.fetchIfNeeded()).getTitle());
@@ -258,11 +238,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (post.getHasMedia()) {
                 ivPostImage.setVisibility(View.VISIBLE);
                 ImagePreview image = new ImagePreview(post.getMedia());
-                image.loadImage(mContext, ivPostImage);;
+                image.loadImage(mContext, ivPostImage);
             } else {
                 ivPostImage.setVisibility(View.GONE);
             }
-
         }
 
         private void bindPostLinkText(TextView textView, String text) {
