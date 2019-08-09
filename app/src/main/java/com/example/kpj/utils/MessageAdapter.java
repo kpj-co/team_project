@@ -144,19 +144,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if(profilePic != null) {
                 ImagePreview profileImg = new ImagePreview(profilePic);
                 profileImg.loadImage(mContext, profileView, new RequestOptions().circleCrop());
-//                Glide.with(mContext)
-//                        .load(message.getParseFileUserImage().getUrl())
-//                        .apply(new RequestOptions().circleCrop())
-//                        .into(profileView);
             }
-//            else {
-//                try {
-//                    message.setUserPhoto();
-//                    message.setUserUsername();
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//            }
             body.setText(message.getDescription());
         }
 
