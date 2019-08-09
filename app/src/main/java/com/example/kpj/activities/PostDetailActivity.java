@@ -1,5 +1,6 @@
 package com.example.kpj.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,12 +48,14 @@ public class PostDetailActivity extends AppCompatActivity {
     private ImagePreviewAdapter imagePreviewAdapter;
 
     Context context;
-    ImageView ivDetailProfilePic, ivDetailComment;
+    ImageView ivDetailProfilePic, ivDetailComment, ivLinkIcon;
     TextView tvDetailUsername, tvDetailRelativeTime, tvDetailTitle, tvDetailDescription,
-            tvDetailHashTags, tvDetailUpVotes, tvDetailDownVotes, tvDetailCommentCount;
+            tvDetailHashTags, tvDetailUpVotes, tvDetailDownVotes, tvDetailCommentCount,
+            tvLinkUserName, tvLinkContent;
     ImageButton ibDetailLike, ibDetailDislike, ibDetailSend, ibAddComment;
     RecyclerView rvComments, rvDetailImagePreview;
     EditText etWriteComment;
+    LinearLayout linkContainter;
 
     private final static String KEY_SEND_POST_TO_CHAT = "A";
     private final static String KEY_SEND_COURSE_TO_CHAT = "B";
@@ -171,6 +175,21 @@ public class PostDetailActivity extends AppCompatActivity {
         this.mImages = new ArrayList<>();
     }
 
+    // this method makes the views assocaited with a link invisible unless post has a link ref
+    private void hideLinkViews(boolean makeHidden) {
+        int viewState;
+        if (makeHidden) {
+            viewState = View.GONE;
+        } else {
+            viewState = View.VISIBLE;
+        }
+        ivLinkIcon.setVisibility(viewState);
+        linkContainter.setVisibility(viewState);
+        tvLinkUserName.setVisibility(viewState);
+        tvLinkContent.setVisibility(viewState);
+    }
+
+
     private void queryHashTags(final Post post) {
         final PostHashtagRelation.Query query = new PostHashtagRelation.Query();
         query.whereEqualTo("post", post);
@@ -204,6 +223,12 @@ public class PostDetailActivity extends AppCompatActivity {
         rvDetailImagePreview = findViewById(R.id.rvDetailImagePreview);
         etWriteComment = findViewById(R.id.etWriteComment);
         ibAddComment = findViewById(R.id.ibAddComment);
+        // link views
+        ivLinkIcon = findViewById(R.id.ivLinkIcon);
+        linkContainter = findViewById(R.id.linkContainer);
+        tvLinkUserName = findViewById(R.id.tvLinkUserName);
+        tvLinkContent = findViewById(R.id.tvLinkContent);
+        hideLinkViews(true);
     }
 
     private void setUpComments() {
@@ -222,6 +247,14 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void bindPostDetailContent(Post post) {
+
+        if (post.getPostLink() != null) {
+            hideLinkViews(false);
+            bindLinkContent((Post) post.getPostLink());
+        } else {
+            hideLinkViews(true);
+        }
+
         try {
             tvDetailUsername.setText((post.getUser().fetchIfNeeded()).getUsername());
         } catch (ParseException e) {
@@ -263,12 +296,41 @@ public class PostDetailActivity extends AppCompatActivity {
             tvDetailHashTags.setText(post.getDisplayHashTags());
         }
 
+
         tvDetailCommentCount.setText(String.valueOf(post.getNumComments()));
         tvDetailUpVotes.setText(String.valueOf(post.getUpVotes()));
         tvDetailDownVotes.setText(String.valueOf(post.getDownVotes()));
 
         VoteSystemManager.bindVoteContentOnLoad(context, post, ParseUser.getCurrentUser(), ibDetailLike, tvDetailUpVotes,
                 ibDetailDislike, tvDetailDownVotes);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void bindLinkContent(Post link) {
+        try {
+            String linkUserName = "You are referencing post from " +
+                    ((Post) link.fetchIfNeeded()).getUser().fetchIfNeeded().getUsername();
+            tvLinkUserName.setText(linkUserName);
+        } catch (ParseException e) {
+            tvLinkUserName.setText("USER NOT FOUND");
+            e.printStackTrace();
+        }
+
+        try {
+            if (((Post) link.fetchIfNeeded()).getTitle() != null) {
+                tvLinkContent.setText(((Post) link.fetchIfNeeded()).getTitle());
+            } else if (((Post) link.fetchIfNeeded()).getDescription() != null) {
+                tvLinkContent.setText(((Post) link.fetchIfNeeded()).getDescription());
+            } else if (((Post) link.fetchIfNeeded()).getMedia() != null &&
+                    ((Post) link.fetchIfNeeded()).getHasMedia()) {
+                tvLinkContent.setText("Post is an Image");
+            } else {
+                tvLinkContent.setText(". . .");
+            }
+        } catch (ParseException e) {
+            tvLinkUserName.setText("CONTENT LOADING ERROR");
+            e.printStackTrace();
+        }
     }
 
 
