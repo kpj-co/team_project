@@ -27,6 +27,7 @@ import com.example.kpj.utils.EndlessRecyclerViewScrollListener;
 import com.example.kpj.utils.MessageAdapter;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -56,6 +57,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     private University university;
     private ParseUser userMessage;
     private ParseUser currentUser;
+    String username;
 
     public MessageFragment() {
     }
@@ -231,6 +233,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
     }
 
     private void setParseLiveQueryClient() {
+
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
         parseQuery.whereEqualTo("course", course);
@@ -246,6 +249,11 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                             @Override
                             public void done(ParseObject object, ParseException e) {
                                 userMessage = ((Message)object).getUser();
+                                try {
+                                    username = ((ParseUser) userMessage.fetchIfNeeded()).getUsername();
+                                }catch(ParseException e1) {
+
+                                }
 
                                 userMessage.fetchInBackground(new GetCallback<ParseObject>() {
                                     @Override
@@ -253,9 +261,10 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                                         if(userMessage.getUsername().equals(currentUser.getUsername())) {
                                             Toast.makeText(getContext(), "IS USEEEER", Toast.LENGTH_LONG).show();
                                         }
-                                        message.setUsername(userMessage.getUsername());
+                                        message.setUsername(username);
                                         message.setParseFileUserImage(userMessage.getParseFile("photoImage"));
-                                        //messageAdapter.notifyDataSetChanged();
+                                        messages.add(messages.size(), message);
+                                        messageAdapter.notifyDataSetChanged();
                                     }
                                 });
 
@@ -285,7 +294,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
                         if(postParseObject != null) {
                             message.setPostReference((Post) postParseObject);
                         }
-                        messages.add(messages.size(), message);
+
 
                         // RecyclerView updates need to be run on the UI thread
                         ((Activity)getContext()).runOnUiThread(new Runnable() {

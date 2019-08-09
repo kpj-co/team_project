@@ -57,10 +57,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setUserProfileImage(ParseUser user) {
-        tvUsername.setText(user.getUsername());
-        Glide.with(getContext())
-                .load(user.getParseFile(User.KEY_PROFILE).getUrl())
-                .into(imageView);
+//        tvUsername.setText(user.getUsername());
+//        Glide.with(getContext())
+//                .load(user.getParseFile(User.KEY_PROFILE).getUrl())
+//                .into(imageView);
     }
 
     private void findViewsById(View view) {
