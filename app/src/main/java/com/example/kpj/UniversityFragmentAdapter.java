@@ -53,7 +53,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         // this method is to bind the components of the layout to the user in parse
         Log.d("Adapter", "On Bind is called");
         final University university = universityFilteredList.get(position);
-        if(isSelected()){
+        if(userUniversity == university){
             viewHolder.tvUniversity.setBackgroundColor(Color.GREEN);
         }
         else{
@@ -64,14 +64,14 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         viewHolder.tvUniversity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setSelected(!isChecked);
-                if(isSelected()){
+                boolean isChecked = (userUniversity == university);
+               if(!isChecked){
                     viewHolder.tvUniversity.setBackgroundColor(Color.GREEN);
                     userUniversity = university;
                 }
                 else{
-                    setSelected(isChecked);
                     viewHolder.tvUniversity.setBackgroundColor(Color.TRANSPARENT);
+                    userUniversity = null;
                 }
             }
         });
@@ -89,9 +89,6 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
         filter.getFilter().filter(s);
     }
 
-    private Boolean isSelected(){ return isChecked;}
-
-    private void setSelected(boolean checked){isChecked = checked;}
 
     public University selectedUniversity(ParseObject university){
         university = userUniversity;

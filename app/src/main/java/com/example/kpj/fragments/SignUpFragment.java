@@ -154,10 +154,8 @@ public class SignUpFragment extends Fragment {
         if (photoFile != null) {
             photo = photoFile.toString();
         }
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = prefs.edit();
-
         if (photoFile != null) {
             editor.putString("photo", photo);
         }
