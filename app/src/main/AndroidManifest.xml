@@ -28,7 +28,8 @@
         <activity android:name=".activities.registerNewCourse" />
         <activity android:name=".activities.PostDetailActivity" />
         <activity android:name=".activities.CourseListActivity" />
-        <activity android:name=".activities.LoginActivity">
+        <activity android:name=".activities.LoginActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
