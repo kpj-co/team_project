@@ -84,7 +84,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_message, container, false);
         findViews(view);
-        setListeners(view);
+        setListeners();
         prepareRecyclerView();
         setEndlessRecyclerViewScrollListener();
         setSharedObjects();
@@ -144,7 +144,7 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 
-    void setListeners(View view) {
+    void setListeners() {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
