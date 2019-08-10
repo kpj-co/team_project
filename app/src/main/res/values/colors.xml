@@ -5,4 +5,7 @@
     <color name="colorAccent">#88ADE1</color>
     <color name ="black">#627899</color>
     <color name="colorMain">#88ADE1</color>
+    <color name="colorAccentBlue">#627899</color>
+    <color name="colorAccentPink">#FBB1A9</color>
+    <color name="colorAccentHotPink">#FF4D4D</color>
 </resources>

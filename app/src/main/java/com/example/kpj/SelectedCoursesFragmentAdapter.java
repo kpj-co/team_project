@@ -16,20 +16,20 @@ import com.example.kpj.model.Course;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<SelectedCoursesFragmentAdapter.ViewHolder> {
 
     private Context context;
 
     private List<Course> universityCourses;
-    private Set<Course> selectedCourses;
+    private List<Course> selectedCourses;
     private List<Course> courseFilteredList;
 
     private CourseFilter filter;
 
     public SelectedCoursesFragmentAdapter(Context context, List<Course> courses) {
         this.context = context;
+        this.selectedCourses = new ArrayList<>();
         this.courseFilteredList = new ArrayList<>();
         this.universityCourses = courses;
         this.filter = new CourseFilter(universityCourses, this);
@@ -83,7 +83,7 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
         }
     }
 
-    public Set<Course> getSelectedCoursesList(){
+    public List<Course> getSelectedCoursesList(){
         String msg = "SelectedCourseFragment list size = " + selectedCourses.size();
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
         return selectedCourses;
