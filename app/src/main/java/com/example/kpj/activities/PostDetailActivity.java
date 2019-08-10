@@ -55,7 +55,7 @@ public class PostDetailActivity extends AppCompatActivity {
     ImageButton ibDetailLike, ibDetailDislike, ibDetailSend, ibAddComment;
     RecyclerView rvComments, rvDetailImagePreview;
     EditText etWriteComment;
-    LinearLayout linkContainter;
+    LinearLayout linkContainter, linkContainerBig;
 
     private final static String KEY_SEND_POST_TO_CHAT = "A";
     private final static String KEY_SEND_COURSE_TO_CHAT = "B";
@@ -185,6 +185,7 @@ public class PostDetailActivity extends AppCompatActivity {
         }
         ivLinkIcon.setVisibility(viewState);
         linkContainter.setVisibility(viewState);
+        linkContainerBig.setVisibility(viewState);
         tvLinkUserName.setVisibility(viewState);
         tvLinkContent.setVisibility(viewState);
     }
@@ -226,6 +227,7 @@ public class PostDetailActivity extends AppCompatActivity {
         // link views
         ivLinkIcon = findViewById(R.id.ivLinkIcon);
         linkContainter = findViewById(R.id.linkContainer);
+        linkContainerBig = findViewById(R.id.linkContainerBig);
         tvLinkUserName = findViewById(R.id.tvLinkUserName);
         tvLinkContent = findViewById(R.id.tvLinkContent);
         hideLinkViews(true);
