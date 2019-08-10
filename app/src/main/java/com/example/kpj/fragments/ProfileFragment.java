@@ -55,8 +55,15 @@ public class ProfileFragment extends Fragment {
         setBtnLogOut();
         ParseUser user = ParseUser.getCurrentUser();
         setUserProfileImage(user);
+        setUserName(user);
         return view;
 
+    }
+
+    private void setUserName(ParseUser user) {
+        if(user.getUsername() != null) {
+            tvUsername.setText(user.getUsername());
+        }
     }
 
     private void setUserProfileImage(ParseUser user) {

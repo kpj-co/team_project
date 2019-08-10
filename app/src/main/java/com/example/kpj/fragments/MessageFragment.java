@@ -262,11 +262,14 @@ public class MessageFragment extends Fragment implements RecyclerViewClickListen
 
     @Override
     public void recyclerViewListClicked(View v, int position) {
-        Log.d("MessageFragment", "item position: " + position);
-        //Move the content of the message to a post
-        Intent intentPostMessage = new Intent(getContext(), ComposePostActivity.class);
-        intentPostMessage.putExtra("message", messages.get(position));
-        startActivity(intentPostMessage);
+        //You can just post the message if it is yours
+        if(messages.get(position).getUser().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+            Log.d("MessageFragment", "item position: " + position);
+            //Move the content of the message to a post
+            Intent intentPostMessage = new Intent(getContext(), ComposePostActivity.class);
+            intentPostMessage.putExtra("message", messages.get(position));
+            startActivity(intentPostMessage);
+        }
     }
 
     private void setEndlessRecyclerViewScrollListener() {
