@@ -29,7 +29,6 @@ import com.parse.SignUpCallback;
 
 import java.io.File;
 import java.util.List;
-import java.util.Set;
 
 public class SignupFlowActivity extends AppCompatActivity {
 
@@ -69,16 +68,15 @@ public class SignupFlowActivity extends AppCompatActivity {
             final SelectCoursesFragment selectCoursesFragment = (SelectCoursesFragment) fragment;
             selectCoursesFragment.setUserSelectedCoursesListener(new SelectCoursesFragment.SelectedCoursesListener() {
                 @Override
-                public void onSelectCourses(Set<Course> selectedCourses) {
-                    SignUp(user);
-                    saveUserCourseRelations(selectedCourses);
+                public void onSelectCourses(List<Course> selectedCourses) {
+                    SignUp(user, selectedCourses);
 
                 }
             });
         }
     }
 
-    private void saveUserCourseRelations(Set<Course> selectedCourses) {
+    private void saveUserCourseRelations(List<Course> selectedCourses) {
         for (Course course : selectedCourses) {
             UserCourseRelation userCourseRelation = new UserCourseRelation();
             userCourseRelation.setUser(user);
@@ -99,7 +97,6 @@ public class SignupFlowActivity extends AppCompatActivity {
                         user.put("University", selectedUniversity);
                     }
                 }
-                user.saveInBackground();
             }
         });
     }
@@ -118,12 +115,13 @@ public class SignupFlowActivity extends AppCompatActivity {
         }
     }
 
-    private void SignUp(final ParseUser user){
+    private void SignUp(final ParseUser user, final List<Course> selectedCourses){
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                     saveProfilePic();
+                    saveUserCourseRelations(selectedCourses);
                 } else {
                     Log.e("SignUpActivity", "Login Failed" + e);
                     e.printStackTrace();
@@ -159,6 +157,7 @@ public class SignupFlowActivity extends AppCompatActivity {
             user.put(User.KEY_PROFILE, parseFile);
             //save in background thread
         }
+        user.saveInBackground();
         Toast.makeText(getApplicationContext(), "Account created", Toast.LENGTH_LONG).show();
     }
 }
