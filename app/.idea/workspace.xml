@@ -105,17 +105,7 @@
     <last-search-timestamp>1564511697365</last-search-timestamp>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="acd0092b-a809-47c8-97f1-0405f39bdde9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/kpj/fragments/SelectCoursesFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_course_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_course_list.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/course_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/course_item.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/fragment_signup.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/fragment_signup.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/fragment_university.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/fragment_university.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/colors.xml" afterDir="false" />
-    </list>
+    <list default="true" id="acd0092b-a809-47c8-97f1-0405f39bdde9" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/../.gradle/" />
     <ignored path="$PROJECT_DIR$/build/generated/not_namespaced_r_class_sources/" />
     <ignored path="$PROJECT_DIR$/build/generated/source/r/" />
@@ -174,11 +164,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
-              <caret line="84" lean-forward="true" selection-start-line="84" selection-end-line="84" />
+            <state relative-caret-position="510">
+              <caret line="88" selection-start-line="88" selection-end-line="88" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -204,7 +194,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/CourseListActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-6">
-              <caret line="23" column="22" lean-forward="true" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
+              <caret line="23" column="22" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
               <folding>
                 <element signature="e#2771#3239#0" expanded="true" />
                 <element signature="e#3238#3239#0" expanded="true" />
@@ -213,11 +203,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="78" column="29" lean-forward="true" selection-start-line="78" selection-start-column="29" selection-end-line="78" selection-end-column="29" />
+            <state relative-caret-position="410">
+              <caret line="79" selection-start-line="79" selection-end-line="79" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2495#2778#0" expanded="true" />
@@ -582,11 +572,11 @@
       <window_info id="Favorites" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Build" order="0" sideWeight="0.4981685" weight="0.39693877" />
       <window_info anchor="bottom" id="Run" order="1" sideWeight="0.4981685" weight="0.45918366" />
-      <window_info active="true" anchor="bottom" id="Logcat" order="2" sideWeight="0.6965812" visible="true" weight="0.2734694" />
+      <window_info anchor="bottom" id="Logcat" order="2" sideWeight="0.6965812" weight="0.2734694" />
       <window_info anchor="bottom" id="TODO" order="3" sideWeight="0.4981685" weight="0.32865497" />
       <window_info anchor="bottom" id="Android Profiler" order="4" sideWeight="0.4981685" weight="0.32865497" />
       <window_info anchor="bottom" id="Find" order="5" sideWeight="0.49876085" weight="0.32857144" />
-      <window_info anchor="bottom" id="Terminal" order="6" sideWeight="0.489011" weight="0.2377551" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="6" sideWeight="0.489011" visible="true" weight="0.2377551" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.510989" side_tool="true" weight="0.6336735" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.492674" weight="0.28469387" />
       <window_info anchor="bottom" id="Debug" order="9" sideWeight="0.87728935" weight="0.3377551" />
@@ -1005,22 +995,10 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/CourseListActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-6">
-          <caret line="23" column="22" lean-forward="true" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
+          <caret line="23" column="22" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
           <folding>
             <element signature="e#2771#3239#0" expanded="true" />
             <element signature="e#3238#3239#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="78" column="29" lean-forward="true" selection-start-line="78" selection-start-column="29" selection-end-line="78" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2495#2778#0" expanded="true" />
-            <element signature="e#2777#2778#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1039,10 +1017,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/SelectedCoursesFragmentAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="84" lean-forward="true" selection-start-line="84" selection-end-line="84" />
+        <state relative-caret-position="510">
+          <caret line="88" selection-start-line="88" selection-end-line="88" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/example/kpj/activities/SignupFlowActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="410">
+          <caret line="79" selection-start-line="79" selection-end-line="79" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2495#2778#0" expanded="true" />
+            <element signature="e#2777#2778#0" expanded="true" />
           </folding>
         </state>
       </provider>
