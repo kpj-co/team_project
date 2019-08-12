@@ -53,6 +53,7 @@ public class CourseListActivity extends AppCompatActivity {
         courses = new ArrayList<>();
         // set up recycler view
         RecyclerView recyclerView = findViewById(R.id.rvCourse);
+
         // set the adapter
         adapter = new CourseAdapter(context, courses);
         // attach adapter to recycler view
