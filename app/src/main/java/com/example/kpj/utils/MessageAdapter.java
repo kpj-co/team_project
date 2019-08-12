@@ -143,10 +143,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @Override
         public boolean onLongClick(View v) {
-            Toast.makeText(mContext, "Long click", Toast.LENGTH_LONG).show();
+            //Toast.makeText(mContext, "Long click", Toast.LENGTH_LONG).show();
             Log.d("MessageAdapter", "Executed long click");
             itemListener.recyclerViewListClicked(v, this.getLayoutPosition());
-
             //indicate that the click has handled
             return true;
         }
@@ -184,7 +183,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @Override
         public boolean onLongClick(View v) {
-            Toast.makeText(mContext, "Long click", Toast.LENGTH_LONG).show();
+            //.makeText(mContext, "Long click", Toast.LENGTH_LONG).show();
             Log.d("MessageAdapter", "Executed long click");
             itemListener.recyclerViewListClicked(v, this.getLayoutPosition());
 
@@ -232,7 +231,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             bindPostLinkText(tvUserOpinion, ((Message)message.fetchIfNeeded()).getDescription());
 
             if (post.getHasMedia()) {
-                Toast.makeText(mContext, "post link has pic", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "post link has pic", Toast.LENGTH_SHORT).show();
                 ivPostImage.setVisibility(View.VISIBLE);
                 ImagePreview image = new ImagePreview(post.getMedia());
                 image.loadImage(mContext, ivPostImage, new RequestOptions().centerCrop());
