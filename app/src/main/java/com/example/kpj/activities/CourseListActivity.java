@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.kpj.R;
@@ -36,6 +37,7 @@ public class CourseListActivity extends AppCompatActivity {
     public Context context;
 
     private int REGISTER_COURSE_REQUEST = 1997;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class CourseListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_list);
         this.context = CourseListActivity.this;
         this.tvToCreateNewCourse = findViewById(R.id.tvToCreateNewCourse);
+        this.progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         TextView userUniversity = findViewById(R.id.tvSelectedUniversity);
         getSharedPrefs();
         userUniversity.setText(university);
@@ -70,6 +74,7 @@ public class CourseListActivity extends AppCompatActivity {
                         insertCourseToList((Course) relation.getCourse());
                     }
                 }
+                progressBar.setVisibility(View.GONE);
                 setCreateNewCourseListener();
             }
         });
@@ -115,6 +120,5 @@ public class CourseListActivity extends AppCompatActivity {
     private void getSharedPrefs(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         university = prefs.getString("university", "");
-
     }
 }
