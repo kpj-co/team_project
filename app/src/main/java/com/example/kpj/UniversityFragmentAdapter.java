@@ -66,7 +66,7 @@ public class UniversityFragmentAdapter extends RecyclerView.Adapter<UniversityFr
             public void onClick(View v) {
                 boolean isChecked = (userUniversity == university);
                if(!isChecked){
-                    viewHolder.tvUniversity.setBackgroundColor(Color.GREEN);
+                    viewHolder.tvUniversity.setBackgroundResource(R.color.LightBlue);
                     userUniversity = university;
                 }
                 else{

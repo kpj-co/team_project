@@ -64,7 +64,7 @@ public class SelectedCoursesFragmentAdapter extends RecyclerView.Adapter<Selecte
             public void onClick(View v) {
                 boolean isChecked = selectedCourses.contains(course);
                 if(!isChecked){
-                    viewHolder.cdCourse.setBackgroundColor(Color.GREEN);
+                    viewHolder.cdCourse.setBackgroundResource(R.color.LightBlue);
                     selectedCourses.add(course);
                 }
                 else{
