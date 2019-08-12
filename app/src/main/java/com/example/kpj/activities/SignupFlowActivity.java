@@ -25,6 +25,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.io.File;
@@ -76,14 +77,21 @@ public class SignupFlowActivity extends AppCompatActivity {
         }
     }
 
-    private void saveUserCourseRelations(List<Course> selectedCourses) {
-        for (Course course : selectedCourses) {
+    private void saveUserCourseRelations(final List<Course> selectedCourses) {
+        for (final Course course : selectedCourses) {
             UserCourseRelation userCourseRelation = new UserCourseRelation();
             userCourseRelation.setUser(user);
             userCourseRelation.setCourse(course);
-            userCourseRelation.saveInBackground();
+            userCourseRelation.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(course == selectedCourses.get(selectedCourses.size() - 1)) {
+                        goToCourseListActivity();
+                    }
+                }
+            });
         }
-        goToCourseListActivity();
+
     }
 
     private void getUserUniversity(String university, University.Query query) {
