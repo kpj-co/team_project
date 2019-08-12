@@ -1,6 +1,7 @@
 package com.example.kpj.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -179,6 +180,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private void setPostLinkListener() {
             tvUserOpinion.setOnLongClickListener(this);
             postLinkContainer.setOnLongClickListener(this);
+            postLinkContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onMessageClicked.onMessageClicked(getAdapterPosition());
+                }
+            });
         }
 
         @Override
@@ -186,7 +193,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             //.makeText(mContext, "Long click", Toast.LENGTH_LONG).show();
             Log.d("MessageAdapter", "Executed long click");
             itemListener.recyclerViewListClicked(v, this.getLayoutPosition());
-
             //indicate that the click has handled
             return true;
         }
