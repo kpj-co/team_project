@@ -103,7 +103,7 @@ public class PostDetailActivity extends AppCompatActivity {
         final Comment.Query query = new Comment.Query();
         query.include("user");
         query.whereEqualTo("post", post);
-        query.orderByDescending("createdAt");
+        query.orderByAscending("createdAt");
         query.findInBackground(new FindCallback<Comment>() {
             @Override
             public void done(List<Comment> comments, ParseException e) {
