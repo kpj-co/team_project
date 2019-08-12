@@ -128,7 +128,6 @@ public class SignupFlowActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    saveProfilePic();
                     saveUserCourseRelations(selectedCourses);
                 } else {
                     Log.e("SignUpActivity", "Login Failed" + e);
@@ -137,7 +136,7 @@ public class SignupFlowActivity extends AppCompatActivity {
                 }
             }
         });
-
+        saveProfilePic();
     }
 
     private void goToCourseListActivity() {
@@ -151,9 +150,6 @@ public class SignupFlowActivity extends AppCompatActivity {
         photo = prefs.getString("photo", "");
         if (photo != null) {
             photoFile = new File(photo);
-        }
-        else{
-            return;
         }
     }
 
