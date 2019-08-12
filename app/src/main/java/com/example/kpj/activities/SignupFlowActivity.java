@@ -128,15 +128,15 @@ public class SignupFlowActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
+                    saveProfilePic();
                     saveUserCourseRelations(selectedCourses);
                 } else {
                     Log.e("SignUpActivity", "Login Failed" + e);
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"Sign Up failed. Username or email in use", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Sign Up failed.", Toast.LENGTH_LONG).show();
                 }
             }
         });
-        saveProfilePic();
     }
 
     private void goToCourseListActivity() {
