@@ -95,7 +95,7 @@ public class CourseFeedFragment extends Fragment {
             @Override
             public void onRefresh() {
                 if (!userIsFiltering) {
-                    Toast.makeText(getContext(), "REFRESHING . . .", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "REFRESHING . . .", Toast.LENGTH_SHORT).show();
                     postAdapter.clearFullList();
                     endlessRecyclerViewScrollListener.resetState();
                     queryPosts(true);
