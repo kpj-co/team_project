@@ -63,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivLinkIcon" />
+            app:layout_constraintTop_toBottomOf="@+id/linkContainerBig" />
 
         <ImageView
             android:id="@+id/ivDetailProfilePic"
@@ -73,7 +73,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/ivLinkIcon"
+            app:layout_constraintBottom_toTopOf="@+id/linkContainerBig"
             app:layout_constraintEnd_toStartOf="@+id/tvDetailUsername"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -288,47 +288,53 @@
             app:layout_constraintStart_toEndOf="@+id/tvDetailCommentCount"
             app:layout_constraintTop_toTopOf="@+id/tvDetailCommentCount" />
 
-        <ImageView
-            android:id="@+id/ivLinkIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginLeft="28dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
-            app:layout_constraintBottom_toTopOf="@+id/tvDetailTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivDetailProfilePic"
-            app:srcCompat="@drawable/baseline_link_black_18dp" />
-
         <LinearLayout
-            android:id="@+id/linkContainer"
+            android:id="@+id/linkContainerBig"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
-            android:orientation="vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
             android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/ivLinkIcon"
+            android:background="@drawable/comment_container"
+            app:layout_constraintBottom_toTopOf="@+id/tvDetailTitle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ivLinkIcon"
-            app:layout_constraintTop_toTopOf="@+id/ivLinkIcon">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivDetailProfilePic">
 
-            <TextView
-                android:id="@+id/tvLinkUserName"
+            <ImageView
+                android:id="@+id/ivLinkIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="0dp"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                app:srcCompat="@drawable/baseline_link_black_18dp" />
+
+            <LinearLayout
+                android:id="@+id/linkContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:orientation="vertical"
+                android:padding="0dp">
 
-            <TextView
-                android:id="@+id/tvLinkContent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
+                <TextView
+                    android:id="@+id/tvLinkUserName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/tvLinkContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>

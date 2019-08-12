@@ -2,6 +2,7 @@ package com.example.kpj.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -55,7 +56,7 @@ public class PostDetailActivity extends AppCompatActivity {
     ImageButton ibDetailLike, ibDetailDislike, ibDetailSend, ibAddComment;
     RecyclerView rvComments, rvDetailImagePreview;
     EditText etWriteComment;
-    LinearLayout linkContainter;
+    LinearLayout linkContainter, linkContainerBig;
 
     private final static String KEY_SEND_POST_TO_CHAT = "A";
     private final static String KEY_SEND_COURSE_TO_CHAT = "B";
@@ -160,6 +161,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 ibDetailLike, tvDetailUpVotes, ibDetailDislike, tvDetailDownVotes);
         VoteSystemManager.setDownVoteClickFunctionality(context, post, ParseUser.getCurrentUser(),
                 ibDetailLike, tvDetailUpVotes, ibDetailDislike, tvDetailDownVotes);
+
     }
 
     private void initializeVariables() {
@@ -169,6 +171,9 @@ public class PostDetailActivity extends AppCompatActivity {
             this.postHashtags = bundle.getStringArrayList("postHashTags");
         } catch (Exception e) {
             // do nothing
+        }
+        if (postHashtags == null) {
+            postHashtags = new ArrayList();
         }
         this.context = this;
         this.mComments = new ArrayList<>();
@@ -185,6 +190,7 @@ public class PostDetailActivity extends AppCompatActivity {
         }
         ivLinkIcon.setVisibility(viewState);
         linkContainter.setVisibility(viewState);
+        linkContainerBig.setVisibility(viewState);
         tvLinkUserName.setVisibility(viewState);
         tvLinkContent.setVisibility(viewState);
     }
@@ -226,6 +232,7 @@ public class PostDetailActivity extends AppCompatActivity {
         // link views
         ivLinkIcon = findViewById(R.id.ivLinkIcon);
         linkContainter = findViewById(R.id.linkContainer);
+        linkContainerBig = findViewById(R.id.linkContainerBig);
         tvLinkUserName = findViewById(R.id.tvLinkUserName);
         tvLinkContent = findViewById(R.id.tvLinkContent);
         hideLinkViews(true);
@@ -251,6 +258,8 @@ public class PostDetailActivity extends AppCompatActivity {
         if (post.getPostLink() != null) {
             hideLinkViews(false);
             bindLinkContent((Post) post.getPostLink());
+            // todo -- move this function
+            setLinkListener((Post) post.getPostLink());
         } else {
             hideLinkViews(true);
         }
@@ -289,7 +298,7 @@ public class PostDetailActivity extends AppCompatActivity {
             tvDetailDescription.setVisibility(View.INVISIBLE);
         }
 
-        if (postHashtags.size() == 0) {
+        if (postHashtags.size() == 0 || postHashtags == null) {
             queryHashTags(post);
         } else {
             post.setHashtags((ArrayList) postHashtags);
@@ -331,6 +340,19 @@ public class PostDetailActivity extends AppCompatActivity {
             tvLinkUserName.setText("CONTENT LOADING ERROR");
             e.printStackTrace();
         }
+    }
+
+    private void setLinkListener(final Post link) {
+        linkContainerBig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PostDetailActivity.this, PostDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("post", link);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
     }
 
 
