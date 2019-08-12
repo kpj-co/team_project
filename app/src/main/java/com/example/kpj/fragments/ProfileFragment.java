@@ -17,6 +17,7 @@ import com.example.kpj.activities.LoginActivity;
 import com.example.kpj.R;
 import com.example.kpj.model.ImagePreview;
 import com.example.kpj.model.User;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 
@@ -53,9 +54,8 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         findViewsById(view);
         setBtnLogOut();
-        ParseUser user = ParseUser.getCurrentUser();
-        setUserProfileImage(user);
-        setUserName(user);
+        setUserName(ParseUser.getCurrentUser());
+        setUserProfileImage(ParseUser.getCurrentUser());
         return view;
 
     }
@@ -67,9 +67,15 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setUserProfileImage(ParseUser user) {
-        if (user.getParseFile(User.KEY_PROFILE) != null) {
-            ImagePreview profilepic = new ImagePreview(user.getParseFile(User.KEY_PROFILE));
-            profilepic.loadImage(getContext(), imageView, new RequestOptions().centerCrop());
+        try {
+            if (user.fetchIfNeeded().getParseFile(User.KEY_PROFILE) != null) {
+                imageView.setVisibility(View.VISIBLE);
+                ImagePreview pic = new ImagePreview(user.fetchIfNeeded().getParseFile(User.KEY_PROFILE));
+                pic.loadImage(getContext(), imageView, new RequestOptions().circleCrop());
+            }
+        } catch (ParseException e) {
+            imageView.setVisibility(View.GONE);
+            e.printStackTrace();
         }
     }
 
